@@ -1,0 +1,490 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A5AE454482A1752C9A1A670 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8128E319A5D7C80B3083C1A /* Assets.xcassets */; };
+		10E9F8FF091A86F522700A63 /* StaiNApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87238F001CFBDAF9E619373D /* StaiNApp.swift */; };
+		2274117A892E1100AB371883 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1DF5E02D140159E3F6E996 /* ContentView.swift */; };
+		B3366E48B8B0A368914B17DC /* StainKit in Frameworks */ = {isa = PBXBuildFile; productRef = 560D8AD1D3FBA62D5FF5060B /* StainKit */; };
+		BE5A87B2D87F231A9D898CBB /* LaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BBF33CFED4BDECFD83B68E /* LaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		80C7409C62AC0B7A13F27A2E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 796CE439D853441105F9E932 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E6DC57982E4174EE302A152A;
+			remoteInfo = StaiN;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		03BBF33CFED4BDECFD83B68E /* LaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchTests.swift; sourceTree = "<group>"; };
+		4EA31C8DAAE90B5B1ECF7B08 /* StaiN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StaiN.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E208F5FCFCB1358B75E7CD7 /* StaiNUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StaiNUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		87238F001CFBDAF9E619373D /* StaiNApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaiNApp.swift; sourceTree = "<group>"; };
+		A8128E319A5D7C80B3083C1A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A8FD4A59BD06F3019B569466 /* StainKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = StainKit; path = Packages/StainKit; sourceTree = SOURCE_ROOT; };
+		BE1DF5E02D140159E3F6E996 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E84CDE76EE4B3BCC1151E7ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3366E48B8B0A368914B17DC /* StainKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0C63E125B06218EE718D3093 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4EA31C8DAAE90B5B1ECF7B08 /* StaiN.app */,
+				7E208F5FCFCB1358B75E7CD7 /* StaiNUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0CC3881AA59A8444BC0E7D33 = {
+			isa = PBXGroup;
+			children = (
+				48E72293D26928CDC2D2DF96 /* Packages */,
+				20528EBC39DF25A05F1994D5 /* StaiN */,
+				534CC99F1DCA720310CBDA04 /* StaiNUITests */,
+				0C63E125B06218EE718D3093 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		20528EBC39DF25A05F1994D5 /* StaiN */ = {
+			isa = PBXGroup;
+			children = (
+				59AE10DAEE79228767295956 /* App */,
+				FD14C6A29A862E60FBCF9ED6 /* Resources */,
+			);
+			path = StaiN;
+			sourceTree = "<group>";
+		};
+		48E72293D26928CDC2D2DF96 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				A8FD4A59BD06F3019B569466 /* StainKit */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		534CC99F1DCA720310CBDA04 /* StaiNUITests */ = {
+			isa = PBXGroup;
+			children = (
+				03BBF33CFED4BDECFD83B68E /* LaunchTests.swift */,
+			);
+			path = StaiNUITests;
+			sourceTree = "<group>";
+		};
+		59AE10DAEE79228767295956 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				BE1DF5E02D140159E3F6E996 /* ContentView.swift */,
+				87238F001CFBDAF9E619373D /* StaiNApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		FD14C6A29A862E60FBCF9ED6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A8128E319A5D7C80B3083C1A /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9A7B8C908178800F1531A70A /* StaiNUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1BBFBCB92661841754C9A343 /* Build configuration list for PBXNativeTarget "StaiNUITests" */;
+			buildPhases = (
+				6E66F28684A4EB35FEBA98FD /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B24E6CD0FEDC2CAC290B4E2C /* PBXTargetDependency */,
+			);
+			name = StaiNUITests;
+			packageProductDependencies = (
+			);
+			productName = StaiNUITests;
+			productReference = 7E208F5FCFCB1358B75E7CD7 /* StaiNUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		E6DC57982E4174EE302A152A /* StaiN */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B9805D876085C77F643EFB1 /* Build configuration list for PBXNativeTarget "StaiN" */;
+			buildPhases = (
+				19DDC48ADEE55B62DA3DDFAF /* Sources */,
+				95FE2A9895BA7FDEACE89452 /* Resources */,
+				E84CDE76EE4B3BCC1151E7ED /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StaiN;
+			packageProductDependencies = (
+				560D8AD1D3FBA62D5FF5060B /* StainKit */,
+			);
+			productName = StaiN;
+			productReference = 4EA31C8DAAE90B5B1ECF7B08 /* StaiN.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		796CE439D853441105F9E932 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					9A7B8C908178800F1531A70A = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+						TestTargetID = E6DC57982E4174EE302A152A;
+					};
+					E6DC57982E4174EE302A152A = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = E6CC168F151DD3AC2E4F97EF /* Build configuration list for PBXProject "StaiN" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 0CC3881AA59A8444BC0E7D33;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				203C72C1F66FA5B6785A1588 /* XCLocalSwiftPackageReference "Packages/StainKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 0C63E125B06218EE718D3093 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E6DC57982E4174EE302A152A /* StaiN */,
+				9A7B8C908178800F1531A70A /* StaiNUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		95FE2A9895BA7FDEACE89452 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A5AE454482A1752C9A1A670 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		19DDC48ADEE55B62DA3DDFAF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2274117A892E1100AB371883 /* ContentView.swift in Sources */,
+				10E9F8FF091A86F522700A63 /* StaiNApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E66F28684A4EB35FEBA98FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE5A87B2D87F231A9D898CBB /* LaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B24E6CD0FEDC2CAC290B4E2C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E6DC57982E4174EE302A152A /* StaiN */;
+			targetProxy = 80C7409C62AC0B7A13F27A2E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1E4787DEF3A0301E3785EDF3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		2A08FEB68F8B1638C9B22C11 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.fbonnemaison.StaiNUITests;
+				SDKROOT = macosx;
+				TEST_TARGET_NAME = StaiN;
+			};
+			name = Release;
+		};
+		8FDDC87A4C3473FF3D147DF4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = StaiN;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 StaiN contributors. MIT License.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.fbonnemaison.StaiN;
+				PRODUCT_NAME = StaiN;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		9688A7A744CEA3D30BBEC265 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = StaiN;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.graphics-design";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 StaiN contributors. MIT License.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.fbonnemaison.StaiN;
+				PRODUCT_NAME = StaiN;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E3B8B304280A6A25B9E36D79 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		FCA307432A4A3E02AB6190B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.fbonnemaison.StaiNUITests;
+				SDKROOT = macosx;
+				TEST_TARGET_NAME = StaiN;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1BBFBCB92661841754C9A343 /* Build configuration list for PBXNativeTarget "StaiNUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCA307432A4A3E02AB6190B6 /* Debug */,
+				2A08FEB68F8B1638C9B22C11 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5B9805D876085C77F643EFB1 /* Build configuration list for PBXNativeTarget "StaiN" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8FDDC87A4C3473FF3D147DF4 /* Debug */,
+				9688A7A744CEA3D30BBEC265 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E6CC168F151DD3AC2E4F97EF /* Build configuration list for PBXProject "StaiN" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E3B8B304280A6A25B9E36D79 /* Debug */,
+				1E4787DEF3A0301E3785EDF3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		203C72C1F66FA5B6785A1588 /* XCLocalSwiftPackageReference "Packages/StainKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/StainKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		560D8AD1D3FBA62D5FF5060B /* StainKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = StainKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 796CE439D853441105F9E932 /* Project object */;
+}

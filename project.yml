@@ -1,0 +1,59 @@
+name: StaiN
+options:
+  bundleIdPrefix: io.github.fbonnemaison
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_IDENTITY: "-"
+packages:
+  StainKit:
+    path: Packages/StainKit
+targets:
+  StaiN:
+    type: application
+    platform: macOS
+    sources:
+      - StaiN
+    dependencies:
+      - package: StainKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.fbonnemaison.StaiN
+        PRODUCT_NAME: StaiN
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: StaiN
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.graphics-design
+        INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 StaiN contributors. MIT License."
+        ENABLE_APP_SANDBOX: YES
+        ENABLE_USER_SELECTED_FILES: readwrite
+        ENABLE_HARDENED_RUNTIME: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  StaiNUITests:
+    type: bundle.ui-testing
+    platform: macOS
+    sources:
+      - StaiNUITests
+    dependencies:
+      - target: StaiN
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.fbonnemaison.StaiNUITests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: StaiN
+schemes:
+  StaiN:
+    build:
+      targets:
+        StaiN: all
+        StaiNUITests: [test]
+    test:
+      targets:
+        - StaiNUITests
