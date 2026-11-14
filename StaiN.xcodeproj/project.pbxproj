@@ -15,6 +15,7 @@
 		36051A47CD4F92AFFFE68B33 /* EditorCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = B953FD2696037BF6B5D740E0 /* EditorCommands.swift */; };
 		401ED39AC55AE9778AFDAFA1 /* ImageDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5572498271A8F555E5A88E62 /* ImageDocument.swift */; };
 		497AB5261739C6F42C929105 /* ImagePrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A91E11D280ADFDC7269EA6E /* ImagePrinter.swift */; };
+		7E44B66DFD598CF875ECF414 /* ShapeAndTextUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7EB2DB373995F8477FCC7F /* ShapeAndTextUITests.swift */; };
 		7E699193668FC94D9FD5AB3F /* ToolKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142EAEDE5F7C48FC8459F8A /* ToolKind.swift */; };
 		82202AB6F6C88BA69F30326A /* EditorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B77BE8C7EE709B19FC4F0712 /* EditorState.swift */; };
 		975E1F4D86401A82BBA02BB1 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334EF62F50C32E47964055AE /* CanvasView.swift */; };
@@ -22,6 +23,7 @@
 		B3366E48B8B0A368914B17DC /* StainKit in Frameworks */ = {isa = PBXBuildFile; productRef = 560D8AD1D3FBA62D5FF5060B /* StainKit */; };
 		B6C9B364B1D579236954C669 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941C28F03A86EA3A9B30A8B /* AppSettings.swift */; };
 		BA562BE5F0BD8961A3BB79B3 /* EditorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92EC8287D92D53E2EE1C1F5 /* EditorUITests.swift */; };
+		D51475CCBE7D00D200076D7C /* TextOptionsBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F77BBA76A4F6E1BF9B4696 /* TextOptionsBar.swift */; };
 		D91CD4F328A6B5761C9B2AF7 /* CenteringClipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E25EC853F211D0B1D123E8 /* CenteringClipView.swift */; };
 		E353FC97CE85D9EB0D293527 /* Checkerboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D791246C1B7C7FB6AA6AE8BC /* Checkerboard.swift */; };
 		EB4DED571ADC4169151A02A1 /* PaletteBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628DD1FFA7645060224E6C0C /* PaletteBar.swift */; };
@@ -49,6 +51,7 @@
 		275822C0165273C754AF9CC4 /* ColorPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPanelController.swift; sourceTree = "<group>"; };
 		3013C9056C0ABFD3BEE45696 /* PaletteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteStore.swift; sourceTree = "<group>"; };
 		334EF62F50C32E47964055AE /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+		3F7EB2DB373995F8477FCC7F /* ShapeAndTextUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeAndTextUITests.swift; sourceTree = "<group>"; };
 		4EA31C8DAAE90B5B1ECF7B08 /* StaiN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StaiN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5572498271A8F555E5A88E62 /* ImageDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDocument.swift; sourceTree = "<group>"; };
 		628DD1FFA7645060224E6C0C /* PaletteBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteBar.swift; sourceTree = "<group>"; };
@@ -65,6 +68,7 @@
 		B953FD2696037BF6B5D740E0 /* EditorCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCommands.swift; sourceTree = "<group>"; };
 		D791246C1B7C7FB6AA6AE8BC /* Checkerboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkerboard.swift; sourceTree = "<group>"; };
 		E3B6E52F7008771896A42A75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E7F77BBA76A4F6E1BF9B4696 /* TextOptionsBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOptionsBar.swift; sourceTree = "<group>"; };
 		FA4DB9BAC01873A37AE4BBF5 /* SwatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwatchView.swift; sourceTree = "<group>"; };
 		FCE3323DC9C6CC6571224DEA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -154,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				A92EC8287D92D53E2EE1C1F5 /* EditorUITests.swift */,
+				3F7EB2DB373995F8477FCC7F /* ShapeAndTextUITests.swift */,
 			);
 			path = StaiNUITests;
 			sourceTree = "<group>";
@@ -177,6 +182,7 @@
 				B953FD2696037BF6B5D740E0 /* EditorCommands.swift */,
 				B77BE8C7EE709B19FC4F0712 /* EditorState.swift */,
 				1C46E74170A5F3E44E7EF7E4 /* EditorView.swift */,
+				E7F77BBA76A4F6E1BF9B4696 /* TextOptionsBar.swift */,
 				2142EAEDE5F7C48FC8459F8A /* ToolKind.swift */,
 				01E48641657DD8689412D44F /* ToolPanel.swift */,
 			);
@@ -309,6 +315,7 @@
 				1017FD0B2B41F9F161294389 /* SettingsView.swift in Sources */,
 				10E9F8FF091A86F522700A63 /* StaiNApp.swift in Sources */,
 				9A6EFEC9A6B13C7EADEB0791 /* SwatchView.swift in Sources */,
+				D51475CCBE7D00D200076D7C /* TextOptionsBar.swift in Sources */,
 				7E699193668FC94D9FD5AB3F /* ToolKind.swift in Sources */,
 				ECAD51BB05E7A71DBFECBE74 /* ToolPanel.swift in Sources */,
 			);
@@ -319,6 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA562BE5F0BD8961A3BB79B3 /* EditorUITests.swift in Sources */,
+				7E44B66DFD598CF875ECF414 /* ShapeAndTextUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

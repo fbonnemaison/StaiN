@@ -27,14 +27,22 @@ public struct PointerEvent: Sendable, Hashable {
     public var modifiers: PointerModifiers
     /// Presión entre 0 y 1 (1 para ratón).
     public var pressure: Double
+    /// 1 para clic simple, 2 para doble clic…
+    public var clickCount: Int
+    /// Distancia (en píxeles de imagen) a la que se considera que el puntero "toca" un tirador.
+    /// Depende del zoom: a más zoom, menos píxeles de imagen.
+    public var hitTolerance: Double
 
     public init(
-        location: CGPoint, button: PointerButton = .primary, modifiers: PointerModifiers = [], pressure: Double = 1
+        location: CGPoint, button: PointerButton = .primary, modifiers: PointerModifiers = [], pressure: Double = 1,
+        clickCount: Int = 1, hitTolerance: Double = 3
     ) {
         self.location = location
         self.button = button
         self.modifiers = modifiers
         self.pressure = pressure
+        self.clickCount = clickCount
+        self.hitTolerance = hitTolerance
     }
 
     /// Píxel bajo el puntero.
@@ -57,12 +65,42 @@ public protocol Tool: Sendable {
     mutating func end(_ event: PointerEvent, on canvas: inout Canvas)
     /// Se interrumpe la acción (Escape, cambio de herramienta…). La edición se descarta después.
     mutating func cancel(on canvas: inout Canvas)
+
+    /// `true` si, tras soltar el botón, la herramienta sigue esperando más clics
+    /// (polígono, curva, forma editable). La edición sigue abierta hasta `commit`.
+    var isAwaitingInput: Bool { get }
+    /// Con la herramienta esperando: ¿este clic le pertenece? Si no, se confirma y empieza una nueva.
+    func accepts(_ event: PointerEvent) -> Bool
+    /// Confirma el trabajo pendiente (Intro, cambio de herramienta, clic fuera).
+    mutating func commit(on canvas: inout Canvas)
+    /// Guías que la vista dibuja encima de la imagen (no forman parte de ella).
+    var overlay: ToolOverlay? { get }
+    /// `true` si la herramienta sigue actuando mientras el botón está pulsado aunque no se mueva (aerógrafo).
+    var repeatsWhileHeld: Bool { get }
 }
 
 extension Tool {
     public mutating func drag(_ event: PointerEvent, on canvas: inout Canvas) {}
     public mutating func end(_ event: PointerEvent, on canvas: inout Canvas) {}
     public mutating func cancel(on canvas: inout Canvas) {}
+    public var isAwaitingInput: Bool { false }
+    public func accepts(_ event: PointerEvent) -> Bool { false }
+    public mutating func commit(on canvas: inout Canvas) {}
+    public var overlay: ToolOverlay? { nil }
+    public var repeatsWhileHeld: Bool { false }
+}
+
+/// Guías de edición en coordenadas de imagen: un contorno y tiradores.
+public struct ToolOverlay: Sendable, Equatable {
+    public var outline: [CGPoint]
+    public var isClosed: Bool
+    public var handles: [CGPoint]
+
+    public init(outline: [CGPoint] = [], isClosed: Bool = true, handles: [CGPoint] = []) {
+        self.outline = outline
+        self.isClosed = isClosed
+        self.handles = handles
+    }
 }
 
 /// Conecta una herramienta con un lienzo y un historial: cada trazo completo es un paso de deshacer.

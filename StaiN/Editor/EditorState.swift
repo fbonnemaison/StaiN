@@ -26,7 +26,28 @@ final class EditorState {
     var fillTolerance = 0.0
     var lineWidth = 1
 
+    var shapeFillMode: ShapeFillMode = .outline
+    var shapeLineWidth = 1
+    var airbrushRadius = 8
+
+    // Texto
+    var fontFamily = "Helvetica"
+    var fontSize = 24.0
+    var isBold = false
+    var isItalic = false
+    var isUnderlined = false
+    /// Fondo del texto con el color secundario (opaco) o transparente.
+    var hasOpaqueTextBackground = false
+
+    func textStyle(primary: PaintColor, secondary: PaintColor) -> TextStyle {
+        TextStyle(
+            fontName: fontFamily, size: fontSize, bold: isBold, italic: isItalic, underline: isUnderlined,
+            color: primary, background: hasOpaqueTextBackground ? secondary : nil)
+    }
+
     static let brushSizes = [1, 2, 3, 5, 8, 12, 16, 24]
+    static let airbrushRadii = [4, 8, 12, 16]
+    static let fontSizes: [Double] = [8, 10, 12, 14, 18, 24, 36, 48, 72, 96]
     static let eraserSizes = [4, 6, 8, 10, 16, 24, 32]
     static let lineWidths = [1, 2, 3, 5, 8]
 

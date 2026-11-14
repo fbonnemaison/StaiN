@@ -1,0 +1,83 @@
+import XCTest
+
+/// Formas pendientes, polígono, texto y bomba (Fase 4).
+final class ShapeAndTextUITests: XCTestCase {
+    private var app: XCUIApplication!
+
+    @MainActor
+    override func setUp() async throws {
+        continueAfterFailure = false
+        app = XCUIApplication()
+        app.launchArguments = ["-ApplePersistenceIgnoreState", "YES", "-canvasWidth", "320", "-canvasHeight", "200"]
+        app.launch()
+        app.typeKey("n", modifierFlags: .command)
+        XCTAssertTrue(canvas.waitForExistence(timeout: 5))
+    }
+
+    @MainActor
+    override func tearDown() async throws {
+        app.terminate()
+    }
+
+    @MainActor private var canvas: XCUIElement { app.images["canvas"] }
+    @MainActor private var undo: XCUIElement { app.menuItems["undo:"] }
+
+    @MainActor
+    private func point(_ x: CGFloat, _ y: CGFloat) -> XCUICoordinate {
+        canvas.coordinate(withNormalizedOffset: CGVector(dx: x, dy: y))
+    }
+
+    @MainActor
+    func testRectangleStaysPendingUntilReturn() {
+        app.typeKey("r", modifierFlags: [])
+        point(0.2, 0.2).click(forDuration: 0.1, thenDragTo: point(0.6, 0.7))
+        XCTAssertFalse(undo.isEnabled, "La forma sigue editable: aún no hay paso de deshacer")
+        app.typeKey(.return, modifierFlags: [])
+        XCTAssertTrue(undo.isEnabled)
+    }
+
+    @MainActor
+    func testPolygonClosesWithDoubleClick() {
+        app.typeKey("g", modifierFlags: [])
+        point(0.2, 0.2).click()
+        point(0.8, 0.3).click()
+        XCTAssertFalse(undo.isEnabled)
+        point(0.5, 0.8).doubleClick()
+        XCTAssertTrue(undo.isEnabled)
+    }
+
+    @MainActor
+    func testTextIsRasterizedWhenClickingOutside() {
+        app.typeKey("t", modifierFlags: [])
+        XCTAssertTrue(app.popUpButtons["Fuente"].exists, "Aparece la barra de fuentes")
+        point(0.1, 0.1).click()
+        let box = app.textViews["textBox"]
+        XCTAssertTrue(box.waitForExistence(timeout: 2))
+        box.typeText("Hola")
+        point(0.9, 0.9).click()
+        XCTAssertFalse(box.exists)
+        XCTAssertTrue(undo.isEnabled)
+    }
+
+    @MainActor
+    func testBombAsksForConfirmationAndReturnsToPreviousTool() {
+        app.buttons["tool.bomb"].click()
+        point(0.5, 0.5).click()
+        let erase = app.buttons["Borrar"]
+        XCTAssertTrue(erase.waitForExistence(timeout: 2))
+        erase.click()
+        XCTAssertTrue(undo.isEnabled)
+        XCTAssertTrue(app.buttons["tool.pencil"].isSelected)
+    }
+
+    @MainActor
+    func testScreenshotOfShapes() {
+        app.typeKey("o", modifierFlags: [])
+        point(0.05, 0.1).click(forDuration: 0.1, thenDragTo: point(0.4, 0.6))
+        app.typeKey(.return, modifierFlags: [])
+        app.typeKey("u", modifierFlags: [])
+        point(0.5, 0.2).click(forDuration: 0.1, thenDragTo: point(0.9, 0.8))
+        let shot = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("phase4.png")
+        try? app.windows.firstMatch.screenshot().pngRepresentation.write(to: shot)
+    }
+}

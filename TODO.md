@@ -71,14 +71,15 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Atajo X para intercambiar el color primario y el secundario
 
 ## Fase 4 — Formas, texto y aerógrafo
-- [ ] **Rectángulo**, **rectángulo redondeado** y **elipse**; con Shift salen proporciones 1:1
-- [ ] **Polígono** (clic por vértice y doble clic para cerrar)
-- [ ] **Curva** al estilo clásico: se traza una línea y luego se doblan 2 puntos de control
-- [ ] Modos de relleno: solo contorno, contorno y relleno, solo relleno
-- [ ] Las formas siguen editables (mover y redimensionar) hasta que se confirman
-- [ ] **Texto**: cuadro editable con fuente, tamaño, negrita, cursiva y subrayado, fondo opaco o transparente; se rasteriza al confirmar
-- [ ] **Aerógrafo**: spray aleatorio con densidad y radio, que sigue pintando mientras se mantiene el clic
-- [ ] Herramienta **"Bomba"** de Paintbrush: borra todo el lienzo con el color secundario (con confirmación y deshacer)
+- [x] **Rectángulo**, **rectángulo redondeado** y **elipse**; con Shift salen proporciones 1:1
+- [x] **Polígono** (clic por vértice y doble clic, o clic en el primer vértice, para cerrar)
+- [x] **Curva** al estilo clásico: se traza una línea y luego se doblan 2 puntos de control
+- [x] Modos de relleno: solo contorno, contorno y relleno, solo relleno (y grosor del borde)
+- [x] Las formas siguen editables (mover y redimensionar con 8 tiradores) hasta que se confirman con Intro, clic fuera o cambio de herramienta; Escape las descarta
+- [x] **Texto**: cuadro editable con fuente, tamaño, negrita, cursiva y subrayado, fondo opaco o transparente; se rasteriza al confirmar
+- [x] **Aerógrafo**: spray aleatorio con densidad y radio, que sigue pintando mientras se mantiene el clic
+- [x] Herramienta **"Bomba"** de Paintbrush: borra todo el lienzo con el color secundario (con confirmación y deshacer)
+- [ ] Ejecutar los tests de interfaz de la Fase 4 (`ShapeAndTextUITests`) y revisar la captura: no se pudieron correr con la pantalla bloqueada
 
 ## Fase 5 — Selección y operaciones de imagen
 - [ ] **Selección rectangular** y **selección libre (lazo)**, con hormigas marchantes
@@ -131,6 +132,7 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [ ] Rendimiento: la copia del bitmap al empezar cada trazo copia la imagen entera; cambiar a copia por tiles si va lento
 - [ ] Deshacer: `UndoManager` limita pasos pero no memoria; aplicar el límite de bytes de `UndoHistory` si hace falta
 - [ ] El menú muestra "Deshacer" sin el nombre de la acción ("Deshacer Lápiz"); revisar con los comandos de SwiftUI
+- [ ] Al guardar con una forma o un polígono aún editables, se guarda la imagen sin ellos: confirmar lo pendiente antes de guardar
 - [ ] Rendimiento: probar con imágenes de 8000×8000, perfilar con Instruments y valorar Metal o tiles si hace falta
 - [ ] Icono de la app y de los tipos de documento
 

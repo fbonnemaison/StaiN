@@ -75,6 +75,11 @@ public struct Canvas: Sendable {
         bitmap.stamp(mask, atX: x, y: y, color: color)
     }
 
+    /// Copia `other` sobre la imagen en `rect.origin` y marca la región como sucia.
+    mutating func replaceRegion(_ rect: PixelRect, with other: Bitmap) {
+        markDirty(bitmap.replace(with: other, atX: rect.x, y: rect.y))
+    }
+
     /// Color del píxel, o `nil` si está fuera de la imagen.
     public func color(atX x: Int, y: Int) -> PaintColor? {
         bitmap.contains(x: x, y: y) ? bitmap[x, y] : nil

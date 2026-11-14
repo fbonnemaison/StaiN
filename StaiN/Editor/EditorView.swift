@@ -14,9 +14,15 @@ struct EditorView: View {
             ToolPanel(editor: editor)
             Divider()
             VStack(spacing: 0) {
+                if editor.tool == .text {
+                    TextOptionsBar(editor: editor)
+                    Divider()
+                }
                 CanvasRepresentable(
                     document: document, editor: editor, zoom: editor.zoom, tool: editor.tool,
-                    imageSize: CGSize(width: document.width, height: document.height), undoManager: undoManager)
+                    imageSize: CGSize(width: document.width, height: document.height),
+                    textStyle: editor.textStyle(primary: document.primaryColor, secondary: document.secondaryColor),
+                    undoManager: undoManager)
                 Divider()
                 PaletteBar(
                     primary: document.primaryColor, secondary: document.secondaryColor,

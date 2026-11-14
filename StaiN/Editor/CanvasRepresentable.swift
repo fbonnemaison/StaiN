@@ -1,4 +1,5 @@
 import AppKit
+import StainKit
 import SwiftUI
 
 /// Envuelve el lienzo AppKit (scroll + zoom + `CanvasView`) para usarlo en SwiftUI.
@@ -8,6 +9,7 @@ struct CanvasRepresentable: NSViewRepresentable {
     let zoom: Double
     let tool: ToolKind
     let imageSize: CGSize
+    let textStyle: TextStyle
     let undoManager: UndoManager?
 
     func makeNSView(context: Context) -> NSScrollView {
@@ -40,6 +42,7 @@ struct CanvasRepresentable: NSViewRepresentable {
         canvas.editor = editor
         canvas.undoManagerForStrokes = undoManager
         canvas.tool = tool
+        canvas.textStyle = textStyle
         if canvas.frame.size != imageSize {
             canvas.setFrameSize(imageSize)
             canvas.needsDisplay = true

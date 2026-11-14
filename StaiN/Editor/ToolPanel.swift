@@ -38,11 +38,23 @@ private struct ToolButton: View {
         .buttonStyle(.plain)
         .foregroundStyle(isSelected ? Color.accentColor : .primary)
         .background(isSelected ? Color.accentColor.opacity(0.2) : .clear, in: .rect(cornerRadius: 6))
-        .help("\(tool.title) (\(String(tool.shortcut).uppercased()))")
-        .keyboardShortcut(KeyEquivalent(tool.shortcut), modifiers: [])
+        .help(tool.shortcut.map { "\(tool.title) (\(String($0).uppercased()))" } ?? tool.title)
+        .modifier(OptionalShortcut(key: tool.shortcut))
         .accessibilityLabel(tool.title)
         .accessibilityIdentifier("tool.\(tool.rawValue)")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+}
+
+private struct OptionalShortcut: ViewModifier {
+    let key: Character?
+
+    func body(content: Content) -> some View {
+        if let key {
+            content.keyboardShortcut(KeyEquivalent(key), modifiers: [])
+        } else {
+            content
+        }
     }
 }
 
@@ -70,9 +82,19 @@ private struct ToolOptions: View {
                     .accessibilityLabel("Tolerancia del relleno")
                 Text(editor.fillTolerance, format: .percent.precision(.fractionLength(0)))
                     .font(.caption2.monospacedDigit())
-            case .line:
+            case .line, .curve:
                 SizeList(sizes: EditorState.lineWidths, selection: $editor.lineWidth, label: "Grosor de línea")
-                Text("⇧ = 45°").font(.caption2).foregroundStyle(.secondary)
+                Hint(editor.tool == .line ? "⇧ = 45°" : "Arrastra y luego\ndobla con 2 clics")
+            case .rectangle, .roundedRectangle, .ellipse, .polygon:
+                FillModePicker(selection: $editor.shapeFillMode)
+                SizeList(sizes: EditorState.lineWidths, selection: $editor.shapeLineWidth, label: "Grosor del borde")
+                Hint(editor.tool == .polygon ? "Doble clic\npara cerrar" : "⇧ = proporción 1:1")
+            case .airbrush:
+                SizeList(sizes: EditorState.airbrushRadii, selection: $editor.airbrushRadius, label: "Radio")
+            case .text:
+                Hint("Arrastra para\ncrear un cuadro")
+            case .bomb:
+                Hint("Clic: borrar\ntoda la imagen")
             case .eyedropper:
                 Hint("Clic: primario\nClic der.: secundario")
             case .zoom:
@@ -171,6 +193,48 @@ private struct ShapePicker: View {
         case .square: "Cuadrado"
         case .forwardSlash: "Caligráfico /"
         case .backSlash: "Caligráfico \\"
+        }
+    }
+}
+
+/// Contorno, contorno y relleno, o solo relleno.
+private struct FillModePicker: View {
+    @Binding var selection: ShapeFillMode
+
+    var body: some View {
+        VStack(spacing: 2) {
+            ForEach(ShapeFillMode.allCases, id: \.self) { mode in
+                Button {
+                    selection = mode
+                } label: {
+                    preview(mode)
+                        .frame(width: 34, height: 14)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 2)
+                        .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .background(selection == mode ? Color.accentColor.opacity(0.25) : .clear, in: .rect(cornerRadius: 4))
+                .help(name(mode))
+                .accessibilityLabel(name(mode))
+                .accessibilityAddTraits(selection == mode ? .isSelected : [])
+            }
+        }
+    }
+
+    @ViewBuilder private func preview(_ mode: ShapeFillMode) -> some View {
+        switch mode {
+        case .outline: Rectangle().strokeBorder(.primary, lineWidth: 1.5)
+        case .outlineAndFill: Rectangle().fill(.gray).overlay(Rectangle().strokeBorder(.primary, lineWidth: 1.5))
+        case .fill: Rectangle().fill(.gray)
+        }
+    }
+
+    private func name(_ mode: ShapeFillMode) -> String {
+        switch mode {
+        case .outline: "Solo contorno"
+        case .outlineAndFill: "Contorno y relleno"
+        case .fill: "Solo relleno"
         }
     }
 }

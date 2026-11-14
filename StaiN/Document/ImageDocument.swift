@@ -17,7 +17,8 @@ final class ImageDocument: ReferenceFileDocument {
     private let committedBitmap: Mutex<Bitmap>
     /// Avisa a la vista de qué región hay que redibujar.
     var canvasDidChange: ((PixelRect) -> Void)?
-    private var activeTool: (any Tool)?
+    private var controller = ToolController()
+    private var pendingActionName = ""
 
     nonisolated init() {
         let size = AppSettings.newCanvasSize
@@ -52,47 +53,83 @@ final class ImageDocument: ReferenceFileDocument {
     var width: Int { canvas.bitmap.width }
     var height: Int { canvas.bitmap.height }
 
-    // MARK: Trazos
+    // MARK: Herramientas
 
-    var isStroking: Bool { activeTool != nil }
+    /// Guías de la herramienta pendiente (tiradores de una forma editable…).
+    var overlay: ToolOverlay? { controller.overlay }
+    /// Hay una herramienta abierta (trazo en curso o esperando más clics).
+    var hasActiveTool: Bool { controller.isActive }
+    /// La herramienta quiere que se llame a `tick()` mientras el botón siga pulsado (aerógrafo).
+    var toolRepeatsWhileHeld: Bool { controller.repeatsWhileHeld }
+    /// Avisa a la vista de que las guías cambiaron.
+    var overlayDidChange: (() -> Void)?
 
-    func beginStroke(with tool: any Tool, _ event: PointerEvent) {
-        if activeTool != nil { cancelStroke() }
-        var tool = tool
+    func pointerDown(
+        _ event: PointerEvent, actionName: String, undoManager: UndoManager?, makeTool: () -> any Tool
+    ) {
         let colors = (canvas.primaryColor, canvas.secondaryColor)
+        let previousName = pendingActionName
+        if let patch = controller.pointerDown(event, canvas: &canvas, makeTool: makeTool) {
+            finishEdit(patch, actionName: previousName, undoManager: undoManager)
+        }
+        pendingActionName = actionName
+        toolDidChangeCanvas(colors: colors)
+    }
+
+    func pointerDragged(_ event: PointerEvent) {
+        let colors = (canvas.primaryColor, canvas.secondaryColor)
+        controller.pointerDragged(event, canvas: &canvas)
+        toolDidChangeCanvas(colors: colors)
+    }
+
+    func pointerUp(_ event: PointerEvent, undoManager: UndoManager?) {
+        if let patch = controller.pointerUp(event, canvas: &canvas) {
+            finishEdit(patch, actionName: pendingActionName, undoManager: undoManager)
+        }
+        toolDidChangeCanvas(colors: nil)
+    }
+
+    func tick() {
+        controller.tick(canvas: &canvas)
+        flushChanges()
+    }
+
+    /// Confirma la herramienta pendiente (Intro, cambio de herramienta, clic fuera…).
+    func commitTool(undoManager: UndoManager?) {
+        guard controller.isActive else { return }
+        if let patch = controller.commit(canvas: &canvas) {
+            finishEdit(patch, actionName: pendingActionName, undoManager: undoManager)
+        }
+        toolDidChangeCanvas(colors: nil)
+    }
+
+    /// Descarta la herramienta en curso (Escape).
+    func cancelTool() {
+        guard controller.isActive else { return }
+        controller.cancel(canvas: &canvas)
+        toolDidChangeCanvas(colors: nil)
+    }
+
+    /// Rasteriza un cuadro de texto como un paso deshacible.
+    func drawText(_ text: String, style: TextStyle, in rect: PixelRect, undoManager: UndoManager?) {
+        commitTool(undoManager: undoManager)
         canvas.beginEdit()
-        tool.begin(event, on: &canvas)
-        activeTool = tool
-        flushChanges()
-        colorsMayHaveChanged(from: colors)
-    }
-
-    func continueStroke(_ event: PointerEvent) {
-        guard var tool = activeTool else { return }
-        let colors = (canvas.primaryColor, canvas.secondaryColor)
-        tool.drag(event, on: &canvas)
-        activeTool = tool
-        flushChanges()
-        colorsMayHaveChanged(from: colors)
-    }
-
-    func endStroke(_ event: PointerEvent, actionName: String, undoManager: UndoManager?) {
-        guard var tool = activeTool else { return }
-        tool.end(event, on: &canvas)
-        activeTool = nil
+        canvas.drawText(text, style: style, in: rect)
         if let patch = canvas.endEdit() {
-            commit()
-            registerUndo(of: patch, applying: .undo, actionName: actionName, undoManager: undoManager)
+            finishEdit(patch, actionName: "Texto", undoManager: undoManager)
         }
         flushChanges()
     }
 
-    func cancelStroke() {
-        guard var tool = activeTool else { return }
-        tool.cancel(on: &canvas)
-        activeTool = nil
-        canvas.cancelEdit()
+    private func finishEdit(_ patch: UndoPatch, actionName: String, undoManager: UndoManager?) {
+        commit()
+        registerUndo(of: patch, applying: .undo, actionName: actionName, undoManager: undoManager)
+    }
+
+    private func toolDidChangeCanvas(colors: (PaintColor, PaintColor)?) {
         flushChanges()
+        if let colors { colorsMayHaveChanged(from: colors) }
+        overlayDidChange?()
     }
 
     var primaryColor: PaintColor { canvas.primaryColor }
@@ -127,7 +164,7 @@ final class ImageDocument: ReferenceFileDocument {
     ) {
         guard let undoManager else { return }
         undoManager.registerUndo(withTarget: self) { document in
-            if document.isStroking { document.cancelStroke() }
+            document.cancelTool()
             document.canvas.apply(patch, direction)
             document.commit()
             document.flushChanges()
