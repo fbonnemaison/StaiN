@@ -70,6 +70,16 @@ public struct Canvas: Sendable {
         markDirty(bitmap.floodFill(x: x, y: y, with: color, tolerance: tolerance))
     }
 
+    /// Acceso al bitmap para las primitivas de dibujo del módulo. Quien llama marca la región sucia.
+    mutating func bitmapStamp(_ mask: BrushMask, _ x: Int, _ y: Int, _ color: PaintColor) -> PixelRect {
+        bitmap.stamp(mask, atX: x, y: y, color: color)
+    }
+
+    /// Color del píxel, o `nil` si está fuera de la imagen.
+    public func color(atX x: Int, y: Int) -> PaintColor? {
+        bitmap.contains(x: x, y: y) ? bitmap[x, y] : nil
+    }
+
     /// Sustituye el bitmap completo (p. ej. al cambiar el tamaño). Toda la imagen queda sucia.
     public mutating func replaceBitmap(_ newBitmap: Bitmap) {
         bitmap = newBitmap
@@ -103,6 +113,17 @@ public struct Canvas: Sendable {
         }
         markDirty(editRect)
         editSnapshot = nil
+        editRect = .zero
+    }
+
+    /// Devuelve la imagen al estado del principio de la edición, sin terminarla.
+    /// Sirve para herramientas con vista previa (línea, formas): se borra la previa y se vuelve a dibujar.
+    public mutating func revertToEditStart() {
+        guard let snapshot = editSnapshot, !editRect.isEmpty else { return }
+        if let original = snapshot.cropped(to: editRect) {
+            bitmap.replace(with: original, atX: editRect.x, y: editRect.y)
+        }
+        dirtyRect = dirtyRect.union(editRect)
         editRect = .zero
     }
 

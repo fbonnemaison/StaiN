@@ -59,16 +59,16 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Deshacer/rehacer con el `UndoManager` del documento (menú Edición, ⌘Z/⇧⌘Z), un paso por trazo con `UndoPatch`
 
 ## Fase 3 — Herramientas básicas y color
-- [ ] Panel de herramientas (cuadrícula de iconos de SF Symbols con tooltips y atajos de una tecla)
+- [x] Panel de herramientas (cuadrícula de iconos de SF Symbols con tooltips y atajos de una tecla: P, B, E, F, I, L, Z) con recuadro de opciones
 - [x] **Lápiz**: 1 px sin antialiasing (adelantado en la Fase 2)
-- [ ] **Pincel**: tamaños y formas (redondo, cuadrado, caligráfico /, \)
-- [ ] **Borrador**: pinta con el color secundario, o transparente, y tiene tamaños
-- [ ] **Relleno (cubo)**: con tolerancia ajustable
-- [ ] **Cuentagotas**: clic izquierdo para el color primario y clic derecho para el secundario
-- [ ] **Línea**: grosor, y con Shift se fija a 0°, 45° o 90°
-- [ ] Paleta: color primario y secundario (clic izquierdo o derecho), paleta de 28 colores editable y colores recientes
-- [ ] Selector de color del sistema (`NSColorPanel`) con soporte de transparencia (alfa)
-- [ ] Atajo X para intercambiar el color primario y el secundario
+- [x] **Pincel**: tamaños y formas (redondo, cuadrado, caligráfico /, \)
+- [x] **Borrador**: pinta con el color secundario, o transparente, y tiene tamaños
+- [x] **Relleno (cubo)**: con tolerancia ajustable
+- [x] **Cuentagotas**: clic izquierdo para el color primario y clic derecho para el secundario; vuelve a la herramienta anterior
+- [x] **Línea**: grosor, vista previa al arrastrar, y con Shift se fija a 0°, 45° o 90°
+- [x] Paleta: color primario y secundario (clic izquierdo o derecho), paleta de 28 colores editable (doble clic) y colores recientes
+- [x] Selector de color del sistema (`NSColorPanel`) con soporte de transparencia (alfa)
+- [x] Atajo X para intercambiar el color primario y el secundario
 
 ## Fase 4 — Formas, texto y aerógrafo
 - [ ] **Rectángulo**, **rectángulo redondeado** y **elipse**; con Shift salen proporciones 1:1

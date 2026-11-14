@@ -11,17 +11,22 @@ struct EditorView: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            ToolStrip(selection: $editor.tool)
+            ToolPanel(editor: editor)
             Divider()
             VStack(spacing: 0) {
                 CanvasRepresentable(
                     document: document, editor: editor, zoom: editor.zoom, tool: editor.tool,
                     imageSize: CGSize(width: document.width, height: document.height), undoManager: undoManager)
                 Divider()
+                PaletteBar(
+                    primary: document.primaryColor, secondary: document.secondaryColor,
+                    setColors: { document.setColors(primary: $0, secondary: $1) },
+                    swapColors: { document.swapColors() })
+                Divider()
                 StatusBar(editor: editor, width: document.width, height: document.height)
             }
         }
-        .frame(minWidth: 520, minHeight: 360)
+        .frame(minWidth: 640, minHeight: 420)
         .focusedSceneValue(\.editor, editor)
         .focusedSceneValue(\.imageDocument, document)
         // Soltar archivos de imagen sobre la ventana los abre como documentos nuevos.
@@ -35,33 +40,6 @@ struct EditorView: View {
             }
             return !images.isEmpty
         }
-    }
-}
-
-/// Columna de herramientas (provisional hasta la Fase 3).
-private struct ToolStrip: View {
-    @Binding var selection: ToolKind
-
-    var body: some View {
-        VStack(spacing: 4) {
-            ForEach(ToolKind.allCases) { tool in
-                Button {
-                    selection = tool
-                } label: {
-                    Image(systemName: tool.systemImage)
-                        .frame(width: 28, height: 28)
-                        .contentShape(.rect)
-                }
-                .buttonStyle(.plain)
-                .background(selection == tool ? Color.accentColor.opacity(0.25) : .clear, in: .rect(cornerRadius: 6))
-                .help("\(tool.title) (\(String(tool.shortcut).uppercased()))")
-                .keyboardShortcut(KeyEquivalent(tool.shortcut), modifiers: [])
-                .accessibilityLabel(tool.title)
-                .accessibilityAddTraits(selection == tool ? .isSelected : [])
-            }
-            Spacer()
-        }
-        .padding(6)
     }
 }
 

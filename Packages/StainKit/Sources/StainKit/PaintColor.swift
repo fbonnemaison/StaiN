@@ -26,6 +26,25 @@ public struct PaintColor: Hashable, Sendable, CustomStringConvertible {
             : String(format: "#%02X%02X%02X%02X", red, green, blue, alpha)
     }
 
+    // MARK: Hexadecimal
+
+    /// Lee `#RRGGBB` o `#RRGGBBAA` (con o sin `#`).
+    public init?(hex: String) {
+        var text = Substring(hex)
+        if text.hasPrefix("#") { text = text.dropFirst() }
+        guard text.count == 6 || text.count == 8, let value = UInt32(text, radix: 16) else { return nil }
+        if text.count == 6 {
+            self.init(red: UInt8(value >> 16 & 0xFF), green: UInt8(value >> 8 & 0xFF), blue: UInt8(value & 0xFF))
+        } else {
+            self.init(
+                red: UInt8(value >> 24 & 0xFF), green: UInt8(value >> 16 & 0xFF), blue: UInt8(value >> 8 & 0xFF),
+                alpha: UInt8(value & 0xFF))
+        }
+    }
+
+    /// `#RRGGBB`, o `#RRGGBBAA` si no es opaco.
+    public var hex: String { description }
+
     // MARK: Core Graphics
 
     public var cgColor: CGColor {

@@ -11,6 +11,8 @@ final class EditorUITests: XCTestCase {
             "-ApplePersistenceIgnoreState", "YES",
             "-canvasWidth", "320",
             "-canvasHeight", "200",
+            "-paletteColors", "()",
+            "-recentColors", "()",
         ]
         app.launch()
         app.typeKey("n", modifierFlags: .command)
@@ -55,5 +57,54 @@ final class EditorUITests: XCTestCase {
         XCTAssertTrue(zoom.title.contains("200"), "Zoom tras ⌘+: \(zoom.title)")
         app.typeKey("0", modifierFlags: .command)
         XCTAssertTrue(zoom.title.contains("100"))
+    }
+
+    @MainActor
+    private func value(of label: String) -> String {
+        app.buttons[label].value as? String ?? ""
+    }
+
+    @MainActor
+    func testPaletteSetsColorsAndXSwaps() {
+        XCTAssertTrue(canvas.waitForExistence(timeout: 5))
+        XCTAssertEqual(value(of: "Color primario"), "#000000")
+        XCTAssertEqual(value(of: "Color secundario"), "#FFFFFF")
+
+        app.buttons["Paleta 17"].click()  // rojo
+        XCTAssertEqual(value(of: "Color primario"), "#FF0000")
+        app.buttons["Paleta 19"].rightClick()  // verde lima
+        XCTAssertEqual(value(of: "Color secundario"), "#00FF00")
+
+        app.typeKey("x", modifierFlags: [])
+        XCTAssertEqual(value(of: "Color primario"), "#00FF00")
+        XCTAssertEqual(value(of: "Color secundario"), "#FF0000")
+    }
+
+    @MainActor
+    func testToolShortcuts() {
+        XCTAssertTrue(canvas.waitForExistence(timeout: 5))
+        for (key, tool) in [("b", "brush"), ("e", "eraser"), ("f", "fill"), ("l", "line"), ("p", "pencil")] {
+            app.typeKey(key, modifierFlags: [])
+            XCTAssertTrue(app.buttons["tool.\(tool)"].isSelected, "La tecla \(key) debería elegir \(tool)")
+        }
+    }
+
+    @MainActor
+    func testEyedropperPicksColorAndReturnsToPreviousTool() {
+        XCTAssertTrue(canvas.waitForExistence(timeout: 5))
+        let point = canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        app.buttons["Paleta 21"].click()  // azul
+        app.typeKey("b", modifierFlags: [])
+        point.click()
+        app.buttons["Paleta 1"].click()  // negro
+        XCTAssertEqual(value(of: "Color primario"), "#000000")
+
+        app.typeKey("i", modifierFlags: [])
+        point.click()
+        XCTAssertEqual(value(of: "Color primario"), "#0000FF")
+        XCTAssertTrue(app.buttons["tool.brush"].isSelected, "El cuentagotas vuelve a la herramienta anterior")
+
+        let shot = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("phase3.png")
+        try? app.windows.firstMatch.screenshot().pngRepresentation.write(to: shot)
     }
 }

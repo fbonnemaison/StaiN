@@ -23,7 +23,6 @@ final class CanvasView: NSView {
     }
 
     private var strokeButton: PointerButton?
-    private static let checkerboard = NSColor(patternImage: makeCheckerboard())
 
     override var isFlipped: Bool { true }
     override var isOpaque: Bool { false }
@@ -49,7 +48,7 @@ final class CanvasView: NSView {
         guard !visible.isEmpty else { return }
 
         // Fondo a cuadros para ver la transparencia (de tamaño fijo en pantalla).
-        Self.checkerboard.setFill()
+        Checkerboard.color.setFill()
         visible.fill()
 
         let pixels = PixelRect(
@@ -67,18 +66,6 @@ final class CanvasView: NSView {
         context.scaleBy(x: 1, y: -1)
         context.draw(image, in: target)
         context.restoreGState()
-    }
-
-    private static func makeCheckerboard() -> NSImage {
-        let side: CGFloat = 8
-        return NSImage(size: NSSize(width: side * 2, height: side * 2), flipped: false) { _ in
-            NSColor(white: 1, alpha: 1).setFill()
-            NSRect(x: 0, y: 0, width: side * 2, height: side * 2).fill()
-            NSColor(white: 0.82, alpha: 1).setFill()
-            NSRect(x: 0, y: 0, width: side, height: side).fill()
-            NSRect(x: side, y: side, width: side, height: side).fill()
-            return true
-        }
     }
 
     // MARK: Cursor
@@ -121,7 +108,7 @@ final class CanvasView: NSView {
         window?.makeFirstResponder(self)
         guard strokeButton == nil, let document else { return }
         let pointer = pointerEvent(event, button: button)
-        guard let tool = tool.makeTool() else {
+        guard let editor, let tool = tool.makeTool(options: editor) else {
             zoom(at: pointer)
             return
         }
@@ -141,6 +128,8 @@ final class CanvasView: NSView {
         strokeButton = nil
         document?.endStroke(
             pointerEvent(event, button: button), actionName: tool.title, undoManager: undoManagerForStrokes)
+        // Como en Paint, el cuentagotas vuelve a la herramienta anterior al soltar.
+        if tool == .eyedropper { editor?.returnToPreviousTool() }
     }
 
     override func keyDown(with event: NSEvent) {

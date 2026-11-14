@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import StainKit
 
 /// Estado de una ventana de edición: herramienta, zoom y posición del cursor.
 @MainActor @Observable
@@ -9,7 +10,29 @@ final class EditorState {
         var y: Int
     }
 
-    var tool: ToolKind = .pencil
+    var tool: ToolKind = .pencil {
+        didSet {
+            if oldValue != tool && oldValue != .eyedropper { previousTool = oldValue }
+        }
+    }
+    private(set) var previousTool: ToolKind = .pencil
+
+    // Opciones de las herramientas
+    var brushShape: BrushShape = .round
+    var brushSize = 3
+    var eraserSize = 8
+    var erasesToTransparent = false
+    /// 0 = color exacto, 1 = todo.
+    var fillTolerance = 0.0
+    var lineWidth = 1
+
+    static let brushSizes = [1, 2, 3, 5, 8, 12, 16, 24]
+    static let eraserSizes = [4, 6, 8, 10, 16, 24, 32]
+    static let lineWidths = [1, 2, 3, 5, 8]
+
+    func returnToPreviousTool() {
+        tool = previousTool
+    }
     /// 1 = 100 %.
     var zoom: Double = 1
     var cursor: PixelPosition?

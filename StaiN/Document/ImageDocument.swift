@@ -59,17 +59,21 @@ final class ImageDocument: ReferenceFileDocument {
     func beginStroke(with tool: any Tool, _ event: PointerEvent) {
         if activeTool != nil { cancelStroke() }
         var tool = tool
+        let colors = (canvas.primaryColor, canvas.secondaryColor)
         canvas.beginEdit()
         tool.begin(event, on: &canvas)
         activeTool = tool
         flushChanges()
+        colorsMayHaveChanged(from: colors)
     }
 
     func continueStroke(_ event: PointerEvent) {
         guard var tool = activeTool else { return }
+        let colors = (canvas.primaryColor, canvas.secondaryColor)
         tool.drag(event, on: &canvas)
         activeTool = tool
         flushChanges()
+        colorsMayHaveChanged(from: colors)
     }
 
     func endStroke(_ event: PointerEvent, actionName: String, undoManager: UndoManager?) {
@@ -91,15 +95,28 @@ final class ImageDocument: ReferenceFileDocument {
         flushChanges()
     }
 
+    var primaryColor: PaintColor { canvas.primaryColor }
+    var secondaryColor: PaintColor { canvas.secondaryColor }
+
     func setColors(primary: PaintColor? = nil, secondary: PaintColor? = nil) {
+        let old = (canvas.primaryColor, canvas.secondaryColor)
         if let primary { canvas.primaryColor = primary }
         if let secondary { canvas.secondaryColor = secondary }
-        objectWillChange.send()
+        colorsMayHaveChanged(from: old)
     }
 
     func swapColors() {
         canvas.swapColors()
         objectWillChange.send()
+    }
+
+    /// Refresca la interfaz y guarda en "recientes" los colores nuevos (paleta, selector o cuentagotas).
+    private func colorsMayHaveChanged(from old: (PaintColor, PaintColor)) {
+        let new = (canvas.primaryColor, canvas.secondaryColor)
+        guard new != old else { return }
+        objectWillChange.send()
+        if new.0 != old.0 { PaletteStore.shared.noteUsed(new.0) }
+        if new.1 != old.1 { PaletteStore.shared.noteUsed(new.1) }
     }
 
     // MARK: Deshacer

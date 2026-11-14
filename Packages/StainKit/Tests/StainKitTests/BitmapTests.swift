@@ -130,3 +130,17 @@ import Testing
         #expect(try #require(PaintColor(cgColor: color.cgColor)) == color)
     }
 }
+
+@Suite struct PaintColorHexTests {
+    @Test func parsesAndFormats() {
+        #expect(PaintColor(hex: "#FF8000") == PaintColor(red: 255, green: 128, blue: 0))
+        #expect(PaintColor(hex: "00ff0080") == PaintColor(red: 0, green: 255, blue: 0, alpha: 128))
+        #expect(PaintColor(red: 1, green: 2, blue: 3).hex == "#010203")
+        #expect(PaintColor(red: 1, green: 2, blue: 3, alpha: 4).hex == "#01020304")
+    }
+
+    @Test(arguments: ["", "#12345", "zzzzzz", "#1234567"])
+    func rejectsInvalid(text: String) {
+        #expect(PaintColor(hex: text) == nil)
+    }
+}
