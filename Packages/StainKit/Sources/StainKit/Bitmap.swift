@@ -94,4 +94,33 @@ public struct Bitmap: Hashable, Sendable {
         }
         return target
     }
+
+    /// Muestra reducida de una región: toma un píxel de cada `step` en cada eje (vecino más cercano).
+    /// Sirve para dibujar con zoom alejado sin copiar la imagen entera: el coste depende del resultado.
+    public func sampled(_ rect: PixelRect, step: Int) -> Bitmap? {
+        let rect = rect.intersection(bounds)
+        guard !rect.isEmpty else { return nil }
+        let step = max(1, step)
+        guard step > 1 else { return cropped(to: rect) }
+        let outWidth = (rect.width + step - 1) / step
+        let outHeight = (rect.height + step - 1) / step
+        var result = Bitmap(width: outWidth, height: outHeight, fill: .clear)
+        let sourceWidth = width
+        storage.withUnsafeBufferPointer { src in
+            result.storage.withUnsafeMutableBufferPointer { dst in
+                for y in 0..<outHeight {
+                    let sy = rect.y + y * step
+                    for x in 0..<outWidth {
+                        let s = (sy * sourceWidth + rect.x + x * step) * 4
+                        let d = (y * outWidth + x) * 4
+                        dst[d] = src[s]
+                        dst[d + 1] = src[s + 1]
+                        dst[d + 2] = src[s + 2]
+                        dst[d + 3] = src[s + 3]
+                    }
+                }
+            }
+        }
+        return result
+    }
 }

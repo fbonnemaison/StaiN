@@ -115,8 +115,9 @@ final class ExtrasUITests: XCTestCase {
         let size = app.staticTexts["imageSize"].firstMatch
         waitFor(size, "value == %@", "16 × 16 px")
         XCTAssertTrue(app.staticTexts["Modo pixel"].exists, "Las imágenes pequeñas activan el modo pixel")
-        let zoom = app.windows.firstMatch.menuButtons["zoomLevel"]
-        XCTAssertEqual(zoom.title.filter(\.isNumber), "2400", "Zoom inicial: \(zoom.title)")
+        let zoom = app.windows.firstMatch.popUpButtons["zoomLevel"]
+        XCTAssertEqual(
+            (zoom.value as? String ?? "").filter(\.isNumber), "2400", "Zoom inicial: \((zoom.value as? String ?? ""))")
 
         app.menuBars.menuBarItems["View"].click()
         app.menuItems["Simetría"].hover()

@@ -137,9 +137,13 @@ final class CanvasView: NSView, NSMenuItemValidation {
             x: Int(visible.minX.rounded(.down)), y: Int(visible.minY.rounded(.down)),
             width: Int(visible.maxX.rounded(.up)) - Int(visible.minX.rounded(.down)),
             height: Int(visible.maxY.rounded(.up)) - Int(visible.minY.rounded(.down)))
-        // Solo se copia la parte que hay que redibujar.
-        if let region = document.canvas.bitmap.cropped(to: pixels), let image = region.makeCGImage() {
-            let target = CGRect(x: pixels.x, y: pixels.y, width: region.width, height: region.height)
+        // Solo se copia la parte que hay que redibujar. Con zoom alejado basta un píxel de cada `step`:
+        // así el coste depende de la pantalla y no del tamaño de la imagen.
+        let deviceScale = magnification * (window?.backingScaleFactor ?? 2)
+        let step = deviceScale < 1 ? max(1, Int((1 / deviceScale).rounded(.down))) : 1
+        if let region = document.canvas.bitmap.sampled(pixels, step: step), let image = region.makeCGImage() {
+            // Cada muestra cubre `step` píxeles; lo que sobresalga lo recorta AppKit.
+            let target = CGRect(x: pixels.x, y: pixels.y, width: region.width * step, height: region.height * step)
             context.saveGState()
             context.interpolationQuality = magnification >= 1 ? .none : .medium
             // La vista está volteada: se invierte localmente para que la imagen salga derecha.
@@ -279,13 +283,15 @@ final class CanvasView: NSView, NSMenuItemValidation {
     // MARK: Cursor
 
     override func resetCursorRects() {
-        let cursor: NSCursor =
-            switch tool {
-            case .zoom: .zoomIn
-            case .text: .iBeam
-            default: .crosshair
-            }
+        let tip = editor?.tipSize
+        let cursor = ToolCursors.cursor(
+            for: tool, size: tip?.size, square: tip?.square ?? false, magnification: magnification)
         addCursorRect(visibleRect, cursor: cursor)
+    }
+
+    /// Clave del cursor actual: si cambia (tamaño de punta, zoom), se rehacen los cursores.
+    var cursorKey = "" {
+        didSet { if cursorKey != oldValue { window?.invalidateCursorRects(for: self) } }
     }
 
     override func updateTrackingAreas() {

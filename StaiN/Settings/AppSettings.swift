@@ -1,4 +1,6 @@
-import Foundation
+import AppKit
+import StainKit
+import UniformTypeIdentifiers
 
 /// Preferencias guardadas en `UserDefaults`. Se pueden sobrescribir al lanzar la app (`-canvasWidth 320`).
 enum AppSettings {
@@ -7,6 +9,38 @@ enum AppSettings {
         static let canvasHeight = "canvasHeight"
         static let jpegQuality = "jpegQuality"
         static let gridSpacing = "gridSpacing"
+        static let appearance = "appearance"
+        static let saveFormat = "saveFormat"
+        static let pixelModeByDefault = "pixelModeByDefault"
+    }
+
+    enum Appearance: String, CaseIterable, Identifiable {
+        case system, light, dark
+        var id: Self { self }
+    }
+
+    static var appearance: Appearance {
+        UserDefaults.standard.string(forKey: Key.appearance).flatMap(Appearance.init) ?? .system
+    }
+
+    /// Aplica la apariencia elegida a toda la app (ventanas, menús y paneles).
+    @MainActor
+    static func applyAppearance() {
+        switch appearance {
+        case .system: NSApp.appearance = nil
+        case .light: NSApp.appearance = NSAppearance(named: .aqua)
+        case .dark: NSApp.appearance = NSAppearance(named: .darkAqua)
+        }
+    }
+
+    /// Formato que se propone al guardar un documento nuevo.
+    static var saveFormat: UTType {
+        UserDefaults.standard.string(forKey: Key.saveFormat).flatMap { UTType($0) }
+            .flatMap { type in ImageCodec.supportedTypes.first { $0 == type } } ?? .png
+    }
+
+    static var pixelModeByDefault: Bool {
+        UserDefaults.standard.bool(forKey: Key.pixelModeByDefault)
     }
 
     static let defaultGridSpacing = 16

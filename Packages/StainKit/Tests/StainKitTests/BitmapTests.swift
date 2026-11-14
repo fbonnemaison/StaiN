@@ -73,6 +73,17 @@ import Testing
         #expect(Bitmap(width: 2, height: 2).cropped(to: PixelRect(x: 5, y: 5, width: 2, height: 2)) == nil)
     }
 
+    @Test func sampledTakesEveryNthPixel() throws {
+        var bitmap = Bitmap(width: 5, height: 5)
+        bitmap[0, 0] = red
+        bitmap[2, 2] = red
+        bitmap[4, 4] = red
+        let sample = try #require(bitmap.sampled(bitmap.bounds, step: 2))
+        #expect(sample.width == 3 && sample.height == 3)
+        #expect(sample[0, 0] == red && sample[1, 1] == red && sample[2, 2] == red && sample[1, 0] == .white)
+        #expect(bitmap.sampled(bitmap.bounds, step: 1) == bitmap)
+    }
+
     @Test func copyOnWriteKeepsCopiesIndependent() {
         var a = Bitmap(width: 2, height: 2)
         let b = a

@@ -72,6 +72,24 @@ private func count(_ color: PaintColor, in bitmap: Bitmap) -> Int {
     }
 }
 
+@Suite struct BrushPressureTests {
+    @Test func pressureShrinksBrush() {
+        var canvas = Canvas(width: 20, height: 20)
+        var light = event(10, 10)
+        light.pressure = 0.25
+        stroke(BrushTool(shape: .square, size: 8, usesPressure: true), on: &canvas, [light])
+        #expect(count(.black, in: canvas.bitmap) == 4, "8 × 0,25 = 2 → 2 × 2 píxeles")
+    }
+
+    @Test func pressureIgnoredWhenDisabled() {
+        var canvas = Canvas(width: 20, height: 20)
+        var light = event(10, 10)
+        light.pressure = 0.25
+        stroke(BrushTool(shape: .square, size: 4), on: &canvas, [light])
+        #expect(count(.black, in: canvas.bitmap) == 16)
+    }
+}
+
 @Suite struct EraserToolTests {
     @Test func erasesWithSecondaryColorForEitherButton() {
         var canvas = Canvas(width: 10, height: 10, background: .black)

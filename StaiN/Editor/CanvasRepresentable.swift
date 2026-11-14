@@ -46,12 +46,16 @@ struct CanvasRepresentable: NSViewRepresentable {
         canvas.tool = tool
         canvas.textStyle = textStyle
         canvas.showsGrid = showsGrid
+        let tip = editor.tipSize
+        canvas.cursorKey = "\(tool.rawValue)-\(tip?.size ?? 0)-\(tip?.square ?? false)-\(zoom)"
         canvas.showsPixelGrid = editor.showsPixelGrid
         document.undoManager = undoManager
         if context.coordinator.fitRequest != editor.fitRequest {
             context.coordinator.fitRequest = editor.fitRequest
             DispatchQueue.main.async { canvas.zoomToFit() }
         }
+        canvas.setAccessibilityValue(
+            String(localized: "\(Int(imageSize.width)) × \(Int(imageSize.height)) píxeles, herramienta \(tool.title)"))
         if canvas.frame.size != imageSize {
             canvas.setFrameSize(imageSize)
             canvas.needsDisplay = true

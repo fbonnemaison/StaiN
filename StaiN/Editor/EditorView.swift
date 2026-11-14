@@ -50,6 +50,8 @@ struct EditorView: View {
             }
         }
         .frame(minWidth: 640, minHeight: 480)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Editor de imagen")
         .onChange(of: editor.transparentSelection) { _, value in document.setTransparentSelection(value) }
         .sheet(item: $editor.activeSheet) { sheet in
             switch sheet {
@@ -118,12 +120,17 @@ private struct StatusBar: View {
             Spacer()
             Button("Alejar", systemImage: "minus.magnifyingglass") { editor.zoomOut() }
                 .disabled(!editor.canZoomOut)
-            Menu(Self.format(editor.zoom)) {
+            Picker("Nivel de zoom", selection: $editor.zoom) {
+                // Con el pellizco el zoom puede quedar entre dos niveles: se muestra tal cual.
+                if !EditorState.zoomLevels.contains(editor.zoom) {
+                    Text(Self.format(editor.zoom)).tag(editor.zoom)
+                }
                 ForEach(EditorState.zoomLevels, id: \.self) { level in
-                    Button(Self.format(level)) { editor.zoom = level }
+                    Text(Self.format(level)).tag(level)
                 }
             }
-            .menuStyle(.borderlessButton)
+            .labelsHidden()
+            .pickerStyle(.menu)
             .fixedSize()
             .accessibilityIdentifier("zoomLevel")
             Button("Acercar", systemImage: "plus.magnifyingglass") { editor.zoomIn() }
@@ -132,13 +139,12 @@ private struct StatusBar: View {
         .labelStyle(.titleAndIcon)
         .buttonStyle(.borderless)
         .font(.callout.monospacedDigit())
-        .foregroundStyle(.secondary)
         .padding(.horizontal, 10)
         .padding(.vertical, 4)
     }
 
     private var cursorText: String {
-        guard let cursor = editor.cursor else { return "—" }
+        guard let cursor = editor.cursor else { return String(localized: "Fuera del lienzo") }
         return "\(cursor.x), \(cursor.y) px"
     }
 

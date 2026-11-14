@@ -51,12 +51,12 @@ final class EditorUITests: XCTestCase {
     @MainActor
     func testZoomCommands() {
         XCTAssertTrue(canvas.waitForExistence(timeout: 5))
-        let zoom = app.menuButtons["zoomLevel"]
-        XCTAssertTrue(zoom.title.contains("100"))
+        let zoom = app.popUpButtons["zoomLevel"]
+        XCTAssertTrue((zoom.value as? String ?? "").contains("100"))
         app.typeKey("+", modifierFlags: .command)
-        XCTAssertTrue(zoom.title.contains("200"), "Zoom tras ⌘+: \(zoom.title)")
+        XCTAssertTrue((zoom.value as? String ?? "").contains("200"), "Zoom tras ⌘+: \((zoom.value as? String ?? ""))")
         app.typeKey("0", modifierFlags: .command)
-        XCTAssertTrue(zoom.title.contains("100"))
+        XCTAssertTrue((zoom.value as? String ?? "").contains("100"))
     }
 
     @MainActor

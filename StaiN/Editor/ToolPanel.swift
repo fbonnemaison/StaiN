@@ -23,6 +23,8 @@ struct ToolPanel: View {
         }
         .scrollIndicators(.never)
         .frame(width: 76)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Herramientas")
     }
 }
 

@@ -2,6 +2,8 @@ import SwiftUI
 
 @main
 struct StaiNApp: App {
+    @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
+
     var body: some Scene {
         DocumentGroup(newDocument: { ImageDocument() }) { file in
             EditorView(document: file.document)
@@ -11,5 +13,11 @@ struct StaiNApp: App {
         Settings {
             SettingsView()
         }
+    }
+}
+
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        AppSettings.applyAppearance()
     }
 }

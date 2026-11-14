@@ -134,7 +134,7 @@ enum ToolKind: String, CaseIterable, Identifiable {
         case .freeFormSelect: SelectionTool(mode: .freeForm, isTransparent: options.transparentSelection)
         case .select: SelectionTool(mode: .rectangle, isTransparent: options.transparentSelection)
         case .pencil: PencilTool()
-        case .brush: BrushTool(shape: options.brushShape, size: options.brushSize)
+        case .brush: BrushTool(shape: options.brushShape, size: options.brushSize, usesPressure: true)
         case .airbrush: AirbrushTool(radius: options.airbrushRadius)
         case .eraser: EraserTool(size: options.eraserSize, erasesToTransparent: options.erasesToTransparent)
         case .fill: FillTool(tolerance: UInt8((options.fillTolerance * 255).rounded()))

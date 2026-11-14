@@ -67,7 +67,7 @@ final class EditorState {
 
     // Pixel art
     /// Sin suavizado en texto, flechas y resaltador.
-    var pixelMode = false
+    var pixelMode = AppSettings.pixelModeByDefault
     var symmetry: Symmetry = []
     /// Cuadrícula de píxeles a partir de 800 %.
     var showsPixelGrid = true

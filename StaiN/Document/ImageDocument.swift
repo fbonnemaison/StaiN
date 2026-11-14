@@ -10,7 +10,11 @@ import UniformTypeIdentifiers
 @MainActor
 final class ImageDocument: ReferenceFileDocument {
     nonisolated static var readableContentTypes: [UTType] { ImageCodec.supportedTypes }
-    nonisolated static var writableContentTypes: [UTType] { ImageCodec.supportedTypes }
+    /// El formato preferido (Ajustes) va primero: es el que se propone al guardar.
+    nonisolated static var writableContentTypes: [UTType] {
+        let preferred = AppSettings.saveFormat
+        return [preferred] + ImageCodec.supportedTypes.filter { $0 != preferred }
+    }
 
     var canvas: StainKit.Canvas
     /// Última versión terminada de la imagen (sin trazos a medias). macOS la lee desde otro hilo al guardar.
