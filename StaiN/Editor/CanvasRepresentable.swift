@@ -45,6 +45,7 @@ struct CanvasRepresentable: NSViewRepresentable {
         canvas.tool = tool
         canvas.textStyle = textStyle
         canvas.showsGrid = showsGrid
+        canvas.showsPixelGrid = editor.showsPixelGrid
         document.undoManager = undoManager
         if canvas.frame.size != imageSize {
             canvas.setFrameSize(imageSize)

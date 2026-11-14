@@ -95,6 +95,19 @@ private struct ToolOptions: View {
                 Hint("Arrastra para\ncrear un cuadro")
             case .bomb:
                 Hint("Clic: borrar\ntoda la imagen")
+            case .arrow:
+                SizeList(sizes: EditorState.arrowWidths, selection: $editor.arrowWidth, label: "Grosor de la flecha")
+                Hint("⇧ = 45°")
+            case .highlighter:
+                SizeList(sizes: EditorState.highlighterSizes, selection: $editor.highlighterSize, label: "Tamaño")
+            case .redact:
+                RedactModePicker(selection: $editor.redactMode)
+            case .marker:
+                SizeList(sizes: EditorState.markerRadii, selection: $editor.markerRadius, label: "Radio")
+                Text("Siguiente: \(editor.nextMarker)").font(.caption2.monospacedDigit())
+                    .accessibilityIdentifier("nextMarker")
+                Button("Reiniciar") { editor.nextMarker = 1 }
+                    .controlSize(.mini)
             case .eyedropper:
                 Hint("Clic: primario\nClic der.: secundario")
             case .zoom:
@@ -261,5 +274,37 @@ private struct CheckboxOption: View {
                 .onTapGesture { isOn.toggle() }
         }
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// Pixelar, desenfocar o tapar con un bloque del color del botón.
+private struct RedactModePicker: View {
+    @Binding var selection: RedactTool.Mode
+
+    var body: some View {
+        VStack(spacing: 2) {
+            ForEach(RedactTool.Mode.allCases, id: \.self) { mode in
+                Button {
+                    selection = mode
+                } label: {
+                    Text(name(mode))
+                        .font(.caption2)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 3)
+                        .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .background(selection == mode ? Color.accentColor.opacity(0.25) : .clear, in: .rect(cornerRadius: 4))
+                .accessibilityAddTraits(selection == mode ? .isSelected : [])
+            }
+        }
+    }
+
+    private func name(_ mode: RedactTool.Mode) -> String {
+        switch mode {
+        case .pixelate: "Pixelar"
+        case .blur: "Desenfocar"
+        case .block: "Bloque"
+        }
     }
 }

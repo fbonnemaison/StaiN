@@ -55,31 +55,46 @@ struct PaletteBar: View {
     }
 
     private var paletteGrid: some View {
-        Grid(horizontalSpacing: 2, verticalSpacing: 2) {
-            ForEach(0..<2, id: \.self) { row in
-                GridRow {
-                    ForEach(0..<PaletteStore.columns, id: \.self) { column in
-                        let index = row * PaletteStore.columns + column
-                        let color = palette.colors[index]
-                        SwatchView(
-                            color: color, accessibilityLabel: "Paleta \(index + 1)",
-                            onPrimaryClick: { setColors(color, nil) },
-                            onSecondaryClick: { setColors(nil, color) },
-                            onDoubleClick: {
-                                ColorPanelController.shared.edit(color) { newColor in
-                                    palette.setColor(newColor, at: index)
-                                    setColors(newColor, nil)
-                                }
+        ScrollView(.horizontal) {
+            Grid(horizontalSpacing: 2, verticalSpacing: 2) {
+                ForEach(0..<2, id: \.self) { row in
+                    GridRow {
+                        ForEach(0..<palette.columns, id: \.self) { column in
+                            let index = row * palette.columns + column
+                            if index < palette.colors.count {
+                                swatch(at: index)
+                            } else {
+                                Color.clear.frame(width: swatch, height: swatch)
                             }
-                        )
-                        .frame(width: swatch, height: swatch)
+                        }
                     }
                 }
             }
         }
+        .scrollIndicators(.never)
+        .frame(maxWidth: CGFloat(palette.columns) * (swatch + 2))
         .contextMenu {
+            Button("Cargar paleta…") { PaletteFiles.load(into: palette) }
+            Button("Guardar paleta…") { PaletteFiles.save(palette.colors) }
+            Divider()
             Button("Restaurar paleta original") { palette.resetColors() }
         }
+    }
+
+    private func swatch(at index: Int) -> some View {
+        let color = palette.colors[index]
+        return SwatchView(
+            color: color, accessibilityLabel: "Paleta \(index + 1)",
+            onPrimaryClick: { setColors(color, nil) },
+            onSecondaryClick: { setColors(nil, color) },
+            onDoubleClick: {
+                ColorPanelController.shared.edit(color) { newColor in
+                    palette.setColor(newColor, at: index)
+                    setColors(newColor, nil)
+                }
+            }
+        )
+        .frame(width: swatch, height: swatch)
     }
 
     private var recentColors: some View {

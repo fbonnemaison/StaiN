@@ -1,3 +1,4 @@
+import AppKit
 import StainKit
 import SwiftUI
 import UniformTypeIdentifiers
@@ -8,6 +9,22 @@ struct EditorView: View {
     @State private var editor = EditorState()
     @Environment(\.undoManager) private var undoManager
     @Environment(\.openDocument) private var openDocument
+
+    private var modeSummary: String {
+        var parts: [String] = []
+        if editor.pixelMode { parts.append("Modo pixel") }
+        if editor.symmetry.contains(.horizontal) { parts.append("Simetría ↔") }
+        if editor.symmetry.contains(.vertical) { parts.append("Simetría ↕") }
+        return parts.joined(separator: " · ")
+    }
+
+    /// Las imágenes pequeñas (pixel art) se abren ampliadas.
+    private func zoomSmallImages() {
+        let side = Double(max(document.width, document.height))
+        guard side <= 128 else { return }
+        editor.zoom = EditorState.zoomLevels.last { $0 * side <= 480 } ?? 1
+        editor.pixelMode = true
+    }
 
     var body: some View {
         HStack(spacing: 0) {
@@ -38,8 +55,25 @@ struct EditorView: View {
             switch sheet {
             case .resize: ResizeSheet(document: document)
             case .canvasSize: CanvasSizeSheet(document: document)
+            case .filter(let kind): FilterSheet(kind: kind, document: document)
             }
         }
+        .toolbar {
+            ToolbarItemGroup {
+                if editor.pixelMode || !editor.symmetry.isEmpty {
+                    Text(modeSummary)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Button("Copiar imagen", systemImage: "doc.on.clipboard") { Clipboard.write(document.canvas.bitmap) }
+                    .help("Copiar toda la imagen al portapapeles (⇧⌘C)")
+                Button("Compartir", systemImage: "square.and.arrow.up") {
+                    ImageExport.share(document.canvas.bitmap, from: NSApp.keyWindow)
+                }
+                .help("Compartir la imagen")
+            }
+        }
+        .onAppear(perform: zoomSmallImages)
         .focusedSceneValue(\.editor, editor)
         .focusedSceneValue(\.imageDocument, document)
         // Soltar archivos de imagen sobre la ventana los abre como documentos nuevos.

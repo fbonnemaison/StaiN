@@ -12,6 +12,14 @@ struct EditorCommands: Commands {
     @FocusedValue(\.editor) private var editor
     @FocusedValue(\.imageDocument) private var document
 
+    private func symmetryBinding(_ axis: Symmetry) -> Binding<Bool> {
+        Binding(
+            get: { editor?.symmetry.contains(axis) ?? false },
+            set: { on in
+                if on { editor?.symmetry.insert(axis) } else { editor?.symmetry.remove(axis) }
+            })
+    }
+
     private var transparentBinding: Binding<Bool> {
         Binding(get: { editor?.transparentSelection ?? false }, set: { editor?.transparentSelection = $0 })
     }
@@ -25,7 +33,54 @@ struct EditorCommands: Commands {
             .disabled(document == nil)
         }
 
+        CommandGroup(after: .newItem) {
+            Button("Nuevo desde el portapapeles") {
+                if let bitmap = Clipboard.readBitmap() { ImageExport.openAsNewDocument(bitmap) } else { NSSound.beep() }
+            }
+            .keyboardShortcut("n", modifiers: [.command, .shift])
+            Button("Nueva captura de pantalla…") { ScreenCapturer.shared.start() }
+                .keyboardShortcut("5", modifiers: [.command, .option])
+            Menu("Nuevo pixel art") {
+                ForEach([16, 32, 64], id: \.self) { side in
+                    Button("\(side) × \(side)") {
+                        ImageExport.openAsNewDocument(Bitmap(width: side, height: side, fill: .clear))
+                    }
+                }
+            }
+        }
+
+        CommandGroup(after: .importExport) {
+            Menu("Exportar a escala") {
+                ForEach([2, 4, 8], id: \.self) { factor in
+                    Button("PNG ×\(factor)…") {
+                        if let document {
+                            ImageExport.exportScaled(document.canvas.bitmap, factor: factor, suggestedName: "Imagen")
+                        }
+                    }
+                }
+            }
+            .disabled(document == nil)
+        }
+
+        CommandMenu("Filtros") {
+            ForEach(FilterKind.allCases) { kind in
+                Button(kind.parameters.isEmpty ? kind.title : "\(kind.title)…") {
+                    if kind.parameters.isEmpty, let document {
+                        document.transform(kind.title) { kind.filter([:]).apply(to: $0) }
+                    } else {
+                        editor?.activeSheet = .filter(kind)
+                    }
+                }
+                .disabled(editor == nil)
+            }
+        }
+
         CommandGroup(after: .pasteboard) {
+            Button("Copiar imagen") {
+                if let document { Clipboard.write(document.canvas.bitmap) }
+            }
+            .keyboardShortcut("c", modifiers: [.command, .shift])
+            .disabled(document == nil)
             Button("Pegar como documento nuevo") {
                 guard let bitmap = Clipboard.readBitmap() else { return }
                 ImageDocument.pendingNewBitmap.withLock { $0 = bitmap }
@@ -77,6 +132,20 @@ struct EditorCommands: Commands {
         }
 
         CommandGroup(before: .toolbar) {
+            Button(editor?.showsPixelGrid == true ? "Ocultar cuadrícula de píxeles" : "Mostrar cuadrícula de píxeles") {
+                editor?.showsPixelGrid.toggle()
+            }
+            .disabled(editor == nil)
+            Button(editor?.pixelMode == true ? "Desactivar modo pixel" : "Activar modo pixel") {
+                editor?.pixelMode.toggle()
+            }
+            .disabled(editor == nil)
+            Menu("Simetría") {
+                Toggle("Horizontal (izquierda ↔ derecha)", isOn: symmetryBinding(.horizontal))
+                Toggle("Vertical (arriba ↕ abajo)", isOn: symmetryBinding(.vertical))
+            }
+            .disabled(editor == nil)
+            Divider()
             Button(editor?.showsGrid == true ? "Ocultar cuadrícula" : "Mostrar cuadrícula") {
                 editor?.showsGrid.toggle()
             }

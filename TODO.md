@@ -97,28 +97,30 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 ## Fase 6 — Extras
 
 ### 6a. Filtros de imagen (Core Image)
-- [ ] Infraestructura de filtros: se aplican a la imagen o a la selección, con vista previa en vivo en una hoja y deshacer
-- [ ] Escala de grises, sepia e invertir
-- [ ] Brillo, contraste y saturación
-- [ ] Desenfoque gaussiano y enfoque (*sharpen*)
-- [ ] Pixelar y posterizar
-- [ ] Umbral (blanco y negro)
+- [x] Infraestructura de filtros: se aplican a la imagen o a la selección, con vista previa en vivo en una hoja y deshacer (menú Filtros)
+- [x] Escala de grises, sepia e invertir
+- [x] Brillo, contraste y saturación
+- [x] Desenfoque gaussiano y enfoque (*sharpen*)
+- [x] Pixelar y posterizar
+- [x] Umbral (blanco y negro)
 
 ### 6b. Anotar capturas
-- [ ] Nuevo documento desde el portapapeles (⌘⇧N) y desde una captura de pantalla con ScreenCaptureKit (región, ventana o pantalla completa)
-- [ ] **Flecha** con grosor y estilo de punta
-- [ ] **Resaltador** semitransparente que no se acumula dentro del mismo trazo
-- [ ] **Redacción**: pixelar, desenfocar o tapar con un bloque sólido una región
-- [ ] **Marcadores numerados** (1, 2, 3…) autoincrementales
-- [ ] Copiar el resultado al portapapeles en un clic (⌘⇧C) y compartir con `ShareLink`
+- [x] Nuevo documento desde el portapapeles (⇧⌘N) y desde una captura de pantalla con ScreenCaptureKit (ventana o pantalla completa, ⌥⌘5; la región se obtiene recortando con ⌘K)
+- [ ] Probar la captura de pantalla a mano: necesita el permiso de Grabación de pantalla y no se puede automatizar
+- [x] **Flecha** (W) con grosor; Shift ajusta a 45°
+- [x] **Resaltador** (H) semitransparente que no se acumula dentro del mismo trazo
+- [x] **Redacción** (herramienta Ocultar, K): pixelar, desenfocar o tapar con un bloque sólido una región
+- [x] **Marcadores numerados** (N) (1, 2, 3…) autoincrementales, con botón para reiniciar
+- [x] Copiar el resultado al portapapeles en un clic (⇧⌘C y botón de la barra) y compartir (botón Compartir con el menú del sistema)
 
 ### 6c. Modo pixel art
-- [ ] Cuadrícula de píxeles visible a partir de cierto zoom (por ejemplo ≥ 800 %)
-- [ ] Lápiz, línea, formas y relleno sin antialiasing (ajuste global "modo pixel")
-- [ ] Plantillas de lienzo pequeñas (16×16, 32×32, 64×64)
-- [ ] Exportar escalado ×2, ×4 u ×8 con vecino más cercano
-- [ ] Dibujo con simetría horizontal y vertical (opcional)
-- [ ] Paletas limitadas (cargar y guardar `.gpl` o `.hex`)
+- [x] Cuadrícula de píxeles visible a partir de 800 % (se puede ocultar en Visualización)
+- [x] Lápiz, línea, formas y relleno sin antialiasing; el "modo pixel" quita también el suavizado de texto, flechas, resaltador y marcadores
+- [x] Plantillas de lienzo pequeñas (16×16, 32×32, 64×64), transparentes; las imágenes pequeñas se abren ampliadas y en modo pixel
+- [x] Exportar escalado ×2, ×4 u ×8 con vecino más cercano (Archivo › Exportar a escala)
+- [x] Dibujo con simetría horizontal y vertical para lápiz, pincel, borrador y aerógrafo
+- [x] Paletas limitadas (cargar y guardar `.gpl` o `.hex`, clic derecho en la paleta; hasta 256 colores)
+- [ ] Probar a mano los paneles de Compartir, Exportar a escala y Cargar/Guardar paleta (los tests de interfaz no los recorren)
 
 ## Fase 7 — Pulido para macOS 26
 - [ ] Barra de herramientas e inspectores con el estilo Liquid Glass del sistema

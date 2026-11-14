@@ -12,10 +12,12 @@ public struct TextStyle: Sendable, Hashable {
     public var color: PaintColor
     /// Fondo opaco, o `nil` para fondo transparente.
     public var background: PaintColor?
+    /// Bordes suaves; en modo pixel art se desactiva.
+    public var antialiased: Bool
 
     public init(
         fontName: String = "Helvetica", size: Double = 18, bold: Bool = false, italic: Bool = false,
-        underline: Bool = false, color: PaintColor = .black, background: PaintColor? = nil
+        underline: Bool = false, color: PaintColor = .black, background: PaintColor? = nil, antialiased: Bool = true
     ) {
         self.fontName = fontName
         self.size = size
@@ -24,6 +26,7 @@ public struct TextStyle: Sendable, Hashable {
         self.underline = underline
         self.color = color
         self.background = background
+        self.antialiased = antialiased
     }
 
     /// Fuente de Core Text con negrita/cursiva si la familia las tiene.
@@ -64,13 +67,32 @@ extension Canvas {
         guard !text.isEmpty else { return }
         let framesetter = CTFramesetterCreateWithAttributedString(style.attributedString(text))
         let height = CGFloat(rect.height)
-        draw(in: rect, antialiased: true) { context in
+        draw(in: rect, antialiased: style.antialiased) { context in
+            context.setShouldSmoothFonts(false)
             // Core Text dibuja con la Y hacia arriba: se deshace el volteo dentro del rectángulo.
             context.translateBy(x: CGFloat(rect.x), y: CGFloat(rect.y) + height)
             context.scaleBy(x: 1, y: -1)
             let path = CGPath(rect: CGRect(x: 0, y: 0, width: CGFloat(rect.width), height: height), transform: nil)
             let frame = CTFramesetterCreateFrame(framesetter, CFRange(location: 0, length: 0), path, nil)
             CTFrameDraw(frame, context)
+        }
+    }
+}
+
+extension Canvas {
+    /// Texto de una línea centrado en un punto (números de los marcadores).
+    mutating func drawCenteredText(_ text: String, style: TextStyle, center: CGPoint) {
+        let line = CTLineCreateWithAttributedString(style.attributedString(text))
+        let bounds = CTLineGetBoundsWithOptions(line, .useGlyphPathBounds)
+        let area = PixelRect(
+            covering: CGRect(
+                x: center.x - bounds.width / 2 - 2, y: center.y - bounds.height / 2 - 2, width: bounds.width + 4,
+                height: bounds.height + 4))
+        draw(in: area, antialiased: style.antialiased) { context in
+            context.translateBy(x: center.x, y: center.y)
+            context.scaleBy(x: 1, y: -1)
+            context.textPosition = CGPoint(x: -bounds.midX, y: -bounds.midY)
+            CTLineDraw(line, context)
         }
     }
 }

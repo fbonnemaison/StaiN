@@ -42,6 +42,9 @@ final class CanvasView: NSView, NSMenuItemValidation {
     var showsGrid = false {
         didSet { if showsGrid != oldValue { needsDisplay = true } }
     }
+    var showsPixelGrid = true {
+        didSet { if showsPixelGrid != oldValue { needsDisplay = true } }
+    }
 
     // Texto
     private var textView: NSTextView?
@@ -93,8 +96,25 @@ final class CanvasView: NSView, NSMenuItemValidation {
             context.draw(image, in: target)
             context.restoreGState()
         }
+        if showsPixelGrid, magnification >= 8 { drawPixelGrid(in: visible) }
         if showsGrid { drawGrid(in: visible) }
         drawGuides()
+    }
+
+    /// Una línea entre cada píxel, para pixel art (solo con mucho zoom).
+    private func drawPixelGrid(in rect: NSRect) {
+        let path = NSBezierPath()
+        for x in Int(rect.minX.rounded(.down))...Int(rect.maxX.rounded(.up)) {
+            path.move(to: NSPoint(x: CGFloat(x), y: rect.minY))
+            path.line(to: NSPoint(x: CGFloat(x), y: rect.maxY))
+        }
+        for y in Int(rect.minY.rounded(.down))...Int(rect.maxY.rounded(.up)) {
+            path.move(to: NSPoint(x: rect.minX, y: CGFloat(y)))
+            path.line(to: NSPoint(x: rect.maxX, y: CGFloat(y)))
+        }
+        path.lineWidth = 1 / magnification
+        NSColor.gray.withAlphaComponent(0.35).setStroke()
+        path.stroke()
     }
 
     /// Cuadrícula cada `AppSettings.gridSpacing` píxeles (se oculta si queda demasiado apretada).
@@ -265,7 +285,10 @@ final class CanvasView: NSView, NSMenuItemValidation {
             break
         }
         window?.makeFirstResponder(self)
-        guard let kind = editor.tool.makeTool(options: editor) else { return }
+        guard
+            let kind = editor.tool.makeTool(
+                options: editor, canvasWidth: document.width, canvasHeight: document.height)
+        else { return }
         strokeButton = button
         document.pointerDown(pointer, actionName: tool.title, undoManager: undoManagerForStrokes) { kind }
         startRepeatingIfNeeded()
@@ -295,6 +318,7 @@ final class CanvasView: NSView, NSMenuItemValidation {
         document?.pointerUp(pointer, undoManager: undoManagerForStrokes)
         // Como en Paint, el cuentagotas vuelve a la herramienta anterior al soltar.
         if tool == .eyedropper { editor?.returnToPreviousTool() }
+        if tool == .marker { editor?.nextMarker += 1 }
     }
 
     override func keyDown(with event: NSEvent) {

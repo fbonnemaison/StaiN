@@ -32,11 +32,31 @@ final class EditorState {
     var selectionSize: PixelPosition?
     var showsGrid = false
 
-    enum Sheet: String, Identifiable {
+    enum Sheet: Hashable, Identifiable {
         case resize
         case canvasSize
+        case filter(FilterKind)
         var id: Self { self }
     }
+
+    // Anotar capturas
+    var arrowWidth = 4
+    var highlighterSize = 16
+    var redactMode: RedactTool.Mode = .pixelate
+    var markerRadius = 14
+    /// Número del próximo marcador (1, 2, 3…).
+    var nextMarker = 1
+
+    // Pixel art
+    /// Sin suavizado en texto, flechas y resaltador.
+    var pixelMode = false
+    var symmetry: Symmetry = []
+    /// Cuadrícula de píxeles a partir de 800 %.
+    var showsPixelGrid = true
+
+    static let arrowWidths = [2, 3, 4, 6, 8, 12]
+    static let highlighterSizes = [8, 12, 16, 24, 32]
+    static let markerRadii = [10, 14, 18, 24]
     var activeSheet: Sheet?
 
     var shapeFillMode: ShapeFillMode = .outline
@@ -55,7 +75,7 @@ final class EditorState {
     func textStyle(primary: PaintColor, secondary: PaintColor) -> TextStyle {
         TextStyle(
             fontName: fontFamily, size: fontSize, bold: isBold, italic: isItalic, underline: isUnderlined,
-            color: primary, background: hasOpaqueTextBackground ? secondary : nil)
+            color: primary, background: hasOpaqueTextBackground ? secondary : nil, antialiased: !pixelMode)
     }
 
     static let brushSizes = [1, 2, 3, 5, 8, 12, 16, 24]

@@ -17,6 +17,10 @@ enum ToolKind: String, CaseIterable, Identifiable {
     case roundedRectangle
     case ellipse
     case polygon
+    case arrow
+    case highlighter
+    case redact
+    case marker
     case zoom
     case bomb
 
@@ -39,6 +43,10 @@ enum ToolKind: String, CaseIterable, Identifiable {
         case .roundedRectangle: "Rectángulo redondeado"
         case .ellipse: "Elipse"
         case .polygon: "Polígono"
+        case .arrow: "Flecha"
+        case .highlighter: "Resaltador"
+        case .redact: "Ocultar"
+        case .marker: "Marcador numerado"
         case .zoom: "Lupa"
         case .bomb: "Bomba"
         }
@@ -61,6 +69,10 @@ enum ToolKind: String, CaseIterable, Identifiable {
         case .roundedRectangle: "app"
         case .ellipse: "oval"
         case .polygon: "pentagon"
+        case .arrow: "arrow.up.right"
+        case .highlighter: "highlighter"
+        case .redact: "eye.slash"
+        case .marker: "1.circle"
         case .zoom: "magnifyingglass"
         case .bomb: "burst"
         }
@@ -84,6 +96,10 @@ enum ToolKind: String, CaseIterable, Identifiable {
         case .roundedRectangle: "u"
         case .ellipse: "o"
         case .polygon: "g"
+        case .arrow: "w"
+        case .highlighter: "h"
+        case .redact: "k"
+        case .marker: "n"
         case .zoom: "z"
         case .bomb: nil
         }
@@ -96,11 +112,24 @@ enum ToolKind: String, CaseIterable, Identifiable {
         [.rectangle, .roundedRectangle, .ellipse, .polygon].contains(self)
     }
 
+    /// Herramientas de trazo libre, que admiten simetría.
+    var isFreehand: Bool { [.pencil, .brush, .eraser, .airbrush].contains(self) }
+
     /// Herramienta de dibujo configurada con las opciones actuales, o `nil` si la gestiona la vista (lupa, texto).
     @MainActor
-    func makeTool(options: EditorState) -> (any Tool)? {
+    func makeTool(options: EditorState, canvasWidth: Int, canvasHeight: Int) -> (any Tool)? {
+        guard let base = makeBaseTool(options: options) else { return nil }
+        guard isFreehand, !options.symmetry.isEmpty else { return base }
+        return MirroredTool(symmetry: options.symmetry, canvasWidth: canvasWidth, canvasHeight: canvasHeight) {
+            makeBaseTool(options: options) ?? base
+        }
+    }
+
+    @MainActor
+    private func makeBaseTool(options: EditorState) -> (any Tool)? {
         let fill = options.shapeFillMode
         let width = options.shapeLineWidth
+        let smooth = !options.pixelMode
         return switch self {
         case .freeFormSelect: SelectionTool(mode: .freeForm, isTransparent: options.transparentSelection)
         case .select: SelectionTool(mode: .rectangle, isTransparent: options.transparentSelection)
@@ -116,6 +145,10 @@ enum ToolKind: String, CaseIterable, Identifiable {
         case .roundedRectangle: ShapeTool(kind: .roundedRectangle, fillMode: fill, lineWidth: width)
         case .ellipse: ShapeTool(kind: .ellipse, fillMode: fill, lineWidth: width)
         case .polygon: PolygonTool(fillMode: fill, lineWidth: width)
+        case .arrow: ArrowTool(lineWidth: options.arrowWidth, antialiased: smooth)
+        case .highlighter: HighlighterTool(size: options.highlighterSize, antialiased: smooth)
+        case .redact: RedactTool(mode: options.redactMode)
+        case .marker: StepMarkerTool(number: options.nextMarker, radius: options.markerRadius, antialiased: smooth)
         case .bomb: BombTool()
         case .zoom, .text: nil
         }

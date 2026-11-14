@@ -15,7 +15,8 @@ final class PaletteStore {
         "FF00FF", "FFFF80", "00FF80", "80FFFF", "8080FF", "FF0080", "FF8040",
     ].compactMap { PaintColor(hex: $0) }
 
-    static let columns = 14
+    /// Columnas de la cuadrícula de 2 filas.
+    var columns: Int { max(1, (colors.count + 1) / 2) }
     static let maxRecent = 10
 
     private(set) var colors: [PaintColor]
@@ -30,13 +31,20 @@ final class PaletteStore {
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         let saved = (defaults.stringArray(forKey: Key.colors) ?? []).compactMap(PaintColor.init(hex:))
-        colors = saved.count == Self.defaultColors.count ? saved : Self.defaultColors
+        colors = saved.isEmpty ? Self.defaultColors : saved
         recent = (defaults.stringArray(forKey: Key.recent) ?? []).compactMap(PaintColor.init(hex:))
     }
 
     func setColor(_ color: PaintColor, at index: Int) {
         guard colors.indices.contains(index) else { return }
         colors[index] = color
+        defaults.set(colors.map(\.hex), forKey: Key.colors)
+    }
+
+    /// Sustituye la paleta entera (paletas cargadas de archivo, hasta 256 colores).
+    func setColors(_ newColors: [PaintColor]) {
+        guard !newColors.isEmpty else { return }
+        colors = Array(newColors.prefix(256))
         defaults.set(colors.map(\.hex), forKey: Key.colors)
     }
 
