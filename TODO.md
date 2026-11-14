@@ -47,20 +47,20 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Tests: operaciones de píxel, flood fill, deshacer/rehacer e ida y vuelta con `CGImage` (38 tests)
 
 ## Fase 2 — Documento, lienzo y archivos
-- [ ] `DocumentGroup` con lienzo nuevo en blanco (tamaño por defecto configurable)
-- [ ] Abrir y guardar **PNG, JPEG, BMP, GIF, TIFF y HEIC** con ImageIO; calidad JPEG al exportar
-- [ ] `CanvasView` (NSView) que pinta el bitmap con una capa de fondo a cuadros para la transparencia
-- [ ] Scroll y zoom (de 12,5 % a 3200 %), con el lienzo centrado cuando es más pequeño que la ventana (como `SWCenteringClipView`)
-- [ ] Zoom con pellizco del trackpad, con ⌘+/⌘−/⌘0 y con la herramienta lupa
-- [ ] Barra de estado: posición del cursor, tamaño de la selección, tamaño de la imagen y zoom
-- [ ] Arrastrar y soltar imágenes sobre el lienzo o el icono del Dock
-- [ ] Imprimir (⌘P) con escalado a la página
-- [ ] Aviso de cambios sin guardar, autosave y versiones nativas de macOS
-- [ ] Conectar `UndoHistory` con el `UndoManager` del documento (menú Edición, ⌘Z/⇧⌘Z)
+- [x] `DocumentGroup` con lienzo nuevo en blanco (tamaño por defecto configurable en Ajustes)
+- [x] Abrir y guardar **PNG, JPEG, BMP, GIF, TIFF y HEIC** con ImageIO (respeta la orientación EXIF; JPEG/BMP se aplanan sobre blanco); calidad JPEG/HEIC en Ajustes
+- [x] `CanvasView` (NSView) que pinta el bitmap con una capa de fondo a cuadros para la transparencia (solo redibuja la región sucia)
+- [x] Scroll y zoom (de 12,5 % a 3200 %), con el lienzo centrado cuando es más pequeño que la ventana (como `SWCenteringClipView`)
+- [x] Zoom con pellizco del trackpad, con ⌘+/⌘−/⌘0 y con la herramienta lupa
+- [x] Barra de estado: posición del cursor, tamaño de la imagen y zoom (el tamaño de la selección llega con la Fase 5)
+- [x] Arrastrar y soltar imágenes sobre la ventana o el icono del Dock (se abren como documentos)
+- [x] Imprimir (⌘P) con escalado a la página
+- [x] Aviso de cambios sin guardar, autosave y versiones nativas de macOS
+- [x] Deshacer/rehacer con el `UndoManager` del documento (menú Edición, ⌘Z/⇧⌘Z), un paso por trazo con `UndoPatch`
 
 ## Fase 3 — Herramientas básicas y color
 - [ ] Panel de herramientas (cuadrícula de iconos de SF Symbols con tooltips y atajos de una tecla)
-- [ ] **Lápiz**: 1 px sin antialiasing
+- [x] **Lápiz**: 1 px sin antialiasing (adelantado en la Fase 2)
 - [ ] **Pincel**: tamaños y formas (redondo, cuadrado, caligráfico /, \)
 - [ ] **Borrador**: pinta con el color secundario, o transparente, y tiene tamaños
 - [ ] **Relleno (cubo)**: con tolerancia ajustable
@@ -129,6 +129,8 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [ ] Localización en **español** e **inglés** (String Catalog)
 - [ ] Modo oscuro y claro
 - [ ] Rendimiento: la copia del bitmap al empezar cada trazo copia la imagen entera; cambiar a copia por tiles si va lento
+- [ ] Deshacer: `UndoManager` limita pasos pero no memoria; aplicar el límite de bytes de `UndoHistory` si hace falta
+- [ ] El menú muestra "Deshacer" sin el nombre de la acción ("Deshacer Lápiz"); revisar con los comandos de SwiftUI
 - [ ] Rendimiento: probar con imágenes de 8000×8000, perfilar con Instruments y valorar Metal o tiles si hace falta
 - [ ] Icono de la app y de los tipos de documento
 

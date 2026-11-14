@@ -36,6 +36,20 @@ extension Bitmap {
             decode: nil, shouldInterpolate: false, intent: .defaultIntent)
     }
 
+    /// Copia sin transparencia: compone la imagen sobre un color de fondo (para JPEG y BMP).
+    public func flattened(onto background: PaintColor = .white) -> Bitmap {
+        guard let image = makeCGImage() else { return self }
+        let width = width, height = height
+        var result = Bitmap(width: width, height: height, fill: background)
+        result.draw(antialiased: false) { context in
+            // `draw` voltea el sistema de coordenadas; se deshace para que la imagen no salga invertida.
+            context.translateBy(x: 0, y: CGFloat(height))
+            context.scaleBy(x: 1, y: -1)
+            context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+        }
+        return result
+    }
+
     /// Dibuja con Core Graphics directamente sobre los píxeles.
     ///
     /// - El sistema de coordenadas está volteado: el origen es la esquina superior izquierda y la Y crece hacia

@@ -86,12 +86,17 @@ public struct ToolSession<T: Tool>: Sendable {
         tool.drag(event, on: &canvas)
     }
 
-    /// Termina el trazo y, si cambió algo, lo guarda en el historial.
-    public mutating func pointerUp(_ event: PointerEvent, canvas: inout Canvas, history: inout UndoHistory) {
-        guard isActive else { return }
+    /// Termina el trazo y devuelve el parche para deshacerlo, o `nil` si no cambió nada.
+    public mutating func pointerUp(_ event: PointerEvent, canvas: inout Canvas) -> UndoPatch? {
+        guard isActive else { return nil }
         tool.end(event, on: &canvas)
         isActive = false
-        if let patch = canvas.endEdit() { history.record(patch) }
+        return canvas.endEdit()
+    }
+
+    /// Termina el trazo y, si cambió algo, lo guarda en el historial.
+    public mutating func pointerUp(_ event: PointerEvent, canvas: inout Canvas, history: inout UndoHistory) {
+        if let patch = pointerUp(event, canvas: &canvas) { history.record(patch) }
     }
 
     public mutating func cancel(canvas: inout Canvas) {

@@ -24,6 +24,16 @@ targets:
       - StaiN
     dependencies:
       - package: StainKit
+    info:
+      path: StaiN/Resources/Info.plist
+      properties:
+        CFBundleDocumentTypes:
+          - { CFBundleTypeName: "Imagen PNG", CFBundleTypeRole: Editor, LSHandlerRank: Alternate, LSItemContentTypes: [public.png] }
+          - { CFBundleTypeName: "Imagen JPEG", CFBundleTypeRole: Editor, LSHandlerRank: Alternate, LSItemContentTypes: [public.jpeg] }
+          - { CFBundleTypeName: "Imagen BMP", CFBundleTypeRole: Editor, LSHandlerRank: Alternate, LSItemContentTypes: [com.microsoft.bmp] }
+          - { CFBundleTypeName: "Imagen GIF", CFBundleTypeRole: Editor, LSHandlerRank: Alternate, LSItemContentTypes: [com.compuserve.gif] }
+          - { CFBundleTypeName: "Imagen TIFF", CFBundleTypeRole: Editor, LSHandlerRank: Alternate, LSItemContentTypes: [public.tiff] }
+          - { CFBundleTypeName: "Imagen HEIC", CFBundleTypeRole: Editor, LSHandlerRank: Alternate, LSItemContentTypes: [public.heic] }
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.github.fbonnemaison.StaiN
@@ -35,6 +45,7 @@ targets:
         ENABLE_APP_SANDBOX: YES
         ENABLE_USER_SELECTED_FILES: readwrite
         ENABLE_HARDENED_RUNTIME: YES
+        ENABLE_RESOURCE_ACCESS_PRINTING: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
   StaiNUITests:
     type: bundle.ui-testing
