@@ -26,6 +26,19 @@ final class EditorState {
     var fillTolerance = 0.0
     var lineWidth = 1
 
+    /// "Selección transparente": al mover o pegar, el color secundario no tapa lo de debajo.
+    var transparentSelection = false
+    /// Tamaño de la selección actual (barra de estado).
+    var selectionSize: PixelPosition?
+    var showsGrid = false
+
+    enum Sheet: String, Identifiable {
+        case resize
+        case canvasSize
+        var id: Self { self }
+    }
+    var activeSheet: Sheet?
+
     var shapeFillMode: ShapeFillMode = .outline
     var shapeLineWidth = 1
     var airbrushRadius = 8

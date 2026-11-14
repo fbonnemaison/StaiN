@@ -6,6 +6,15 @@ enum AppSettings {
         static let canvasWidth = "canvasWidth"
         static let canvasHeight = "canvasHeight"
         static let jpegQuality = "jpegQuality"
+        static let gridSpacing = "gridSpacing"
+    }
+
+    static let defaultGridSpacing = 16
+
+    /// Separación de la cuadrícula en píxeles de imagen.
+    static var gridSpacing: Int {
+        let value = UserDefaults.standard.integer(forKey: Key.gridSpacing)
+        return value > 0 ? min(value, 1024) : defaultGridSpacing
     }
 
     static let defaultCanvasWidth = 800

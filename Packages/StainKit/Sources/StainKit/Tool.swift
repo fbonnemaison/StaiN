@@ -95,11 +95,14 @@ public struct ToolOverlay: Sendable, Equatable {
     public var outline: [CGPoint]
     public var isClosed: Bool
     public var handles: [CGPoint]
+    /// Contorno animado de selección ("hormigas marchantes").
+    public var isMarchingAnts: Bool
 
-    public init(outline: [CGPoint] = [], isClosed: Bool = true, handles: [CGPoint] = []) {
+    public init(outline: [CGPoint] = [], isClosed: Bool = true, handles: [CGPoint] = [], isMarchingAnts: Bool = false) {
         self.outline = outline
         self.isClosed = isClosed
         self.handles = handles
+        self.isMarchingAnts = isMarchingAnts
     }
 }
 

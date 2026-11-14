@@ -22,7 +22,7 @@ struct EditorView: View {
                     document: document, editor: editor, zoom: editor.zoom, tool: editor.tool,
                     imageSize: CGSize(width: document.width, height: document.height),
                     textStyle: editor.textStyle(primary: document.primaryColor, secondary: document.secondaryColor),
-                    undoManager: undoManager)
+                    showsGrid: editor.showsGrid, undoManager: undoManager)
                 Divider()
                 PaletteBar(
                     primary: document.primaryColor, secondary: document.secondaryColor,
@@ -33,6 +33,13 @@ struct EditorView: View {
             }
         }
         .frame(minWidth: 640, minHeight: 480)
+        .onChange(of: editor.transparentSelection) { _, value in document.setTransparentSelection(value) }
+        .sheet(item: $editor.activeSheet) { sheet in
+            switch sheet {
+            case .resize: ResizeSheet(document: document)
+            case .canvasSize: CanvasSizeSheet(document: document)
+            }
+        }
         .focusedSceneValue(\.editor, editor)
         .focusedSceneValue(\.imageDocument, document)
         // Soltar archivos de imagen sobre la ventana los abre como documentos nuevos.
@@ -59,7 +66,11 @@ private struct StatusBar: View {
         HStack(spacing: 16) {
             Label(cursorText, systemImage: "cursorarrow")
                 .frame(minWidth: 110, alignment: .leading)
-            Label("\(width) × \(height) px", systemImage: "rectangle.dashed")
+            if let selection = editor.selectionSize {
+                Label("\(selection.x) × \(selection.y) px", systemImage: "rectangle.dashed")
+                    .accessibilityIdentifier("selectionSize")
+            }
+            Label("\(width) × \(height) px", systemImage: "photo")
                 .accessibilityIdentifier("imageSize")
             Spacer()
             Button("Alejar", systemImage: "minus.magnifyingglass") { editor.zoomOut() }

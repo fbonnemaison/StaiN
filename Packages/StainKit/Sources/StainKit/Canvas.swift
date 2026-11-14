@@ -5,7 +5,7 @@ import CoreGraphics
 /// Las herramientas solo modifican el bitmap a través de `Canvas`, que acumula la región sucia
 /// (para redibujar solo eso) y agrupa cada trazo en una edición deshacible.
 public struct Canvas: Sendable {
-    public private(set) var bitmap: Bitmap
+    public internal(set) var bitmap: Bitmap
     public var primaryColor: PaintColor = .black
     public var secondaryColor: PaintColor = .white
 

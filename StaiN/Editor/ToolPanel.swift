@@ -73,11 +73,8 @@ private struct ToolOptions: View {
                 SizeList(sizes: EditorState.brushSizes, selection: $editor.brushSize, label: "Tamaño del pincel")
             case .eraser:
                 SizeList(sizes: EditorState.eraserSizes, selection: $editor.eraserSize, square: true, label: "Tamaño")
-                Toggle(isOn: $editor.erasesToTransparent) {
-                    Text("Transparente").font(.caption2)
-                }
-                .toggleStyle(.checkbox)
-                .help("Borrar dejando píxeles transparentes en vez del color secundario")
+                CheckboxOption(title: "Transparente", isOn: $editor.erasesToTransparent)
+                    .help("Borrar dejando píxeles transparentes en vez del color secundario")
             case .fill:
                 Text("Tolerancia").font(.caption2).foregroundStyle(.secondary)
                 Slider(value: $editor.fillTolerance, in: 0...1)
@@ -104,6 +101,11 @@ private struct ToolOptions: View {
                 Hint("Clic: acercar\n⌥ o clic der.: alejar")
             case .pencil:
                 Hint("Clic der.: color secundario")
+            case .select, .freeFormSelect:
+                CheckboxOption(title: "Transparente", isOn: $editor.transparentSelection)
+                    .help("Al mover o pegar, el color secundario no tapa lo de debajo")
+                    .accessibilityIdentifier("transparentSelection")
+                Hint("⌥ arrastrar:\nduplicar\nFlechas: mover")
             }
         }
         .frame(maxWidth: .infinity)
@@ -239,5 +241,25 @@ private struct FillModePicker: View {
         case .outlineAndFill: "Contorno y relleno"
         case .fill: "Solo relleno"
         }
+    }
+}
+
+/// Casilla con el texto debajo, para que quepa en el panel estrecho.
+private struct CheckboxOption: View {
+    let title: String
+    @Binding var isOn: Bool
+
+    var body: some View {
+        VStack(spacing: 2) {
+            Toggle(title, isOn: $isOn)
+                .labelsHidden()
+                .toggleStyle(.checkbox)
+            Text(title)
+                .font(.caption2)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .onTapGesture { isOn.toggle() }
+        }
+        .accessibilityElement(children: .combine)
     }
 }

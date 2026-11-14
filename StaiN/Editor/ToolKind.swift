@@ -2,6 +2,8 @@ import StainKit
 
 /// Herramientas del panel. Cada una crea una herramienta nueva de StainKit al empezar un trazo.
 enum ToolKind: String, CaseIterable, Identifiable {
+    case freeFormSelect
+    case select
     case pencil
     case brush
     case airbrush
@@ -22,6 +24,8 @@ enum ToolKind: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
+        case .freeFormSelect: "Selección libre"
+        case .select: "Selección"
         case .pencil: "Lápiz"
         case .brush: "Pincel"
         case .airbrush: "Aerógrafo"
@@ -42,6 +46,8 @@ enum ToolKind: String, CaseIterable, Identifiable {
 
     var systemImage: String {
         switch self {
+        case .freeFormSelect: "lasso"
+        case .select: "rectangle.dashed"
         case .pencil: "pencil"
         case .brush: "paintbrush.pointed"
         case .airbrush: "aqi.medium"
@@ -63,6 +69,8 @@ enum ToolKind: String, CaseIterable, Identifiable {
     /// Atajo de una tecla (la bomba no tiene, para no borrar la imagen sin querer).
     var shortcut: Character? {
         switch self {
+        case .freeFormSelect: "q"
+        case .select: "s"
         case .pencil: "p"
         case .brush: "b"
         case .airbrush: "a"
@@ -81,6 +89,8 @@ enum ToolKind: String, CaseIterable, Identifiable {
         }
     }
 
+    var isSelection: Bool { self == .select || self == .freeFormSelect }
+
     /// Las formas usan el modo de relleno y el grosor de línea compartidos.
     var usesShapeOptions: Bool {
         [.rectangle, .roundedRectangle, .ellipse, .polygon].contains(self)
@@ -92,6 +102,8 @@ enum ToolKind: String, CaseIterable, Identifiable {
         let fill = options.shapeFillMode
         let width = options.shapeLineWidth
         return switch self {
+        case .freeFormSelect: SelectionTool(mode: .freeForm, isTransparent: options.transparentSelection)
+        case .select: SelectionTool(mode: .rectangle, isTransparent: options.transparentSelection)
         case .pencil: PencilTool()
         case .brush: BrushTool(shape: options.brushShape, size: options.brushSize)
         case .airbrush: AirbrushTool(radius: options.airbrushRadius)

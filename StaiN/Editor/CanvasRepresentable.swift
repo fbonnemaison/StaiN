@@ -10,6 +10,7 @@ struct CanvasRepresentable: NSViewRepresentable {
     let tool: ToolKind
     let imageSize: CGSize
     let textStyle: TextStyle
+    let showsGrid: Bool
     let undoManager: UndoManager?
 
     func makeNSView(context: Context) -> NSScrollView {
@@ -43,6 +44,8 @@ struct CanvasRepresentable: NSViewRepresentable {
         canvas.undoManagerForStrokes = undoManager
         canvas.tool = tool
         canvas.textStyle = textStyle
+        canvas.showsGrid = showsGrid
+        document.undoManager = undoManager
         if canvas.frame.size != imageSize {
             canvas.setFrameSize(imageSize)
             canvas.needsDisplay = true

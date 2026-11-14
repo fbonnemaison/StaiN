@@ -5,7 +5,7 @@ import StainKit
 ///
 /// Su tamaño es el de la imagen en píxeles; el zoom lo aplica el `NSScrollView` (magnification),
 /// así que las coordenadas de la vista son directamente coordenadas de píxel.
-final class CanvasView: NSView {
+final class CanvasView: NSView, NSMenuItemValidation {
     var document: ImageDocument? {
         didSet {
             guard document !== oldValue else { return }
@@ -37,6 +37,11 @@ final class CanvasView: NSView {
     private var strokeButton: PointerButton?
     private var repeatTimer: Timer?
     private var drawnOverlayRect: NSRect?
+    private var antsTimer: Timer?
+    private var antsPhase: CGFloat = 0
+    var showsGrid = false {
+        didSet { if showsGrid != oldValue { needsDisplay = true } }
+    }
 
     // Texto
     private var textView: NSTextView?
@@ -88,7 +93,30 @@ final class CanvasView: NSView {
             context.draw(image, in: target)
             context.restoreGState()
         }
+        if showsGrid { drawGrid(in: visible) }
         drawGuides()
+    }
+
+    /// Cuadrícula cada `AppSettings.gridSpacing` píxeles (se oculta si queda demasiado apretada).
+    private func drawGrid(in rect: NSRect) {
+        let spacing = CGFloat(AppSettings.gridSpacing)
+        guard spacing * magnification >= 4 else { return }
+        let path = NSBezierPath()
+        var x = (rect.minX / spacing).rounded(.down) * spacing
+        while x <= rect.maxX {
+            path.move(to: NSPoint(x: x, y: rect.minY))
+            path.line(to: NSPoint(x: x, y: rect.maxY))
+            x += spacing
+        }
+        var y = (rect.minY / spacing).rounded(.down) * spacing
+        while y <= rect.maxY {
+            path.move(to: NSPoint(x: rect.minX, y: y))
+            path.line(to: NSPoint(x: rect.maxX, y: y))
+            y += spacing
+        }
+        path.lineWidth = 1 / magnification
+        NSColor.black.withAlphaComponent(0.25).setStroke()
+        path.stroke()
     }
 
     /// Contorno y tiradores de la herramienta pendiente, y el marco del cuadro de texto.
@@ -99,7 +127,7 @@ final class CanvasView: NSView {
             path.move(to: overlay.outline[0])
             overlay.outline.dropFirst().forEach { path.line(to: $0) }
             if overlay.isClosed { path.close() }
-            Self.strokeDashed(path, scale: scale)
+            Self.strokeDashed(path, scale: scale, phase: overlay.isMarchingAnts ? antsPhase : 0)
             for point in overlay.handles {
                 let side = 6 * scale
                 let handle = NSRect(x: point.x - side / 2, y: point.y - side / 2, width: side, height: side)
@@ -116,11 +144,11 @@ final class CanvasView: NSView {
         }
     }
 
-    private static func strokeDashed(_ path: NSBezierPath, scale: CGFloat) {
+    private static func strokeDashed(_ path: NSBezierPath, scale: CGFloat, phase: CGFloat = 0) {
         path.lineWidth = scale
         NSColor.white.setStroke()
         path.stroke()
-        path.setLineDash([4 * scale, 4 * scale], count: 2, phase: 0)
+        path.setLineDash([4 * scale, 4 * scale], count: 2, phase: phase * scale)
         NSColor.black.setStroke()
         path.stroke()
     }
@@ -140,6 +168,40 @@ final class CanvasView: NSView {
         if let old = drawnOverlayRect { setNeedsDisplay(old) }
         if let rect { setNeedsDisplay(rect) }
         drawnOverlayRect = rect
+        updateMarchingAnts()
+        if let bounds = document?.selection?.bounds, document?.hasSelection == true {
+            editor?.selectionSize = .init(x: bounds.width, y: bounds.height)
+        } else {
+            editor?.selectionSize = nil
+        }
+    }
+
+    /// Anima el borde de la selección mientras exista.
+    private func updateMarchingAnts() {
+        let animate = document?.overlay?.isMarchingAnts == true
+        if animate, antsTimer == nil {
+            let timer = Timer(timeInterval: 0.12, repeats: true) { [weak self] _ in
+                MainActor.assumeIsolated {
+                    guard let self else { return }
+                    self.antsPhase = (self.antsPhase + 1).truncatingRemainder(dividingBy: 8)
+                    if let rect = self.drawnOverlayRect { self.setNeedsDisplay(rect) }
+                }
+            }
+            RunLoop.main.add(timer, forMode: .common)
+            antsTimer = timer
+        } else if !animate {
+            antsTimer?.invalidate()
+            antsTimer = nil
+        }
+    }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        // El lienzo recibe Cortar/Copiar/Pegar y las teclas desde el principio.
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let window = self.window, !(window.firstResponder is NSTextView) else { return }
+            window.makeFirstResponder(self)
+        }
     }
 
     // MARK: Cursor
@@ -236,15 +298,95 @@ final class CanvasView: NSView {
     }
 
     override func keyDown(with event: NSEvent) {
+        let step = event.modifierFlags.contains(.shift) ? 10 : 1
+        let selecting = document?.hasSelection == true
         switch event.keyCode {
+        case 53 where selecting, 36, 76:  // Escape con selección, Intro: confirmar.
+            document?.commitTool(undoManager: undoManagerForStrokes)
         case 53:  // Escape: descarta lo que esté a medias.
             strokeButton = nil
             stopRepeating()
             document?.cancelTool()
-        case 36, 76:  // Intro / Enter: confirma la forma, el polígono o la curva.
-            document?.commitTool(undoManager: undoManagerForStrokes)
+        case 51 where selecting, 117 where selecting:  // ⌫ / Supr
+            document?.deleteSelection()
+        case 123 where selecting: document?.nudgeSelection(dx: -step, dy: 0)
+        case 124 where selecting: document?.nudgeSelection(dx: step, dy: 0)
+        case 125 where selecting: document?.nudgeSelection(dx: 0, dy: step)
+        case 126 where selecting: document?.nudgeSelection(dx: 0, dy: -step)
         default:
             super.keyDown(with: event)
+        }
+    }
+
+    // MARK: Portapapeles (menú Edición)
+
+    @objc func copy(_ sender: Any?) {
+        guard let document else { return }
+        Clipboard.write(document.selectedPixels ?? document.canvas.bitmap)
+    }
+
+    @objc func cut(_ sender: Any?) {
+        guard let pixels = document?.selectedPixels else { return }
+        Clipboard.write(pixels)
+        document?.deleteSelection()
+    }
+
+    @objc func delete(_ sender: Any?) {
+        document?.deleteSelection()
+    }
+
+    @objc override func selectAll(_ sender: Any?) {
+        switchTool(to: .select)
+        document?.selectAll(transparent: editor?.transparentSelection ?? false)
+    }
+
+    @objc func paste(_ sender: Any?) {
+        guard let bitmap = Clipboard.readBitmap(), let document, let window else { return }
+        let fits = bitmap.width <= document.width && bitmap.height <= document.height
+        if fits {
+            pasteFloating(bitmap)
+            return
+        }
+        let alert = NSAlert()
+        alert.messageText = "La imagen pegada es más grande que el lienzo"
+        alert.informativeText = "¿Quieres agrandar el lienzo para que quepa?"
+        alert.addButton(withTitle: "Agrandar")
+        alert.addButton(withTitle: "No agrandar")
+        alert.beginSheetModal(for: window) { [weak self] response in
+            MainActor.assumeIsolated {
+                guard let self, let document = self.document else { return }
+                if response == .alertFirstButtonReturn {
+                    let bigger = document.canvas.bitmap.resizedCanvas(
+                        width: max(bitmap.width, document.width), height: max(bitmap.height, document.height),
+                        anchor: .topLeft, fill: document.secondaryColor)
+                    document.replaceImage(with: bigger, actionName: "Agrandar lienzo")
+                }
+                self.pasteFloating(bitmap)
+            }
+        }
+    }
+
+    /// Pega en la esquina superior izquierda de la zona visible, con la herramienta Selección.
+    private func pasteFloating(_ bitmap: Bitmap) {
+        switchTool(to: .select)
+        let visible = visibleRect.intersection(bounds)
+        let x = max(0, Int(visible.minX.rounded(.up)))
+        let y = max(0, Int(visible.minY.rounded(.up)))
+        document?.paste(bitmap, atX: x, y: y, transparent: editor?.transparentSelection ?? false)
+        window?.makeFirstResponder(self)
+    }
+
+    private func switchTool(to newTool: ToolKind) {
+        tool = newTool
+        editor?.tool = newTool
+    }
+
+    func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        switch menuItem.action {
+        case #selector(cut(_:)), #selector(delete(_:)): document?.hasSelection == true
+        case #selector(paste(_:)): Clipboard.hasImage
+        case #selector(copy(_:)), #selector(selectAll(_:)): document != nil
+        default: true
         }
     }
 

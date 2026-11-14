@@ -52,7 +52,7 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] `CanvasView` (NSView) que pinta el bitmap con una capa de fondo a cuadros para la transparencia (solo redibuja la región sucia)
 - [x] Scroll y zoom (de 12,5 % a 3200 %), con el lienzo centrado cuando es más pequeño que la ventana (como `SWCenteringClipView`)
 - [x] Zoom con pellizco del trackpad, con ⌘+/⌘−/⌘0 y con la herramienta lupa
-- [x] Barra de estado: posición del cursor, tamaño de la imagen y zoom (el tamaño de la selección llega con la Fase 5)
+- [x] Barra de estado: posición del cursor, tamaño de la selección, tamaño de la imagen y zoom
 - [x] Arrastrar y soltar imágenes sobre la ventana o el icono del Dock (se abren como documentos)
 - [x] Imprimir (⌘P) con escalado a la página
 - [x] Aviso de cambios sin guardar, autosave y versiones nativas de macOS
@@ -82,17 +82,17 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Tests de interfaz de la Fase 4 (`ShapeAndTextUITests`) ejecutados y captura revisada
 
 ## Fase 5 — Selección y operaciones de imagen
-- [ ] **Selección rectangular** y **selección libre (lazo)**, con hormigas marchantes
-- [ ] Mover la selección (y duplicarla con ⌥ al arrastrar) y moverla con las flechas
-- [ ] Selección transparente: ignora el color secundario al pegar o mover
-- [ ] Cortar, copiar, pegar, eliminar y seleccionar todo, usando el portapapeles del sistema (`NSPasteboard`, PNG/TIFF)
-- [ ] Pegar como documento nuevo
-- [ ] **Recortar** a la selección
-- [ ] **Cambiar tamaño** (porcentaje o píxeles, mantener proporción, interpolación suave o vecino más cercano) e **inclinar**
-- [ ] **Tamaño del lienzo** con anclaje (sin reescalar el contenido)
-- [ ] **Rotar** 90°, 180° y 270°, y **voltear** horizontal y vertical (de la imagen o de la selección)
-- [ ] **Invertir colores** y **borrar imagen**
-- [ ] Cuadrícula superpuesta configurable (como el `SWGridPanel` de Paintbrush)
+- [x] **Selección rectangular** (S) y **selección libre (lazo)** (Q), con hormigas marchantes y tamaño en la barra de estado
+- [x] Mover la selección (y duplicarla con ⌥ al arrastrar) y moverla con las flechas (⇧ = 10 px)
+- [x] Selección transparente: ignora el color secundario al pegar o mover
+- [x] Cortar, copiar, pegar, eliminar y seleccionar todo, usando el portapapeles del sistema (`NSPasteboard`, PNG/TIFF); al pegar algo más grande, ofrece agrandar el lienzo
+- [x] Pegar como documento nuevo (⇧⌘V)
+- [x] **Recortar** a la selección (⌘K)
+- [x] **Cambiar tamaño** (porcentaje o píxeles, mantener proporción, interpolación suave o vecino más cercano) e **inclinar** (⌘R)
+- [x] **Tamaño del lienzo** con anclaje (sin reescalar el contenido) (⌘E)
+- [x] **Rotar** 90°, 180° y 270°, y **voltear** horizontal y vertical (de la imagen o de la selección)
+- [x] **Invertir colores** (⌘I) y **borrar imagen** (⇧⌘⌫)
+- [x] Cuadrícula superpuesta configurable (como el `SWGridPanel` de Paintbrush) (⌘G, separación en Ajustes)
 
 ## Fase 6 — Extras
 
@@ -132,7 +132,7 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [ ] Rendimiento: la copia del bitmap al empezar cada trazo copia la imagen entera; cambiar a copia por tiles si va lento
 - [ ] Deshacer: `UndoManager` limita pasos pero no memoria; aplicar el límite de bytes de `UndoHistory` si hace falta
 - [ ] El menú muestra "Deshacer" sin el nombre de la acción ("Deshacer Lápiz"); revisar con los comandos de SwiftUI
-- [ ] Al guardar con una forma o un polígono aún editables, se guarda la imagen sin ellos: confirmar lo pendiente antes de guardar
+- [ ] Al guardar con una forma, un polígono o una selección flotante aún editables, se guarda la imagen sin ellos: confirmar lo pendiente antes de guardar
 - [ ] Rendimiento: probar con imágenes de 8000×8000, perfilar con Instruments y valorar Metal o tiles si hace falta
 - [ ] Icono de la app y de los tipos de documento
 

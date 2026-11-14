@@ -12,17 +12,29 @@ final class ImageDocument: ReferenceFileDocument {
     nonisolated static var readableContentTypes: [UTType] { ImageCodec.supportedTypes }
     nonisolated static var writableContentTypes: [UTType] { ImageCodec.supportedTypes }
 
-    private(set) var canvas: StainKit.Canvas
+    var canvas: StainKit.Canvas
     /// Última versión terminada de la imagen (sin trazos a medias). macOS la lee desde otro hilo al guardar.
     private let committedBitmap: Mutex<Bitmap>
     /// Avisa a la vista de qué región hay que redibujar.
     var canvasDidChange: ((PixelRect) -> Void)?
-    private var controller = ToolController()
-    private var pendingActionName = ""
+    var controller = ToolController()
+    var pendingActionName = ""
+    /// `UndoManager` de la ventana (lo asigna la vista). Lo usan las órdenes de menú.
+    weak var undoManager: UndoManager?
+
+    /// Imagen para el próximo documento nuevo ("Pegar como documento nuevo").
+    nonisolated static let pendingNewBitmap = Mutex<Bitmap?>(nil)
 
     nonisolated init() {
-        let size = AppSettings.newCanvasSize
-        canvas = StainKit.Canvas(width: size.width, height: size.height)
+        if let pasted = Self.pendingNewBitmap.withLock({ value -> Bitmap? in
+            defer { value = nil }
+            return value
+        }) {
+            canvas = StainKit.Canvas(bitmap: pasted)
+        } else {
+            let size = AppSettings.newCanvasSize
+            canvas = StainKit.Canvas(width: size.width, height: size.height)
+        }
         committedBitmap = Mutex(canvas.bitmap)
     }
 
@@ -121,12 +133,12 @@ final class ImageDocument: ReferenceFileDocument {
         flushChanges()
     }
 
-    private func finishEdit(_ patch: UndoPatch, actionName: String, undoManager: UndoManager?) {
+    func finishEdit(_ patch: UndoPatch, actionName: String, undoManager: UndoManager?) {
         commit()
         registerUndo(of: patch, applying: .undo, actionName: actionName, undoManager: undoManager)
     }
 
-    private func toolDidChangeCanvas(colors: (PaintColor, PaintColor)?) {
+    func toolDidChangeCanvas(colors: (PaintColor, PaintColor)?) {
         flushChanges()
         if let colors { colorsMayHaveChanged(from: colors) }
         overlayDidChange?()
@@ -177,12 +189,12 @@ final class ImageDocument: ReferenceFileDocument {
 
     /// Publica el estado actual para guardar. Solo al terminar una edición: copiar a mitad de un trazo
     /// obligaría a duplicar la imagen entera en el siguiente píxel pintado (copy-on-write).
-    private func commit() {
+    func commit() {
         let bitmap = canvas.bitmap
         committedBitmap.withLock { $0 = bitmap }
     }
 
-    private func flushChanges() {
+    func flushChanges() {
         let dirty = canvas.takeDirtyRect()
         if !dirty.isEmpty { canvasDidChange?(dirty) }
     }

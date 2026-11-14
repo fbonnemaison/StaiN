@@ -69,6 +69,28 @@ public struct ToolController: Sendable {
         pointerDragged(lastEvent, canvas: &canvas)
     }
 
+    /// Instala una herramienta ya pendiente (sin clic), p. ej. "Seleccionar todo" o "Pegar".
+    /// Si había otra pendiente, se confirma y se devuelve su parche.
+    public mutating func install(_ newTool: any Tool, canvas: inout Canvas) -> UndoPatch? {
+        let committed = commit(canvas: &canvas)
+        canvas.beginEdit()
+        tool = newTool
+        isPointerDown = false
+        lastEvent = nil
+        return committed
+    }
+
+    /// Modifica la herramienta activa si es del tipo indicado. Devuelve `false` si no lo es.
+    @discardableResult
+    public mutating func modify<T: Tool>(_ type: T.Type, canvas: inout Canvas, _ body: (inout T, inout Canvas) -> Void)
+        -> Bool
+    {
+        guard var current = tool as? T else { return false }
+        body(&current, &canvas)
+        tool = current
+        return true
+    }
+
     /// Confirma la herramienta pendiente (o en curso) y devuelve su parche.
     public mutating func commit(canvas: inout Canvas) -> UndoPatch? {
         guard var current = tool else { return nil }
