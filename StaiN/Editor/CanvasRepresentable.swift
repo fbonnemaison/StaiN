@@ -11,6 +11,7 @@ struct CanvasRepresentable: NSViewRepresentable {
     let imageSize: CGSize
     let textStyle: TextStyle
     let showsGrid: Bool
+    let fitRequest: Int
     let undoManager: UndoManager?
 
     func makeNSView(context: Context) -> NSScrollView {
@@ -47,6 +48,10 @@ struct CanvasRepresentable: NSViewRepresentable {
         canvas.showsGrid = showsGrid
         canvas.showsPixelGrid = editor.showsPixelGrid
         document.undoManager = undoManager
+        if context.coordinator.fitRequest != editor.fitRequest {
+            context.coordinator.fitRequest = editor.fitRequest
+            DispatchQueue.main.async { canvas.zoomToFit() }
+        }
         if canvas.frame.size != imageSize {
             canvas.setFrameSize(imageSize)
             canvas.needsDisplay = true
@@ -68,6 +73,7 @@ struct CanvasRepresentable: NSViewRepresentable {
     @MainActor
     final class Coordinator: NSObject {
         var editor: EditorState?
+        var fitRequest = 0
 
         @objc func didEndLiveMagnify(_ notification: Notification) {
             guard let scrollView = notification.object as? NSScrollView else { return }

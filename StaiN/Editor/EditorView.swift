@@ -39,7 +39,7 @@ struct EditorView: View {
                     document: document, editor: editor, zoom: editor.zoom, tool: editor.tool,
                     imageSize: CGSize(width: document.width, height: document.height),
                     textStyle: editor.textStyle(primary: document.primaryColor, secondary: document.secondaryColor),
-                    showsGrid: editor.showsGrid, undoManager: undoManager)
+                    showsGrid: editor.showsGrid, fitRequest: editor.fitRequest, undoManager: undoManager)
                 Divider()
                 PaletteBar(
                     primary: document.primaryColor, secondary: document.secondaryColor,
@@ -65,6 +65,15 @@ struct EditorView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
+                ControlGroup {
+                    Button(editor.undoTitle, systemImage: "arrow.uturn.backward") { UndoActions.undo() }
+                        .disabled(!editor.canUndo)
+                    Button(editor.redoTitle, systemImage: "arrow.uturn.forward") { UndoActions.redo() }
+                        .disabled(!editor.canRedo)
+                }
+                .help("Deshacer o rehacer (⌘Z / ⇧⌘Z)")
+                Button("Ajustar a la ventana", systemImage: "arrow.up.left.and.arrow.down.right") { editor.zoomToFit() }
+                    .help("Ajustar a la ventana (⌘9)")
                 Button("Copiar imagen", systemImage: "doc.on.clipboard") { Clipboard.write(document.canvas.bitmap) }
                     .help("Copiar toda la imagen al portapapeles (⇧⌘C)")
                 Button("Compartir", systemImage: "square.and.arrow.up") {

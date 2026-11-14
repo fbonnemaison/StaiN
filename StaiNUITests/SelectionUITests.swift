@@ -21,7 +21,9 @@ final class SelectionUITests: XCTestCase {
     }
 
     @MainActor private var canvas: XCUIElement { app.images["canvas"] }
-    @MainActor private var undo: XCUIElement { app.menuItems["undo:"] }
+    @MainActor private var undo: XCUIElement {
+        app.menuBars.menuItems.matching(NSPredicate(format: "title BEGINSWITH %@", "Deshacer")).firstMatch
+    }
     @MainActor private var imageSize: String { app.staticTexts["imageSize"].value as? String ?? "" }
 
     @MainActor

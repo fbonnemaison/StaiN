@@ -110,6 +110,12 @@ public struct Canvas: Sendable {
         return UndoPatch(before: snapshot, after: bitmap, region: editRect)
     }
 
+    /// Parche de la edición en curso tal como está ahora, sin terminarla (para herramientas pendientes).
+    public func currentEditPatch() -> UndoPatch? {
+        guard let snapshot = editSnapshot else { return nil }
+        return UndoPatch(before: snapshot, after: bitmap, region: editRect)
+    }
+
     /// Descarta la edición en curso y restaura la imagen como estaba al empezar.
     public mutating func cancelEdit() {
         guard let snapshot = editSnapshot else { return }

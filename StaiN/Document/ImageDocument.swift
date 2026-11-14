@@ -18,6 +18,11 @@ final class ImageDocument: ReferenceFileDocument {
     /// Avisa a la vista de qué región hay que redibujar.
     var canvasDidChange: ((PixelRect) -> Void)?
     var controller = ToolController()
+    /// Paso de deshacer de la herramienta pendiente, que se actualiza hasta confirmarla.
+    private var pendingUndo: UndoBox?
+    private var undoSizes: [Int] = []
+    static let maxUndoBytes = 512 * 1024 * 1024
+    static let maxUndoSteps = 200
     var pendingActionName = ""
     /// `UndoManager` de la ventana (lo asigna la vista). Lo usan las órdenes de menú.
     weak var undoManager: UndoManager?
@@ -119,6 +124,12 @@ final class ImageDocument: ReferenceFileDocument {
     func cancelTool() {
         guard controller.isActive else { return }
         controller.cancel(canvas: &canvas)
+        if let box = pendingUndo {
+            // La edición descartada no deja paso de deshacer.
+            undoManager?.removeAllActions(withTarget: box)
+            pendingUndo = nil
+        }
+        commit()
         toolDidChangeCanvas(colors: nil)
     }
 
@@ -135,13 +146,51 @@ final class ImageDocument: ReferenceFileDocument {
 
     func finishEdit(_ patch: UndoPatch, actionName: String, undoManager: UndoManager?) {
         commit()
-        registerUndo(of: patch, applying: .undo, actionName: actionName, undoManager: undoManager)
+        if let box = pendingUndo {
+            // La edición ya tenía su paso de deshacer desde que quedó pendiente: solo se actualiza.
+            box.patch = patch
+            pendingUndo = nil
+            return
+        }
+        let box = UndoBox(patch: patch)
+        noteUndoSize(patch.byteCount, undoManager: undoManager)
+        registerUndo(box, applying: .undo, actionName: actionName, undoManager: undoManager)
     }
 
     func toolDidChangeCanvas(colors: (PaintColor, PaintColor)?) {
         flushChanges()
         if let colors { colorsMayHaveChanged(from: colors) }
         overlayDidChange?()
+        if controller.isPending { syncPendingUndo() }
+    }
+
+    /// Una herramienta pendiente (forma editable, selección flotante…) que ya cambió la imagen cuenta como
+    /// modificación: tiene su paso de deshacer (que se va actualizando) y se incluye al guardar.
+    private func syncPendingUndo() {
+        guard let patch = canvas.currentEditPatch() else { return }
+        commit()
+        if let box = pendingUndo {
+            box.patch = patch
+        } else {
+            let box = UndoBox(patch: patch)
+            pendingUndo = box
+            noteUndoSize(patch.byteCount, undoManager: undoManager)
+            registerUndo(box, applying: .undo, actionName: pendingActionName, undoManager: undoManager)
+        }
+    }
+
+    /// Mantiene el historial por debajo de `maxUndoBytes` ajustando cuántos pasos guarda el `UndoManager`.
+    func noteUndoSize(_ bytes: Int, undoManager: UndoManager?) {
+        undoSizes.append(bytes)
+        if undoSizes.count > 1000 { undoSizes.removeFirst(undoSizes.count - 1000) }
+        var total = 0
+        var levels = 0
+        for size in undoSizes.reversed() {
+            total += size
+            if total > Self.maxUndoBytes && levels > 0 { break }
+            levels += 1
+        }
+        undoManager?.levelsOfUndo = min(levels, Self.maxUndoSteps)
     }
 
     var primaryColor: PaintColor { canvas.primaryColor }
@@ -171,24 +220,24 @@ final class ImageDocument: ReferenceFileDocument {
     // MARK: Deshacer
 
     /// Registra cómo deshacer `patch`. Al deshacer, se registra a su vez el rehacer.
+    /// Registra cómo deshacer el parche de `box`. Al deshacer, se registra a su vez el rehacer.
     private func registerUndo(
-        of patch: UndoPatch, applying direction: UndoPatch.Direction, actionName: String, undoManager: UndoManager?
+        _ box: UndoBox, applying direction: UndoPatch.Direction, actionName: String, undoManager: UndoManager?
     ) {
         guard let undoManager else { return }
-        undoManager.registerUndo(withTarget: self) { document in
-            document.cancelTool()
-            document.canvas.apply(patch, direction)
-            document.commit()
-            document.flushChanges()
-            document.registerUndo(
-                of: patch, applying: direction == .undo ? .redo : .undo, actionName: actionName,
-                undoManager: undoManager)
+        // NSUndoManager no retiene el objetivo: la acción guarda la caja para que siga viva.
+        undoManager.registerUndo(withTarget: box) { [weak self, box] _ in
+            guard let self, let patch = box.patch else { return }
+            self.cancelTool()
+            self.canvas.apply(patch, direction)
+            self.commit()
+            self.flushChanges()
+            self.registerUndo(
+                box, applying: direction == .undo ? .redo : .undo, actionName: actionName, undoManager: undoManager)
         }
         undoManager.setActionName(actionName)
     }
 
-    /// Publica el estado actual para guardar. Solo al terminar una edición: copiar a mitad de un trazo
-    /// obligaría a duplicar la imagen entera en el siguiente píxel pintado (copy-on-write).
     func commit() {
         let bitmap = canvas.bitmap
         committedBitmap.withLock { $0 = bitmap }
@@ -197,5 +246,14 @@ final class ImageDocument: ReferenceFileDocument {
     func flushChanges() {
         let dirty = canvas.takeDirtyRect()
         if !dirty.isEmpty { canvasDidChange?(dirty) }
+    }
+}
+
+/// Contenedor mutable del parche de un paso de deshacer (una forma editable lo va cambiando).
+final class UndoBox {
+    var patch: UndoPatch?
+
+    init(patch: UndoPatch?) {
+        self.patch = patch
     }
 }

@@ -20,7 +20,9 @@ final class ShapeAndTextUITests: XCTestCase {
     }
 
     @MainActor private var canvas: XCUIElement { app.images["canvas"] }
-    @MainActor private var undo: XCUIElement { app.menuItems["undo:"] }
+    @MainActor private var undo: XCUIElement {
+        app.menuBars.menuItems.matching(NSPredicate(format: "title BEGINSWITH %@", "Deshacer")).firstMatch
+    }
 
     /// Los menús se revalidan de forma asíncrona: espera a que "Deshacer" cambie de estado.
     @MainActor
@@ -36,10 +38,15 @@ final class ShapeAndTextUITests: XCTestCase {
     }
 
     @MainActor
-    func testRectangleStaysPendingUntilReturn() {
+    func testPendingRectangleCountsAsChangeAndEscapeDiscards() {
         app.typeKey("r", modifierFlags: [])
         point(0.2, 0.2).click(forDuration: 0.1, thenDragTo: point(0.6, 0.7))
-        expectUndo(enabled: false)  // la forma sigue editable: aún no hay paso de deshacer
+        // La forma sigue editable, pero ya cuenta como cambio (y se guardaría).
+        expectUndo(enabled: true)
+        XCTAssertTrue(undo.title.contains("Rectángulo"), "Menú: \(undo.title)")
+        app.typeKey(.escape, modifierFlags: [])
+        expectUndo(enabled: false)  // Escape la descarta, con su paso de deshacer
+        point(0.2, 0.2).click(forDuration: 0.1, thenDragTo: point(0.6, 0.7))
         app.typeKey(.return, modifierFlags: [])
         expectUndo(enabled: true)
     }
@@ -49,7 +56,6 @@ final class ShapeAndTextUITests: XCTestCase {
         app.typeKey("g", modifierFlags: [])
         point(0.2, 0.2).click()
         point(0.8, 0.3).click()
-        expectUndo(enabled: false)
         point(0.5, 0.8).doubleClick()
         expectUndo(enabled: true)
     }

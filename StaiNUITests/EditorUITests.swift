@@ -35,8 +35,8 @@ final class EditorUITests: XCTestCase {
     @MainActor
     func testDrawingRegistersUndo() {
         XCTAssertTrue(canvas.waitForExistence(timeout: 5))
-        let undo = app.menuItems["undo:"]
-        let redo = app.menuItems["redo:"]
+        let undo = app.menuBars.menuItems.matching(NSPredicate(format: "title BEGINSWITH %@", "Deshacer")).firstMatch
+        let redo = app.menuBars.menuItems.matching(NSPredicate(format: "title BEGINSWITH %@", "Rehacer")).firstMatch
         XCTAssertFalse(undo.isEnabled)
 
         // En macOS, el arrastre de XCUITest es `click(forDuration:thenDragTo:)` (no `press`).

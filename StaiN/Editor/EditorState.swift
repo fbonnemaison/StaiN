@@ -10,6 +10,24 @@ final class EditorState {
         var y: Int
     }
 
+    // Estado de deshacer para el menú Edición (con el nombre de la acción).
+    var canUndo = false
+    var canRedo = false
+    var undoActionName = ""
+    var redoActionName = ""
+    /// Se incrementa para pedir "Ajustar a la ventana" (lo resuelve la vista, que conoce su tamaño).
+    var fitRequest = 0
+
+    var undoTitle: String {
+        undoActionName.isEmpty ? String(localized: "Deshacer") : String(localized: "Deshacer \(undoActionName)")
+    }
+
+    var redoTitle: String {
+        redoActionName.isEmpty ? String(localized: "Rehacer") : String(localized: "Rehacer \(redoActionName)")
+    }
+
+    func zoomToFit() { fitRequest += 1 }
+
     var tool: ToolKind = .pencil {
         didSet {
             if oldValue != tool && oldValue != .eyedropper { previousTool = oldValue }

@@ -171,4 +171,16 @@ func at(_ x: Double, _ y: Double, _ button: PointerButton = .primary) -> Pointer
         history.undo(on: &canvas)
         #expect(canvas.bitmap == Bitmap(width: 20, height: 20))
     }
+
+    @Test func currentEditPatchPeeksWithoutEnding() throws {
+        var canvas = Canvas(width: 4, height: 4)
+        canvas.beginEdit()
+        #expect(canvas.currentEditPatch() == nil)
+        canvas.setPixel(x: 1, y: 1, to: .black)
+        let peek = try #require(canvas.currentEditPatch())
+        #expect(peek.region == PixelRect(x: 1, y: 1, width: 1, height: 1))
+        #expect(canvas.isEditing)
+        let ended = canvas.endEdit()
+        #expect(ended == peek)
+    }
 }

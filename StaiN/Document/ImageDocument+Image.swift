@@ -95,6 +95,7 @@ extension ImageDocument {
         flushChanges()
         overlayDidChange?()
         guard let undoManager else { return }
+        noteUndoSize(old.byteCount + new.byteCount, undoManager: undoManager)
         undoManager.registerUndo(withTarget: self) { document in
             document.swapImage(old: new, new: old, actionName: actionName)
         }

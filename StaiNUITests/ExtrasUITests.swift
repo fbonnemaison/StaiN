@@ -20,7 +20,9 @@ final class ExtrasUITests: XCTestCase {
     }
 
     @MainActor private var canvas: XCUIElement { app.images["canvas"].firstMatch }
-    @MainActor private var undo: XCUIElement { app.menuItems["undo:"] }
+    @MainActor private var undo: XCUIElement {
+        app.menuBars.menuItems.matching(NSPredicate(format: "title BEGINSWITH %@", "Deshacer")).firstMatch
+    }
 
     @MainActor
     private func point(_ x: CGFloat, _ y: CGFloat) -> XCUICoordinate {

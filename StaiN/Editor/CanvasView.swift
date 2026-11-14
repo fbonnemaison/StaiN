@@ -14,12 +14,64 @@ final class CanvasView: NSView, NSMenuItemValidation {
             document?.canvasDidChange = { [weak self] rect in
                 self?.setNeedsDisplay(NSRect(x: rect.x, y: rect.y, width: rect.width, height: rect.height))
             }
-            document?.overlayDidChange = { [weak self] in self?.overlayDidChange() }
+            document?.overlayDidChange = { [weak self] in
+                self?.overlayDidChange()
+                self?.refreshUndoState()
+            }
             needsDisplay = true
         }
     }
     var editor: EditorState?
-    var undoManagerForStrokes: UndoManager?
+    var undoManagerForStrokes: UndoManager? {
+        didSet {
+            guard undoManagerForStrokes !== oldValue else { return }
+            let center = NotificationCenter.default
+            if let oldValue {
+                for name in Self.undoNotifications { center.removeObserver(self, name: name, object: oldValue) }
+            }
+            if let undoManagerForStrokes {
+                for name in Self.undoNotifications {
+                    center.addObserver(
+                        self, selector: #selector(undoStateChanged), name: name, object: undoManagerForStrokes)
+                }
+            }
+            refreshUndoState()
+        }
+    }
+
+    private static let undoNotifications: [Notification.Name] = [
+        .NSUndoManagerDidCloseUndoGroup, .NSUndoManagerDidUndoChange, .NSUndoManagerDidRedoChange,
+        .NSUndoManagerCheckpoint,
+    ]
+
+    @objc private func undoStateChanged(_ notification: Notification) {
+        refreshUndoState()
+    }
+
+    /// Copia el estado del `UndoManager` al estado del editor (menú y barra de herramientas).
+    func refreshUndoState() {
+        guard let editor else { return }
+        let manager = undoManagerForStrokes
+        let canUndo = manager?.canUndo ?? false
+        let canRedo = manager?.canRedo ?? false
+        if editor.canUndo != canUndo { editor.canUndo = canUndo }
+        if editor.canRedo != canRedo { editor.canRedo = canRedo }
+        let undoName = canUndo ? manager?.undoActionName ?? "" : ""
+        let redoName = canRedo ? manager?.redoActionName ?? "" : ""
+        if editor.undoActionName != undoName { editor.undoActionName = undoName }
+        if editor.redoActionName != redoName { editor.redoActionName = redoName }
+    }
+
+    /// Zoom para que la imagen entera quepa en la ventana.
+    func zoomToFit() {
+        guard let scrollView = enclosingScrollView, let editor, bounds.width > 0, bounds.height > 0 else { return }
+        let available = scrollView.contentSize
+        let fit = min(available.width / bounds.width, available.height / bounds.height) * 0.95
+        let level = min(max(fit, EditorState.minZoom), EditorState.maxZoom)
+        scrollView.setMagnification(level, centeredAt: NSPoint(x: bounds.midX, y: bounds.midY))
+        editor.zoom = scrollView.magnification
+        needsDisplay = true
+    }
     var tool: ToolKind = .pencil {
         didSet {
             guard tool != oldValue else { return }

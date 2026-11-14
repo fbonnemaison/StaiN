@@ -33,6 +33,17 @@ struct EditorCommands: Commands {
             .disabled(document == nil)
         }
 
+        // Menú Deshacer con el nombre de la acción ("Deshacer Lápiz"). Se envía `undo:` a la cadena de
+        // respondedores para que también funcione dentro de los cuadros de texto.
+        CommandGroup(replacing: .undoRedo) {
+            Button(editor?.undoTitle ?? String(localized: "Deshacer")) { UndoActions.undo() }
+                .keyboardShortcut("z")
+                .disabled(editor.map { !$0.canUndo } ?? false)
+            Button(editor?.redoTitle ?? String(localized: "Rehacer")) { UndoActions.redo() }
+                .keyboardShortcut("z", modifiers: [.command, .shift])
+                .disabled(editor.map { !$0.canRedo } ?? false)
+        }
+
         CommandGroup(after: .newItem) {
             Button("Nuevo desde el portapapeles") {
                 if let bitmap = Clipboard.readBitmap() { ImageExport.openAsNewDocument(bitmap) } else { NSSound.beep() }
@@ -160,7 +171,17 @@ struct EditorCommands: Commands {
             Button("Tamaño real") { editor?.actualSize() }
                 .keyboardShortcut("0")
                 .disabled(editor == nil)
+            Button("Ajustar a la ventana") { editor?.zoomToFit() }
+                .keyboardShortcut("9")
+                .disabled(editor == nil)
             Divider()
         }
     }
+}
+
+/// Envía deshacer/rehacer al primer respondedor (el lienzo, un cuadro de texto, un campo de Ajustes…).
+@MainActor
+enum UndoActions {
+    static func undo() { NSApp.sendAction(Selector(("undo:")), to: nil, from: nil) }
+    static func redo() { NSApp.sendAction(Selector(("redo:")), to: nil, from: nil) }
 }
