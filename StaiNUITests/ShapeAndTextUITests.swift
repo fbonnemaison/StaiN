@@ -22,6 +22,14 @@ final class ShapeAndTextUITests: XCTestCase {
     @MainActor private var canvas: XCUIElement { app.images["canvas"] }
     @MainActor private var undo: XCUIElement { app.menuItems["undo:"] }
 
+    /// Los menús se revalidan de forma asíncrona: espera a que "Deshacer" cambie de estado.
+    @MainActor
+    private func expectUndo(enabled: Bool, file: StaticString = #filePath, line: UInt = #line) {
+        let predicate = NSPredicate(format: "isEnabled == %@", NSNumber(value: enabled))
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: undo)
+        XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: 2), .completed, file: file, line: line)
+    }
+
     @MainActor
     private func point(_ x: CGFloat, _ y: CGFloat) -> XCUICoordinate {
         canvas.coordinate(withNormalizedOffset: CGVector(dx: x, dy: y))
@@ -31,9 +39,9 @@ final class ShapeAndTextUITests: XCTestCase {
     func testRectangleStaysPendingUntilReturn() {
         app.typeKey("r", modifierFlags: [])
         point(0.2, 0.2).click(forDuration: 0.1, thenDragTo: point(0.6, 0.7))
-        XCTAssertFalse(undo.isEnabled, "La forma sigue editable: aún no hay paso de deshacer")
+        expectUndo(enabled: false)  // la forma sigue editable: aún no hay paso de deshacer
         app.typeKey(.return, modifierFlags: [])
-        XCTAssertTrue(undo.isEnabled)
+        expectUndo(enabled: true)
     }
 
     @MainActor
@@ -41,32 +49,35 @@ final class ShapeAndTextUITests: XCTestCase {
         app.typeKey("g", modifierFlags: [])
         point(0.2, 0.2).click()
         point(0.8, 0.3).click()
-        XCTAssertFalse(undo.isEnabled)
+        expectUndo(enabled: false)
         point(0.5, 0.8).doubleClick()
-        XCTAssertTrue(undo.isEnabled)
+        expectUndo(enabled: true)
     }
 
     @MainActor
     func testTextIsRasterizedWhenClickingOutside() {
         app.typeKey("t", modifierFlags: [])
-        XCTAssertTrue(app.popUpButtons["Fuente"].exists, "Aparece la barra de fuentes")
+        XCTAssertTrue(app.popUpButtons["fontPicker"].waitForExistence(timeout: 2), "Aparece la barra de fuentes")
         point(0.1, 0.1).click()
         let box = app.textViews["textBox"]
         XCTAssertTrue(box.waitForExistence(timeout: 2))
         box.typeText("Hola")
         point(0.9, 0.9).click()
         XCTAssertFalse(box.exists)
-        XCTAssertTrue(undo.isEnabled)
+        expectUndo(enabled: true)
     }
 
     @MainActor
     func testBombAsksForConfirmationAndReturnsToPreviousTool() {
+        // Sobre un lienzo blanco, borrar con blanco no cambiaría nada: el secundario pasa a rojo.
+        app.buttons["Paleta 17"].rightClick()
+        expectUndo(enabled: false)
         app.buttons["tool.bomb"].click()
         point(0.5, 0.5).click()
-        let erase = app.buttons["Borrar"]
+        let erase = app.sheets.buttons["Borrar"].firstMatch
         XCTAssertTrue(erase.waitForExistence(timeout: 2))
         erase.click()
-        XCTAssertTrue(undo.isEnabled)
+        expectUndo(enabled: true)
         XCTAssertTrue(app.buttons["tool.pencil"].isSelected)
     }
 

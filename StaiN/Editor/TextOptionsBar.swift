@@ -16,6 +16,7 @@ struct TextOptionsBar: View {
             .labelsHidden()
             .frame(width: 180)
             .accessibilityLabel("Fuente")
+            .accessibilityIdentifier("fontPicker")
 
             Picker("Tamaño", selection: $editor.fontSize) {
                 ForEach(EditorState.fontSizes, id: \.self) { size in

@@ -39,9 +39,9 @@ final class EditorUITests: XCTestCase {
         let redo = app.menuItems["redo:"]
         XCTAssertFalse(undo.isEnabled)
 
-        // Nota: en macOS 27 el arrastre sintético de XCUITest no llega a la vista; se dibuja con clics.
-        canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.3)).click()
-        canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.6, dy: 0.6)).click()
+        // En macOS, el arrastre de XCUITest es `click(forDuration:thenDragTo:)` (no `press`).
+        canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.3))
+            .click(forDuration: 0.1, thenDragTo: canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.6, dy: 0.6)))
         XCTAssertTrue(undo.isEnabled)
 
         app.typeKey("z", modifierFlags: .command)

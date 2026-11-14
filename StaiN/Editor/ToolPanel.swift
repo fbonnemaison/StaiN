@@ -8,17 +8,20 @@ struct ToolPanel: View {
     private let columns = [GridItem(.fixed(30), spacing: 4), GridItem(.fixed(30), spacing: 4)]
 
     var body: some View {
-        VStack(spacing: 10) {
-            LazyVGrid(columns: columns, spacing: 4) {
-                ForEach(ToolKind.allCases) { tool in
-                    ToolButton(tool: tool, isSelected: editor.tool == tool) { editor.tool = tool }
+        // Con ventanas bajas, el panel se desplaza en vez de salirse por arriba.
+        ScrollView(.vertical) {
+            VStack(spacing: 10) {
+                LazyVGrid(columns: columns, spacing: 4) {
+                    ForEach(ToolKind.allCases) { tool in
+                        ToolButton(tool: tool, isSelected: editor.tool == tool) { editor.tool = tool }
+                    }
                 }
+                Divider()
+                ToolOptions(editor: editor)
             }
-            Divider()
-            ToolOptions(editor: editor)
-            Spacer(minLength: 0)
+            .padding(6)
         }
-        .padding(6)
+        .scrollIndicators(.never)
         .frame(width: 76)
     }
 }

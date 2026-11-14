@@ -79,7 +79,7 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] **Texto**: cuadro editable con fuente, tamaño, negrita, cursiva y subrayado, fondo opaco o transparente; se rasteriza al confirmar
 - [x] **Aerógrafo**: spray aleatorio con densidad y radio, que sigue pintando mientras se mantiene el clic
 - [x] Herramienta **"Bomba"** de Paintbrush: borra todo el lienzo con el color secundario (con confirmación y deshacer)
-- [ ] Ejecutar los tests de interfaz de la Fase 4 (`ShapeAndTextUITests`) y revisar la captura: no se pudieron correr con la pantalla bloqueada
+- [x] Tests de interfaz de la Fase 4 (`ShapeAndTextUITests`) ejecutados y captura revisada
 
 ## Fase 5 — Selección y operaciones de imagen
 - [ ] **Selección rectangular** y **selección libre (lazo)**, con hormigas marchantes

@@ -32,7 +32,7 @@ struct EditorView: View {
                 StatusBar(editor: editor, width: document.width, height: document.height)
             }
         }
-        .frame(minWidth: 640, minHeight: 420)
+        .frame(minWidth: 640, minHeight: 480)
         .focusedSceneValue(\.editor, editor)
         .focusedSceneValue(\.imageDocument, document)
         // Soltar archivos de imagen sobre la ventana los abre como documentos nuevos.
