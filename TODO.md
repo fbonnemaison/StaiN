@@ -37,14 +37,14 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [ ] Crear el repositorio público en GitHub, con plantillas de issues y PR
 
 ## Fase 1 — Motor de imagen (`StainKit`)
-- [ ] `Bitmap`: buffer RGBA8 (ancho, alto, stride) con acceso por píxel y conversión a y desde `CGImage`
-- [ ] `PaintColor` (RGBA) con conversión a `CGColor` y `NSColor`
-- [ ] Contexto de dibujo sobre el bitmap, con o sin antialiasing según la herramienta
-- [ ] Seguimiento de *dirty rects* para redibujar solo lo que cambia
-- [ ] Protocolo `Tool` con eventos `begin`/`drag`/`end`/`cancel`, modificadores (Shift, Opción) y botón primario o secundario
-- [ ] Sistema de deshacer y rehacer basado en parches (región antes/después) e integrado con `UndoManager`
-- [ ] Algoritmo de relleno *flood fill* por scanlines con tolerancia
-- [ ] Tests: operaciones de píxel, flood fill, deshacer/rehacer e ida y vuelta con `CGImage`
+- [x] `Bitmap`: buffer RGBA8 premultiplicado (ancho, alto, stride) con acceso por píxel, recorte/reemplazo de regiones y conversión a y desde `CGImage`
+- [x] `PaintColor` (RGBA) con conversión a `CGColor` (en StainKit) y `NSColor` (extensión en la app)
+- [x] Contexto de dibujo sobre el bitmap (origen arriba a la izquierda, con recorte), con o sin antialiasing
+- [x] Seguimiento de *dirty rects* para redibujar solo lo que cambia (`Canvas`)
+- [x] Protocolo `Tool` con eventos `begin`/`drag`/`end`/`cancel`, modificadores (Shift, Opción) y botón primario o secundario, más `ToolSession` (un trazo = un paso de deshacer)
+- [x] Sistema de deshacer y rehacer basado en parches (región antes/después), con límite de pasos y de memoria (`UndoHistory`)
+- [x] Algoritmo de relleno *flood fill* por scanlines con tolerancia
+- [x] Tests: operaciones de píxel, flood fill, deshacer/rehacer e ida y vuelta con `CGImage` (38 tests)
 
 ## Fase 2 — Documento, lienzo y archivos
 - [ ] `DocumentGroup` con lienzo nuevo en blanco (tamaño por defecto configurable)
@@ -56,6 +56,7 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [ ] Arrastrar y soltar imágenes sobre el lienzo o el icono del Dock
 - [ ] Imprimir (⌘P) con escalado a la página
 - [ ] Aviso de cambios sin guardar, autosave y versiones nativas de macOS
+- [ ] Conectar `UndoHistory` con el `UndoManager` del documento (menú Edición, ⌘Z/⇧⌘Z)
 
 ## Fase 3 — Herramientas básicas y color
 - [ ] Panel de herramientas (cuadrícula de iconos de SF Symbols con tooltips y atajos de una tecla)
@@ -127,6 +128,7 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [ ] Accesibilidad: VoiceOver en paneles, Aumentar contraste y navegación con teclado
 - [ ] Localización en **español** e **inglés** (String Catalog)
 - [ ] Modo oscuro y claro
+- [ ] Rendimiento: la copia del bitmap al empezar cada trazo copia la imagen entera; cambiar a copia por tiles si va lento
 - [ ] Rendimiento: probar con imágenes de 8000×8000, perfilar con Instruments y valorar Metal o tiles si hace falta
 - [ ] Icono de la app y de los tipos de documento
 
