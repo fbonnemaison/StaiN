@@ -1,14 +1,61 @@
-# macOS
-.DS_Store
+# ─── Secretos e información sensible ───────────────────────────────
+# Nunca subir claves, certificados ni credenciales.
+.env
+.env.*
+!.env.example
+*.secret
+*.secrets
+secrets/
+Secrets.xcconfig
+*.local.xcconfig
+credentials*
+*.credentials
+.netrc
+# Certificados, claves y perfiles de firma de Apple
+*.p8
+*.p12
+*.pem
+*.key
+*.cer
+*.certSigningRequest
+*.mobileprovision
+*.provisionprofile
+AuthKey_*.p8
+*.keychain
+*.keychain-db
+# Notarización / App Store Connect
+notarytool-*.json
+ExportOptions*.plist
 
-# Xcode
-xcuserdata/
+# ─── Compilación y productos ───────────────────────────────────────
+build/
+Build/
 DerivedData/
+.build/
+*.xcarchive
+*.dSYM
+*.dSYM.zip
+*.app
+*.dmg
+*.pkg
+*.ipa
+dist/
+*.xcresult
+
+# ─── Xcode / Swift Package Manager ─────────────────────────────────
+xcuserdata/
 *.xcuserstate
 *.xcscmblueprint
-build/
-
-# Swift Package Manager
-.build/
+*.xccheckout
 .swiftpm/
 Package.resolved
+
+# ─── Editores y sistema ────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.idea/
+.vscode/
+*.swp
+*~
