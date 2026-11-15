@@ -8,11 +8,10 @@ final class EditorUITests: XCTestCase {
         continueAfterFailure = false
         app = XCUIApplication()
         app.launchArguments = [
-            "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(es)",
+            "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(es)", "-paletteSource", "preset.classic",
+            "-paletteColors", "()", "-customColors", "()", "-recentColors", "()",
             "-canvasWidth", "320",
             "-canvasHeight", "200",
-            "-paletteColors", "()",
-            "-recentColors", "()",
         ]
         app.launch()
         app.typeKey("n", modifierFlags: .command)

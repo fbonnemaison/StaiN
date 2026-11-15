@@ -22,6 +22,7 @@
 		497AB5261739C6F42C929105 /* ImagePrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A91E11D280ADFDC7269EA6E /* ImagePrinter.swift */; };
 		52E4CEFEC062C634A8D11A74 /* ImageSheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F63D0A0DF1B8238273510AC /* ImageSheets.swift */; };
 		56D4DC1E085CCB40F8BD54F2 /* PaletteFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E38C0581382949FD7458DA /* PaletteFiles.swift */; };
+		73B32FCF1CA84608F0259E07 /* PalettePreset+Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED223D47BDA9183B8B3CF296 /* PalettePreset+Title.swift */; };
 		74074C1F433640AD33A3E1DA /* ImageDocument+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303E360C4A2FC6205B2FEC49 /* ImageDocument+Image.swift */; };
 		7E44B66DFD598CF875ECF414 /* ShapeAndTextUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F7EB2DB373995F8477FCC7F /* ShapeAndTextUITests.swift */; };
 		7E699193668FC94D9FD5AB3F /* ToolKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142EAEDE5F7C48FC8459F8A /* ToolKind.swift */; };
@@ -34,6 +35,8 @@
 		B6C9B364B1D579236954C669 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941C28F03A86EA3A9B30A8B /* AppSettings.swift */; };
 		B85247F6BE0E46429F9D6F91 /* ToolCursors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226B57D0B291FD99D59E88E1 /* ToolCursors.swift */; };
 		BA562BE5F0BD8961A3BB79B3 /* EditorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92EC8287D92D53E2EE1C1F5 /* EditorUITests.swift */; };
+		C66D0F9A2277BE96B242F8F9 /* ColorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A48C00A0A3D1E8C891080FD /* ColorUITests.swift */; };
+		C8F8F54F0AEF072716292A53 /* ColorValueEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE50B5B05E9666497CB8096 /* ColorValueEditor.swift */; };
 		CAA187E449664C007F58163B /* ScreenCapturer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF30EFBE9F8BC1677FFA6BCB /* ScreenCapturer.swift */; };
 		D51475CCBE7D00D200076D7C /* TextOptionsBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F77BBA76A4F6E1BF9B4696 /* TextOptionsBar.swift */; };
 		D91CD4F328A6B5761C9B2AF7 /* CenteringClipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E25EC853F211D0B1D123E8 /* CenteringClipView.swift */; };
@@ -68,6 +71,7 @@
 		226B57D0B291FD99D59E88E1 /* ToolCursors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCursors.swift; sourceTree = "<group>"; };
 		26A3EA27F782830FC5C868B5 /* ImageExport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExport.swift; sourceTree = "<group>"; };
 		275822C0165273C754AF9CC4 /* ColorPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPanelController.swift; sourceTree = "<group>"; };
+		2A48C00A0A3D1E8C891080FD /* ColorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUITests.swift; sourceTree = "<group>"; };
 		3013C9056C0ABFD3BEE45696 /* PaletteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteStore.swift; sourceTree = "<group>"; };
 		303E360C4A2FC6205B2FEC49 /* ImageDocument+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageDocument+Image.swift"; sourceTree = "<group>"; };
 		334EF62F50C32E47964055AE /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
@@ -94,10 +98,12 @@
 		B77BE8C7EE709B19FC4F0712 /* EditorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorState.swift; sourceTree = "<group>"; };
 		B953FD2696037BF6B5D740E0 /* EditorCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCommands.swift; sourceTree = "<group>"; };
 		BB85510727AF7FA0B0E31B3A /* ExtrasUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrasUITests.swift; sourceTree = "<group>"; };
+		CBE50B5B05E9666497CB8096 /* ColorValueEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorValueEditor.swift; sourceTree = "<group>"; };
 		D791246C1B7C7FB6AA6AE8BC /* Checkerboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkerboard.swift; sourceTree = "<group>"; };
 		E3B6E52F7008771896A42A75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E77000FAB8EEC1881FBEDC23 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		E7F77BBA76A4F6E1BF9B4696 /* TextOptionsBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOptionsBar.swift; sourceTree = "<group>"; };
+		ED223D47BDA9183B8B3CF296 /* PalettePreset+Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PalettePreset+Title.swift"; sourceTree = "<group>"; };
 		FA4DB9BAC01873A37AE4BBF5 /* SwatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwatchView.swift; sourceTree = "<group>"; };
 		FCE3323DC9C6CC6571224DEA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FF212D3F7FDCA11D632DDA33 /* LICENSE */ = {isa = PBXFileReference; path = LICENSE; sourceTree = "<group>"; };
@@ -163,8 +169,10 @@
 			isa = PBXGroup;
 			children = (
 				275822C0165273C754AF9CC4 /* ColorPanelController.swift */,
+				CBE50B5B05E9666497CB8096 /* ColorValueEditor.swift */,
 				628DD1FFA7645060224E6C0C /* PaletteBar.swift */,
 				96E38C0581382949FD7458DA /* PaletteFiles.swift */,
+				ED223D47BDA9183B8B3CF296 /* PalettePreset+Title.swift */,
 				3013C9056C0ABFD3BEE45696 /* PaletteStore.swift */,
 				FA4DB9BAC01873A37AE4BBF5 /* SwatchView.swift */,
 			);
@@ -202,6 +210,7 @@
 		534CC99F1DCA720310CBDA04 /* StaiNUITests */ = {
 			isa = PBXGroup;
 			children = (
+				2A48C00A0A3D1E8C891080FD /* ColorUITests.swift */,
 				A92EC8287D92D53E2EE1C1F5 /* EditorUITests.swift */,
 				BB85510727AF7FA0B0E31B3A /* ExtrasUITests.swift */,
 				58A2F36640CA6C1B34333206 /* PolishUITests.swift */,
@@ -370,6 +379,7 @@
 				E353FC97CE85D9EB0D293527 /* Checkerboard.swift in Sources */,
 				20E43685AF445A77DBD0B6E8 /* Clipboard.swift in Sources */,
 				F09ABA38D4505EB5D84FAC4C /* ColorPanelController.swift in Sources */,
+				C8F8F54F0AEF072716292A53 /* ColorValueEditor.swift in Sources */,
 				36051A47CD4F92AFFFE68B33 /* EditorCommands.swift in Sources */,
 				82202AB6F6C88BA69F30326A /* EditorState.swift in Sources */,
 				14E43648F0D1EAA669309A38 /* EditorView.swift in Sources */,
@@ -383,6 +393,7 @@
 				FDF8323C6764D10477AD3022 /* PaintColor+AppKit.swift in Sources */,
 				EB4DED571ADC4169151A02A1 /* PaletteBar.swift in Sources */,
 				56D4DC1E085CCB40F8BD54F2 /* PaletteFiles.swift in Sources */,
+				73B32FCF1CA84608F0259E07 /* PalettePreset+Title.swift in Sources */,
 				FD8B849650CC2AD074D06DC8 /* PaletteStore.swift in Sources */,
 				CAA187E449664C007F58163B /* ScreenCapturer.swift in Sources */,
 				1017FD0B2B41F9F161294389 /* SettingsView.swift in Sources */,
@@ -399,6 +410,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C66D0F9A2277BE96B242F8F9 /* ColorUITests.swift in Sources */,
 				BA562BE5F0BD8961A3BB79B3 /* EditorUITests.swift in Sources */,
 				ED846391B085685CFA94CC29 /* ExtrasUITests.swift in Sources */,
 				DD26BBB8A85C71047E723D6B /* PolishUITests.swift in Sources */,

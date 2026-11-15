@@ -9,8 +9,15 @@ Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró ca
 
 ## [Sin publicar]
 ### Añadido
+- 10 paletas preconfiguradas en un selector: clásica, moderna, neón, pasteles, escala de grises, tierra,
+  retro 8 bits, verde 4 tonos, apta para daltonismo e interfaz web. Las paletas cargadas desde archivo
+  también aparecen en el selector.
+- 8 casillas de colores personalizados, que se recuerdan entre sesiones.
+- Panel con valores RGB, alfa y HEX al hacer clic en el color primario o el secundario.
 - Código publicado en GitHub con integración continua.
 - `.gitignore` ampliado para secretos, certificados y productos de compilación.
+### Cambiado
+- Las casillas de color tienen los bordes ligeramente redondeados.
 
 ## [0.7.0] - 2026-11-14
 ### Añadido

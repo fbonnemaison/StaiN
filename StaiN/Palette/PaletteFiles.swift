@@ -21,7 +21,7 @@ enum PaletteFiles {
             alert.runModal()
             return
         }
-        palette.setColors(colors)
+        palette.importPalette(named: url.deletingPathExtension().lastPathComponent, colors: colors)
     }
 
     static func save(_ colors: [PaintColor]) {

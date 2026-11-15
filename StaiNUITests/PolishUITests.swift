@@ -6,7 +6,8 @@ final class PolishUITests: XCTestCase {
     private func launch(appearance: String, language: String = "es") -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = [
-            "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(\(language))",
+            "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(\(language))", "-paletteSource",
+            "preset.classic", "-paletteColors", "()", "-customColors", "()",
             "-canvasWidth", "320", "-canvasHeight", "200", "-appearance", appearance,
         ]
         app.launch()

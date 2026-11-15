@@ -10,7 +10,9 @@ final class SelectionUITests: XCTestCase {
         continueAfterFailure = false
         app = XCUIApplication()
         app.launchArguments = [
-            "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(es)", "-canvasWidth", "320", "-canvasHeight",
+            "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(es)", "-paletteSource", "preset.classic",
+            "-paletteColors", "()", "-customColors", "()", "-recentColors", "()", "-canvasWidth", "320",
+            "-canvasHeight",
             "200",
         ]
         app.launch()

@@ -8,7 +8,10 @@ StaiN **no incluye código de terceros** ni dependencias externas: solo usa fram
 | Código de StaiN y StainKit | App-Zilla | MIT ([LICENSE](LICENSE)) |
 | Icono de la app (`Design/AppIcon-source.png`) | App-Zilla | MIT, como el resto del proyecto |
 | Iconos de la interfaz | SF Symbols de Apple, referenciados por nombre (no se copian al repositorio) | [Licencia de SF Symbols](https://developer.apple.com/sf-symbols/): solo para apps en plataformas de Apple; **no** cubiertos por la MIT ni usables en iconos de app |
-| Paleta de 28 colores | Valores de la paleta clásica de Paint (datos, no código) | — |
+| Paleta "Clásica" (28 colores) | Valores de la paleta clásica de Paint (datos, no código) | — |
+| Paleta "Apta para daltonismo" | Paleta de Okabe e Ito (2008), publicada para uso libre (datos) | — |
+| Paleta "Interfaz web" | Valores inspirados en la paleta de Material Design (datos) | — |
+| Resto de paletas | Valores elegidos para StaiN | MIT |
 
 ## Referencias de diseño
 

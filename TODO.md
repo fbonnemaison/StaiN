@@ -153,32 +153,32 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 ## Mejoras — Colores
 
 ### Paletas preconfiguradas
-- [ ] Selector de paleta en la barra de colores (menú junto a las muestras), recordando la última elegida
+- [x] Selector de paleta en la barra de colores (menú junto a las muestras), recordando la última elegida; "•" indica que tiene muestras editadas y "Restaurar paleta original" la devuelve a su estado
 - [x] **Clásica**: los 28 colores de Paint (ya existe; será una opción más del selector)
-- [ ] **Moderna**: tonos actuales y equilibrados, tipo colores del sistema de macOS
-- [ ] **Neón**: colores saturados y brillantes (magenta, cian, lima, naranja eléctrico…)
-- [ ] **Pasteles**: tonos suaves y claros
-- [ ] Otras a evaluar:
-  - [ ] **Escala de grises**: del negro al blanco en pasos iguales
-  - [ ] **Tierra / naturales**: marrones, ocres, verdes oliva y arena
-  - [ ] **Retro 8 bits**: paletas limitadas para pixel art (estilo consolas antiguas, 16 colores)
-  - [ ] **Monocromo verde (4 tonos)**: estilo pantallas portátiles antiguas, para pixel art
-  - [ ] **Apta para daltonismo**: colores distinguibles con cualquier tipo de daltonismo (p. ej. Okabe–Ito)
-  - [ ] **Material / web**: los colores más usados en diseño de interfaces
-- [ ] Las paletas cargadas desde archivo (`.gpl` / `.hex`) aparecen también en el selector
+- [x] **Moderna**: tonos actuales y equilibrados, tipo colores del sistema de macOS
+- [x] **Neón**: colores saturados y brillantes (magenta, cian, lima, naranja eléctrico…)
+- [x] **Pasteles**: tonos suaves y claros
+- [x] Otras a evaluar:
+  - [x] **Escala de grises**: del negro al blanco en pasos iguales
+  - [x] **Tierra / naturales**: marrones, ocres, verdes oliva y arena
+  - [x] **Retro 8 bits**: 16 colores propios al estilo de las consolas antiguas, para pixel art
+  - [x] **Monocromo verde (4 tonos)**: estilo pantallas portátiles antiguas, para pixel art
+  - [x] **Apta para daltonismo**: colores distinguibles con cualquier tipo de daltonismo (p. ej. Okabe–Ito)
+  - [x] **Material / web**: los colores más usados en diseño de interfaces
+- [x] Las paletas cargadas desde archivo (`.gpl` / `.hex`) aparecen también en el selector
 
 ### Colores personalizados
-- [ ] **8 casillas de colores personalizados** a la derecha de la paleta, vacías al principio
-- [ ] Guardar en una casilla el color primario (p. ej. clic en una casilla vacía o "Añadir color actual"), editarla con doble clic y vaciarla desde el menú contextual
-- [ ] Las casillas personalizadas se recuerdan entre sesiones y no cambian al cambiar de paleta
+- [x] **8 casillas de colores personalizados** a la derecha de la paleta, vacías al principio
+- [x] Guardar en una casilla el color primario (clic en una casilla vacía o "Guardar el color primario aquí" en su menú), editarla con doble clic y vaciarla desde el menú contextual
+- [x] Las casillas personalizadas se recuerdan entre sesiones y no cambian al cambiar de paleta
 
 ### Aspecto de las muestras
-- [ ] Bordes ligeramente redondeados en todas las casillas de color (paleta, recientes, personalizados, primario y secundario), manteniendo el fondo a cuadros para la transparencia
+- [x] Bordes ligeramente redondeados en todas las casillas de color (paleta, recientes, personalizados, primario y secundario), manteniendo el fondo a cuadros para la transparencia
 
 ### Elegir colores por valor
-- [ ] Campos **RGB** (0–255 por canal, y alfa) y **HEX** (`#RRGGBB` / `#RRGGBBAA`) para el color primario y el secundario, dentro de la propia app (hoy solo se puede desde el selector de color del sistema)
-- [ ] Validar lo escrito (valores fuera de rango, HEX incompleto) y actualizar el color al momento
-- [ ] Copiar y pegar el HEX del color actual
+- [x] Campos **RGB** (0–255 por canal, y alfa) y **HEX** (`#RRGGBB` / `#RRGGBBAA`) para el color primario y el secundario, dentro de la propia app en un panel que se abre al hacer clic en el color primario o el secundario; el selector del sistema sigue disponible desde ahí
+- [x] Validar lo escrito (valores fuera de rango, HEX incompleto) y actualizar el color al momento
+- [x] Copiar y pegar el HEX del color actual
 
 ---
 

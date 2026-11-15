@@ -1,6 +1,16 @@
 {
   "sourceLanguage": "es",
   "strings": {
+    "#RRGGBB": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "#RRGGBB"
+          }
+        }
+      }
+    },
     "%@: %lld px": {
       "localizations": {
         "en": {
@@ -227,6 +237,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apply"
+          }
+        }
+      }
+    },
+    "Apta para daltonismo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colorblind-Friendly"
           }
         }
       }
@@ -471,6 +491,16 @@
         }
       }
     },
+    "Clásica": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Classic"
+          }
+        }
+      }
+    },
     "Color primario": {
       "localizations": {
         "en": {
@@ -521,6 +551,16 @@
         }
       }
     },
+    "Colores personalizados: clic en una casilla vacía para guardar el color primario": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom colors: click an empty slot to save the primary color"
+          }
+        }
+      }
+    },
     "Como el sistema": {
       "localizations": {
         "en": {
@@ -567,6 +607,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Contrast"
+          }
+        }
+      }
+    },
+    "Copiar HEX": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy HEX"
           }
         }
       }
@@ -721,6 +771,16 @@
         }
       }
     },
+    "Editar…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit…"
+          }
+        }
+      }
+    },
     "Editor de imagen": {
       "localizations": {
         "en": {
@@ -787,6 +847,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Grayscale"
+          }
+        }
+      }
+    },
+    "Escribe 6 u 8 dígitos hexadecimales, p. ej. #FF8800": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter 6 or 8 hexadecimal digits, e.g. #FF8800"
           }
         }
       }
@@ -961,12 +1031,32 @@
         }
       }
     },
+    "Guardar el color primario aquí": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save Primary Color Here"
+          }
+        }
+      }
+    },
     "Guardar paleta…": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Save Palette…"
+          }
+        }
+      }
+    },
+    "HEX": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HEX"
           }
         }
       }
@@ -1061,6 +1151,16 @@
         }
       }
     },
+    "Interfaz web": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Web Interface"
+          }
+        }
+      }
+    },
     "Invertir": {
       "localizations": {
         "en": {
@@ -1151,6 +1251,16 @@
         }
       }
     },
+    "Moderna": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modern"
+          }
+        }
+      }
+    },
     "Modo pixel": {
       "localizations": {
         "en": {
@@ -1187,6 +1297,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bold"
+          }
+        }
+      }
+    },
+    "Neón": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neon"
           }
         }
       }
@@ -1311,12 +1431,42 @@
         }
       }
     },
+    "Paleta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palette"
+          }
+        }
+      }
+    },
     "Paleta %lld": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Palette %lld"
+          }
+        }
+      }
+    },
+    "Paleta de colores": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color palette"
+          }
+        }
+      }
+    },
+    "Pasteles": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pastels"
           }
         }
       }
@@ -1331,12 +1481,32 @@
         }
       }
     },
+    "Pegar HEX": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste HEX"
+          }
+        }
+      }
+    },
     "Pegar como documento nuevo": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Paste as New Document"
+          }
+        }
+      }
+    },
+    "Personalizado %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom %lld"
           }
         }
       }
@@ -1417,6 +1587,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sharp pixels"
+          }
+        }
+      }
+    },
+    "Quitar esta paleta del selector": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove This Palette from the List"
           }
         }
       }
@@ -1581,6 +1761,16 @@
         }
       }
     },
+    "Retro 8 bits": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retro 8-Bit"
+          }
+        }
+      }
+    },
     "Saturación": {
       "localizations": {
         "en": {
@@ -1657,6 +1847,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Transparent Selection"
+          }
+        }
+      }
+    },
+    "Selector de color del sistema…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System Color Picker…"
           }
         }
       }
@@ -1841,6 +2041,16 @@
         }
       }
     },
+    "Tierra": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Earth"
+          }
+        }
+      }
+    },
     "Tolerancia": {
       "localizations": {
         "en": {
@@ -1901,6 +2111,46 @@
         }
       }
     },
+    "Usar como color secundario": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use as Secondary Color"
+          }
+        }
+      }
+    },
+    "Vaciar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
+          }
+        }
+      }
+    },
+    "Vacío": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empty"
+          }
+        }
+      }
+    },
+    "Verde 4 tonos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4-Tone Green"
+          }
+        }
+      }
+    },
     "Vertical": {
       "localizations": {
         "en": {
@@ -1917,6 +2167,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vertical (top ↕ bottom)"
+          }
+        }
+      }
+    },
+    "Vista previa": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview"
           }
         }
       }
