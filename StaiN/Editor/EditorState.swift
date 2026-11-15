@@ -49,6 +49,10 @@ final class EditorState {
     /// Tamaño de la selección actual (barra de estado).
     var selectionSize: PixelPosition?
     var showsGrid = false
+    /// Puntos de control en los bordes del lienzo para cambiar su tamaño con el ratón (se recuerda).
+    var showsCanvasHandles = UserDefaults.standard.bool(forKey: "showsCanvasHandles") {
+        didSet { UserDefaults.standard.set(showsCanvasHandles, forKey: "showsCanvasHandles") }
+    }
 
     enum Sheet: Hashable, Identifiable {
         case resize

@@ -212,13 +212,10 @@ final class ImageDocument: ReferenceFileDocument {
         objectWillChange.send()
     }
 
-    /// Refresca la interfaz y guarda en "recientes" los colores nuevos (paleta, selector o cuentagotas).
+    /// Refresca la interfaz si cambió algún color (paleta, selector o cuentagotas).
     private func colorsMayHaveChanged(from old: (PaintColor, PaintColor)) {
-        let new = (canvas.primaryColor, canvas.secondaryColor)
-        guard new != old else { return }
+        guard (canvas.primaryColor, canvas.secondaryColor) != old else { return }
         objectWillChange.send()
-        if new.0 != old.0 { PaletteStore.shared.noteUsed(new.0) }
-        if new.1 != old.1 { PaletteStore.shared.noteUsed(new.1) }
     }
 
     // MARK: Deshacer

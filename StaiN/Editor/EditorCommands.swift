@@ -183,6 +183,15 @@ struct EditorCommands: Commands {
             }
             .keyboardShortcut("g")  // como Ctrl+G en Paint
             .disabled(editor == nil)
+            Button(
+                editor?.showsCanvasHandles == true
+                    ? String(localized: "Ocultar puntos de control del lienzo")
+                    : String(localized: "Mostrar puntos de control del lienzo")
+            ) {
+                editor?.showsCanvasHandles.toggle()
+            }
+            .keyboardShortcut("e", modifiers: [.command, .option])
+            .disabled(editor == nil)
             Button("Acercar") { editor?.zoomIn() }
                 .keyboardShortcut("+")
                 .disabled(!(editor?.canZoomIn ?? false))
@@ -205,4 +214,13 @@ struct EditorCommands: Commands {
 enum UndoActions {
     static func undo() { NSApp.sendAction(Selector(("undo:")), to: nil, from: nil) }
     static func redo() { NSApp.sendAction(Selector(("redo:")), to: nil, from: nil) }
+}
+
+/// Cortar, copiar y pegar desde la barra de herramientas: llegan al lienzo (o al cuadro de texto activo)
+/// por la cadena de respondedores, igual que ⌘X, ⌘C y ⌘V.
+@MainActor
+enum EditActions {
+    static func cut() { NSApp.sendAction(#selector(NSText.cut(_:)), to: nil, from: nil) }
+    static func copy() { NSApp.sendAction(#selector(NSText.copy(_:)), to: nil, from: nil) }
+    static func paste() { NSApp.sendAction(#selector(NSText.paste(_:)), to: nil, from: nil) }
 }

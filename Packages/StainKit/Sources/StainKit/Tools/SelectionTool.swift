@@ -5,7 +5,31 @@ import CoreGraphics
 /// Al arrastrar dentro, los píxeles se "levantan" y flotan: el hueco se rellena con el color secundario
 /// (o se deja intacto si se duplica con ⌥). Todo el trabajo con la selección es un único paso de deshacer,
 /// que se confirma al hacer clic fuera, pulsar Intro/Escape o cambiar de herramienta.
+///
+/// Los 8 puntos de control (esquinas y centros de los lados) estiran la selección; con ⇧ en una
+/// esquina se mantiene la proporción. Se escala siempre desde los píxeles originales para no perder calidad.
 public struct SelectionTool: Tool {
+    /// Punto de control: -1, 0 o 1 en cada eje (y hacia abajo). (0, 0) no existe.
+    public struct Handle: Sendable, Hashable {
+        public let dx: Int
+        public let dy: Int
+
+        public static let all: [Handle] = [
+            Handle(dx: -1, dy: -1), Handle(dx: 0, dy: -1), Handle(dx: 1, dy: -1),
+            Handle(dx: -1, dy: 0), Handle(dx: 1, dy: 0),
+            Handle(dx: -1, dy: 1), Handle(dx: 0, dy: 1), Handle(dx: 1, dy: 1),
+        ]
+
+        public var isCorner: Bool { dx != 0 && dy != 0 }
+
+        /// Posición del punto en el rectángulo (coordenadas de imagen).
+        public func point(in rect: CGRect) -> CGPoint {
+            CGPoint(
+                x: dx < 0 ? rect.minX : dx > 0 ? rect.maxX : rect.midX,
+                y: dy < 0 ? rect.minY : dy > 0 ? rect.maxY : rect.midY)
+        }
+    }
+
     public enum Mode: Sendable {
         case rectangle
         case freeForm
@@ -21,6 +45,7 @@ public struct SelectionTool: Tool {
         case drawingLasso
         case selected
         case moving(from: (x: Int, y: Int), startOrigin: (x: Int, y: Int))
+        case scaling(handle: Handle, from: CGPoint, startBounds: PixelRect)
     }
 
     private var phase: Phase = .idle
@@ -42,6 +67,8 @@ public struct SelectionTool: Tool {
     private var lassoAnchor: (x: Int, y: Int)?
     /// Tras girar o voltear, el contorno del lazo ya no coincide: se muestra el rectángulo.
     private var isTransformed = false
+    /// Píxeles y máscara antes de estirar: cada estiramiento parte de aquí. Se olvida al girar o voltear.
+    private var scaleBase: (content: Bitmap, mask: Bitmap?)?
 
     public init(mode: Mode = .rectangle, isTransparent: Bool = false) {
         self.mode = mode
@@ -68,7 +95,7 @@ public struct SelectionTool: Tool {
 
     public var hasSelection: Bool {
         switch phase {
-        case .selected, .moving: !bounds.isEmpty
+        case .selected, .moving, .scaling: !bounds.isEmpty
         default: false
         }
     }
@@ -81,13 +108,44 @@ public struct SelectionTool: Tool {
     }
 
     public func accepts(_ event: PointerEvent) -> Bool {
-        hasSelection && bounds.contains(x: event.pixel.x, y: event.pixel.y)
+        hasSelection && (bounds.contains(x: event.pixel.x, y: event.pixel.y) || handle(at: event) != nil)
+    }
+
+    /// Punto de control bajo el puntero, si hay selección.
+    ///
+    /// Dentro de la selección la zona sensible se limita a un cuarto del lado más corto,
+    /// para que en selecciones pequeñas siga habiendo sitio para moverlas.
+    public func handle(at location: CGPoint, tolerance: Double) -> Handle? {
+        guard hasSelection else { return nil }
+        let rect = bounds.cgRect
+        var tolerance = tolerance
+        if rect.contains(location) {
+            tolerance = min(tolerance, Double(min(bounds.width, bounds.height)) / 4)
+        }
+        // El más cercano, por si las zonas de varios puntos se solapan.
+        let distances = Handle.all.map { handle in
+            let point = handle.point(in: rect)
+            return (handle, max(abs(point.x - location.x), abs(point.y - location.y)))
+        }
+        guard let nearest = distances.min(by: { $0.1 < $1.1 }), nearest.1 < tolerance else { return nil }
+        return nearest.0
+    }
+
+    private func handle(at event: PointerEvent) -> Handle? {
+        handle(at: event.location, tolerance: event.hitTolerance)
     }
 
     // MARK: Ratón
 
     public mutating func begin(_ event: PointerEvent, on canvas: inout Canvas) {
         let pixel = event.pixel
+        if hasSelection, let handle = handle(at: event) {
+            if content == nil { lift(from: canvas, leavingHole: true) }
+            if scaleBase == nil, let content { scaleBase = (content, mask) }
+            phase = .scaling(handle: handle, from: event.location, startBounds: bounds)
+            render(on: &canvas)
+            return
+        }
         if hasSelection {
             // Arrastre dentro: mover. Con ⌥ se duplica.
             if event.modifiers.contains(.option) {
@@ -127,9 +185,42 @@ public struct SelectionTool: Tool {
             bounds.x = start.x + pixel.x - from.x
             bounds.y = start.y + pixel.y - from.y
             render(on: &canvas)
+        case .scaling(let handle, let from, let start):
+            let rect = Self.scaledRect(
+                start, handle: handle,
+                delta: (Int((event.location.x - from.x).rounded()), Int((event.location.y - from.y).rounded())),
+                keepRatio: event.modifiers.contains(.shift) && handle.isCorner)
+            guard rect != bounds || content?.width != rect.width || content?.height != rect.height else { return }
+            if let base = scaleBase {
+                content = base.content.resized(width: rect.width, height: rect.height, smooth: false)
+                mask = base.mask?.resized(width: rect.width, height: rect.height, smooth: false)
+            }
+            bounds = rect
+            isTransformed = true
+            render(on: &canvas)
         case .idle, .selected:
             break
         }
+    }
+
+    /// Rectángulo estirado desde `start` arrastrando `handle`; el lado opuesto queda fijo.
+    static func scaledRect(
+        _ start: PixelRect, handle: Handle, delta: (x: Int, y: Int), keepRatio: Bool
+    ) -> PixelRect {
+        var minX = start.x, minY = start.y
+        var maxX = start.x + start.width, maxY = start.y + start.height
+        if handle.dx < 0 { minX = min(minX + delta.x, maxX - 1) }
+        if handle.dx > 0 { maxX = max(maxX + delta.x, minX + 1) }
+        if handle.dy < 0 { minY = min(minY + delta.y, maxY - 1) }
+        if handle.dy > 0 { maxY = max(maxY + delta.y, minY + 1) }
+        if keepRatio, start.width > 0, start.height > 0 {
+            let factor = max(Double(maxX - minX) / Double(start.width), Double(maxY - minY) / Double(start.height))
+            let width = max(1, Int((Double(start.width) * factor).rounded()))
+            let height = max(1, Int((Double(start.height) * factor).rounded()))
+            if handle.dx < 0 { minX = maxX - width } else { maxX = minX + width }
+            if handle.dy < 0 { minY = maxY - height } else { maxY = minY + height }
+        }
+        return PixelRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
     }
 
     public mutating func end(_ event: PointerEvent, on canvas: inout Canvas) {
@@ -146,7 +237,7 @@ public struct SelectionTool: Tool {
             } else {
                 phase = .idle
             }
-        case .moving:
+        case .moving, .scaling:
             phase = .selected
         case .idle, .selected:
             break
@@ -192,6 +283,7 @@ public struct SelectionTool: Tool {
             mask = probe.width == transformed.width && probe.height == transformed.height ? probe : nil
         }
         content = transformed
+        scaleBase = nil
         isTransformed = true
         bounds = PixelRect(x: bounds.x, y: bounds.y, width: transformed.width, height: transformed.height)
         render(on: &canvas)
@@ -202,6 +294,7 @@ public struct SelectionTool: Tool {
         guard hasSelection else { return }
         if content == nil { lift(from: canvas, leavingHole: true) }
         content = nil
+        scaleBase = nil
         render(on: &canvas)
         phase = .idle
     }
@@ -217,21 +310,25 @@ public struct SelectionTool: Tool {
             return ToolOverlay(
                 outline: lasso.map { CGPoint(x: Double($0.x) + 0.5, y: Double($0.y) + 0.5) }, isClosed: false,
                 isMarchingAnts: true)
-        case .drawingRectangle, .selected, .moving:
+        case .drawingRectangle, .selected, .moving, .scaling:
             guard !bounds.isEmpty else { return nil }
+            var drawing = false
+            if case .drawingRectangle = phase { drawing = true }
+            let handles = drawing ? [] : Handle.all.map { $0.point(in: bounds.cgRect) }
             if mode == .freeForm, mask != nil, !isTransformed, let anchor = lassoAnchor {
                 // El contorno del lazo sigue a la selección cuando se mueve.
                 let dx = Double(bounds.x - anchor.x) + 0.5
                 let dy = Double(bounds.y - anchor.y) + 0.5
                 return ToolOverlay(
-                    outline: lasso.map { CGPoint(x: Double($0.x) + dx, y: Double($0.y) + dy) }, isMarchingAnts: true)
+                    outline: lasso.map { CGPoint(x: Double($0.x) + dx, y: Double($0.y) + dy) }, handles: handles,
+                    isMarchingAnts: true)
             }
             let r = bounds.cgRect
             return ToolOverlay(
                 outline: [
                     CGPoint(x: r.minX, y: r.minY), CGPoint(x: r.maxX, y: r.minY), CGPoint(x: r.maxX, y: r.maxY),
                     CGPoint(x: r.minX, y: r.maxY),
-                ], isMarchingAnts: true)
+                ], handles: handles, isMarchingAnts: true)
         case .idle:
             return nil
         }
@@ -272,6 +369,7 @@ public struct SelectionTool: Tool {
     private mutating func lift(from canvas: Canvas, leavingHole: Bool) {
         sourceBounds = bounds
         sourceMask = mask
+        scaleBase = nil
         content = canvas.bitmap.cropped(to: bounds)?.masked(by: mask)
         if let content, content.width != bounds.width || content.height != bounds.height {
             bounds = PixelRect(x: bounds.x, y: bounds.y, width: content.width, height: content.height)

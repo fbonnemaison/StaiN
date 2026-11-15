@@ -79,6 +79,7 @@ final class CanvasView: NSView, NSMenuItemValidation {
             commitText()
             document?.commitTool(undoManager: undoManagerForStrokes)
             window?.invalidateCursorRects(for: self)
+            refreshCursor()
         }
     }
     /// Estilo del cuadro de texto (fuente y colores actuales).
@@ -291,7 +292,11 @@ final class CanvasView: NSView, NSMenuItemValidation {
 
     /// Clave del cursor actual: si cambia (tamaño de punta, zoom), se rehacen los cursores.
     var cursorKey = "" {
-        didSet { if cursorKey != oldValue { window?.invalidateCursorRects(for: self) } }
+        didSet {
+            guard cursorKey != oldValue else { return }
+            window?.invalidateCursorRects(for: self)
+            refreshCursor()
+        }
     }
 
     override func updateTrackingAreas() {
@@ -299,11 +304,76 @@ final class CanvasView: NSView, NSMenuItemValidation {
         trackingAreas.forEach(removeTrackingArea)
         addTrackingArea(
             NSTrackingArea(
-                rect: .zero, options: [.mouseMoved, .mouseEnteredAndExited, .activeInKeyWindow, .inVisibleRect],
+                rect: .zero,
+                options: [.mouseMoved, .mouseEnteredAndExited, .cursorUpdate, .activeInKeyWindow, .inVisibleRect],
                 owner: self))
     }
 
-    override func mouseMoved(with event: NSEvent) { updateCursorPosition(event) }
+    // El cursor se fija en cada movimiento, no solo con los rectángulos de cursor: SwiftUI vuelve a poner
+    // la flecha cuando redibuja la ventana (p. ej. la posición en la barra de estado), y sin esto
+    // el cursor alternaba al azar entre la flecha y el de la herramienta.
+    override func cursorUpdate(with event: NSEvent) { applyCursor(for: event) }
+
+    override func mouseMoved(with event: NSEvent) {
+        updateCursorPosition(event)
+        applyCursor(for: event)
+    }
+
+    override func mouseEntered(with event: NSEvent) { applyCursor(for: event) }
+
+    /// Cursor fijado al pulsar (p. ej. el de redimensionar al agarrar un punto de la selección),
+    /// que se mantiene mientras dura el arrastre.
+    private var dragCursor: NSCursor?
+
+    private var toolCursor: NSCursor {
+        let tip = editor?.tipSize
+        return ToolCursors.cursor(
+            for: tool, size: tip?.size, square: tip?.square ?? false, magnification: magnification)
+    }
+
+    /// Cursor que corresponde a un punto del lienzo: redimensionar sobre un punto de la selección,
+    /// o el de la herramienta.
+    private func cursor(at point: NSPoint) -> NSCursor {
+        if tool == .select || tool == .freeFormSelect, let selection = document?.selection,
+            let handle = selection.handle(at: point, tolerance: 5 / magnification)
+        {
+            return Self.resizeCursor(for: handle)
+        }
+        return toolCursor
+    }
+
+    /// Pone el cursor que toca si el ratón está sobre el lienzo (tras cambiar de herramienta o de zoom).
+    private func refreshCursor() {
+        guard dragCursor == nil, let window, window.isKeyWindow else { return }
+        let point = convert(window.mouseLocationOutsideOfEventStream, from: nil)
+        guard visibleRect.contains(point) else { return }
+        cursor(at: point).set()
+    }
+
+    private func applyCursor(for event: NSEvent) {
+        if let dragCursor {
+            dragCursor.set()
+            return
+        }
+        let point = convert(event.locationInWindow, from: nil)
+        guard visibleRect.contains(point) else { return }
+        cursor(at: point).set()
+    }
+
+    private static func resizeCursor(for handle: SelectionTool.Handle) -> NSCursor {
+        let position: NSCursor.FrameResizePosition =
+            switch (handle.dx, handle.dy) {
+            case (-1, -1): .topLeft
+            case (0, -1): .top
+            case (1, -1): .topRight
+            case (-1, 0): .left
+            case (1, 0): .right
+            case (-1, 1): .bottomLeft
+            case (0, 1): .bottom
+            default: .bottomRight
+            }
+        return NSCursor.frameResize(position: position, directions: .all)
+    }
     override func mouseExited(with event: NSEvent) { editor?.cursor = nil }
 
     private func updateCursorPosition(_ event: NSEvent) {
@@ -348,12 +418,15 @@ final class CanvasView: NSView, NSMenuItemValidation {
                 options: editor, canvasWidth: document.width, canvasHeight: document.height)
         else { return }
         strokeButton = button
+        dragCursor = cursor(at: pointer.location)
+        dragCursor?.set()
         document.pointerDown(pointer, actionName: tool.title, undoManager: undoManagerForStrokes) { kind }
         startRepeatingIfNeeded()
     }
 
     private func pointerDragged(_ event: NSEvent, button: PointerButton) {
         updateCursorPosition(event)
+        applyCursor(for: event)
         guard strokeButton == button else { return }
         autoscroll(with: event)
         let pointer = pointerEvent(event, button: button)
@@ -367,6 +440,7 @@ final class CanvasView: NSView, NSMenuItemValidation {
     private func pointerUp(_ event: NSEvent, button: PointerButton) {
         guard strokeButton == button else { return }
         strokeButton = nil
+        dragCursor = nil
         stopRepeating()
         let pointer = pointerEvent(event, button: button)
         if tool == .text {
@@ -377,6 +451,7 @@ final class CanvasView: NSView, NSMenuItemValidation {
         // Como en Paint, el cuentagotas vuelve a la herramienta anterior al soltar.
         if tool == .eyedropper { editor?.returnToPreviousTool() }
         if tool == .marker { editor?.nextMarker += 1 }
+        applyCursor(for: event)
     }
 
     override func keyDown(with event: NSEvent) {

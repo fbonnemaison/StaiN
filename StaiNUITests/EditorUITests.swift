@@ -9,7 +9,7 @@ final class EditorUITests: XCTestCase {
         app = XCUIApplication()
         app.launchArguments = [
             "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(es)", "-paletteSource", "preset.classic",
-            "-paletteColors", "()", "-customColors", "()", "-recentColors", "()",
+            "-paletteColors", "()", "-customColors", "()",
             "-canvasWidth", "320",
             "-canvasHeight", "200",
         ]

@@ -521,16 +521,6 @@
         }
       }
     },
-    "Color reciente": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recent color"
-          }
-        }
-      }
-    },
     "Color secundario": {
       "localizations": {
         "en": {
@@ -631,12 +621,42 @@
         }
       }
     },
-    "Copiar toda la imagen al portapapeles (⇧⌘C)": {
+    "Copiar la selección, o toda la imagen si no hay selección (⌘C)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Copy the whole image to the clipboard (⇧⌘C)"
+            "value": "Copy the selection, or the whole image if nothing is selected (⌘C)"
+          }
+        }
+      }
+    },
+    "Copiar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy"
+          }
+        }
+      }
+    },
+    "Cortar la selección (⌘X)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cut the selection (⌘X)"
+          }
+        }
+      }
+    },
+    "Cortar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cut"
           }
         }
       }
@@ -721,6 +741,16 @@
         }
       }
     },
+    "Deshacer (⌘Z)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo (⌘Z)"
+          }
+        }
+      }
+    },
     "Deshacer": {
       "localizations": {
         "en": {
@@ -737,16 +767,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Undo %@"
-          }
-        }
-      }
-    },
-    "Deshacer o rehacer (⌘Z / ⇧⌘Z)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Undo or redo (⌘Z / ⇧⌘Z)"
           }
         }
       }
@@ -787,6 +807,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Image editor"
+          }
+        }
+      }
+    },
+    "Elegir paleta de colores": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose color palette"
           }
         }
       }
@@ -1291,6 +1321,26 @@
         }
       }
     },
+    "Mostrar puntos de control del lienzo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show Canvas Handles"
+          }
+        }
+      }
+    },
+    "Mostrar u ocultar los puntos de control para redimensionar el lienzo con el ratón (⌥⌘E)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show or hide the handles for resizing the canvas with the mouse (⌥⌘E)"
+          }
+        }
+      }
+    },
     "Negrita": {
       "localizations": {
         "en": {
@@ -1381,6 +1431,16 @@
         }
       }
     },
+    "Ocultar puntos de control del lienzo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide Canvas Handles"
+          }
+        }
+      }
+    },
     "Ocultar": {
       "localizations": {
         "en": {
@@ -1467,6 +1527,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pastels"
+          }
+        }
+      }
+    },
+    "Pegar desde el portapapeles (⌘V)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste from the clipboard (⌘V)"
           }
         }
       }
@@ -1621,16 +1691,6 @@
         }
       }
     },
-    "Recientes": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recent"
-          }
-        }
-      }
-    },
     "Recortar": {
       "localizations": {
         "en": {
@@ -1671,12 +1731,32 @@
         }
       }
     },
+    "Redimensionar lienzo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resize Canvas"
+          }
+        }
+      }
+    },
     "Redondo": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Round"
+          }
+        }
+      }
+    },
+    "Rehacer (⇧⌘Z)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Redo (⇧⌘Z)"
           }
         }
       }

@@ -172,4 +172,39 @@ private func selection(_ c: ToolController) -> SelectionTool? { c.tool as? Selec
         #expect(canvas.bitmap[1, 1] == .white)
         #expect(canvas.bitmap[9, 9] == red, "Fuera del lazo no se toca")
     }
+
+    // MARK: Estirar con puntos de control
+
+    @Test func selectionShowsEightHandles() {
+        var canvas = canvasWithSquare()
+        var c = ToolController()
+        drag(&c, &canvas, [at(2, 2), at(5, 5)], make: rect)
+        #expect(c.overlay?.handles.count == 8)
+        #expect(selection(c)?.handle(at: CGPoint(x: 6, y: 6), tolerance: 1) == .init(dx: 1, dy: 1))
+        #expect(selection(c)?.handle(at: CGPoint(x: 4, y: 2), tolerance: 1) == .init(dx: 0, dy: -1))
+        #expect(selection(c)?.handle(at: CGPoint(x: 4, y: 4), tolerance: 1) == nil)
+    }
+
+    @Test func draggingCornerHandleStretchesPixels() {
+        var canvas = canvasWithSquare()
+        canvas.secondaryColor = PaintColor(red: 0, green: 0, blue: 255)
+        var c = ToolController()
+        drag(&c, &canvas, [at(2, 2), at(5, 5)], make: rect)
+        let corner = PointerEvent(location: CGPoint(x: 6, y: 6))
+        let target = PointerEvent(location: CGPoint(x: 10, y: 10))
+        drag(&c, &canvas, [corner, target], make: rect)
+        #expect(selection(c)?.bounds == PixelRect(x: 2, y: 2, width: 8, height: 8))
+        #expect(canvas.bitmap[2, 2] == red && canvas.bitmap[9, 9] == red)
+        #expect(canvas.bitmap[10, 10] == .white)
+    }
+
+    @Test func draggingLeftHandleKeepsRightEdge() {
+        let start = PixelRect(x: 4, y: 4, width: 4, height: 2)
+        let left = SelectionTool.scaledRect(start, handle: .init(dx: -1, dy: 0), delta: (-2, 5), keepRatio: false)
+        #expect(left == PixelRect(x: 2, y: 4, width: 6, height: 2))
+        let collapsed = SelectionTool.scaledRect(start, handle: .init(dx: 1, dy: 0), delta: (-10, 0), keepRatio: false)
+        #expect(collapsed.width == 1, "Nunca menos de 1 píxel")
+        let ratio = SelectionTool.scaledRect(start, handle: .init(dx: 1, dy: 1), delta: (4, 0), keepRatio: true)
+        #expect(ratio == PixelRect(x: 4, y: 4, width: 8, height: 4))
+    }
 }

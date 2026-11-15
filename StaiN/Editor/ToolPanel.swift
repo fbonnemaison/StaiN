@@ -1,3 +1,4 @@
+import AppKit
 import StainKit
 import SwiftUI
 
@@ -5,15 +6,21 @@ import SwiftUI
 struct ToolPanel: View {
     @Bindable var editor: EditorState
 
-    private let columns = [GridItem(.fixed(30), spacing: 4), GridItem(.fixed(30), spacing: 4)]
+    private static let columnCount = 2
 
     var body: some View {
         // Con ventanas bajas, el panel se desplaza en vez de salirse por arriba.
         ScrollView(.vertical) {
             VStack(spacing: 10) {
-                LazyVGrid(columns: columns, spacing: 4) {
-                    ForEach(ToolKind.allCases) { tool in
-                        ToolButton(tool: tool, isSelected: editor.tool == tool) { editor.tool = tool }
+                // Grid (no LazyVGrid): en las cuadrículas perezosas los tooltips no siempre aparecen.
+                let tools = ToolKind.allCases
+                Grid(horizontalSpacing: 4, verticalSpacing: 4) {
+                    ForEach(Array(stride(from: 0, to: tools.count, by: Self.columnCount)), id: \.self) { start in
+                        GridRow {
+                            ForEach(tools[start..<min(start + Self.columnCount, tools.count)]) { tool in
+                                ToolButton(tool: tool, isSelected: editor.tool == tool) { editor.tool = tool }
+                            }
+                        }
                     }
                 }
                 Divider()
@@ -43,11 +50,28 @@ private struct ToolButton: View {
         .buttonStyle(.plain)
         .foregroundStyle(isSelected ? Color.accentColor : .primary)
         .background(isSelected ? Color.accentColor.opacity(0.2) : .clear, in: .rect(cornerRadius: 6))
-        .help(tool.shortcut.map { "\(tool.title) (\(String($0).uppercased()))" } ?? tool.title)
+        .background(ToolTip(text: tool.shortcut.map { "\(tool.title) (\(String($0).uppercased()))" } ?? tool.title))
         .modifier(OptionalShortcut(key: tool.shortcut))
         .accessibilityLabel(tool.title)
         .accessibilityIdentifier("tool.\(tool.rawValue)")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+}
+
+/// Tooltip de AppKit: aparece al detener el cursor sobre la herramienta, aunque el lienzo
+/// tenga el foco o la ventana use cursores propios (donde `.help` a veces no se muestra).
+private struct ToolTip: NSViewRepresentable {
+    let text: String
+
+    func makeNSView(context: Context) -> ToolTipView { ToolTipView() }
+
+    func updateNSView(_ view: ToolTipView, context: Context) {
+        view.toolTip = text
+    }
+
+    final class ToolTipView: NSView {
+        /// No intercepta clics: solo aporta el tooltip.
+        override func hitTest(_ point: NSPoint) -> NSView? { nil }
     }
 }
 

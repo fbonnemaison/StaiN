@@ -10,7 +10,7 @@ final class ColorUITests: XCTestCase {
         app = XCUIApplication()
         app.launchArguments = [
             "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(es)", "-paletteSource", "preset.classic",
-            "-paletteColors", "()", "-customColors", "()", "-recentColors", "()", "-canvasWidth", "320",
+            "-paletteColors", "()", "-customColors", "()", "-canvasWidth", "320",
             "-canvasHeight", "200",
         ]
         app.launch()
@@ -46,7 +46,7 @@ final class ColorUITests: XCTestCase {
     @MainActor
     func testPalettePresetsSwitch() {
         XCTAssertEqual(value(of: "Paleta 17"), "#FF0000", "Empieza con la clásica")
-        let picker = app.popUpButtons["palettePicker"]
+        let picker = app.menuButtons["palettePicker"]
         picker.click()
         app.menuItems["Neón"].click()
         waitForValue("Paleta 2", "#FF00FF")

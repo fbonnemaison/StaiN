@@ -10,7 +10,7 @@ final class ShapeAndTextUITests: XCTestCase {
         app = XCUIApplication()
         app.launchArguments = [
             "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(es)", "-paletteSource", "preset.classic",
-            "-paletteColors", "()", "-customColors", "()", "-recentColors", "()", "-canvasWidth", "320",
+            "-paletteColors", "()", "-customColors", "()", "-canvasWidth", "320",
             "-canvasHeight",
             "200",
         ]

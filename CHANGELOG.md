@@ -8,6 +8,24 @@ Mientras la app no se publique (versión 1.0.0), cada fase del [plan](TODO.md) e
 Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró cada fase.
 
 ## [Sin publicar]
+### Añadido
+- Puntos de control en las esquinas y lados del lienzo para cambiar su tamaño con el ratón; se muestran
+  u ocultan con el botón "Redimensionar lienzo" o en Visualización (⌥⌘E).
+- Puntos de control en la selección para estirarla (⇧ en una esquina mantiene la proporción).
+- Botones Cortar, Copiar y Pegar en la barra superior.
+- Tooltips con el nombre y el atajo de cada herramienta.
+- Captura de la app en el README.
+- Capas, como fase futura del plan.
+### Cambiado
+- Barra de colores reordenada: primario/secundario, personalizados y paleta, con el menú de paletas
+  al final.
+- Barra superior en tres grupos: deshacer/rehacer, portapapeles y lienzo/vista/compartir.
+- Cursores: cruceta en las herramientas de selección e icono de la herramienta en lápiz, pincel,
+  aerógrafo, borrador, relleno y cuentagotas.
+### Eliminado
+- Colores recientes.
+### Corregido
+- El cursor sobre el lienzo alternaba entre la flecha y el de la herramienta.
 
 ## [0.8.0] - 2026-11-14
 ### Añadido

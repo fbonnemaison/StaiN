@@ -2,7 +2,7 @@ import Foundation
 import Observation
 import StainKit
 
-/// Paletas, colores personalizados y colores recientes, compartidos por todas las ventanas
+/// Paletas y colores personalizados, compartidos por todas las ventanas
 /// y guardados en `UserDefaults`.
 ///
 /// - La paleta visible sale de una paleta incluida o de una importada desde archivo, y se puede editar
@@ -45,7 +45,6 @@ final class PaletteStore {
     }
 
     static let customSlotCount = 8
-    static let maxRecent = 10
     static let maxImported = 12
 
     private(set) var colors: [PaintColor]
@@ -55,7 +54,6 @@ final class PaletteStore {
     private(set) var imported: [ImportedPalette]
     /// 8 casillas; `nil` = vacía.
     private(set) var customColors: [PaintColor?]
-    private(set) var recent: [PaintColor]
 
     /// Columnas de la cuadrícula de 2 filas.
     var columns: Int { max(1, (colors.count + 1) / 2) }
@@ -67,7 +65,6 @@ final class PaletteStore {
         static let modified = "paletteModified"
         static let imported = "importedPalettes"
         static let custom = "customColors"
-        static let recent = "recentColors"
     }
 
     init(defaults: UserDefaults = .standard) {
@@ -86,7 +83,8 @@ final class PaletteStore {
         isModified = !saved.isEmpty && saved != original
         let custom = (defaults.stringArray(forKey: Key.custom) ?? []).map { PaintColor(hex: $0) }
         customColors = (0..<Self.customSlotCount).map { $0 < custom.count ? custom[$0] : nil }
-        recent = (defaults.stringArray(forKey: Key.recent) ?? []).compactMap(PaintColor.init(hex:))
+        // Las versiones anteriores guardaban colores recientes; ya no se usan.
+        defaults.removeObject(forKey: "recentColors")
     }
 
     private static func colors(for source: Source, imported: [ImportedPalette]) -> [PaintColor] {
@@ -146,17 +144,6 @@ final class PaletteStore {
         guard customColors.indices.contains(index) else { return }
         customColors[index] = color
         defaults.set(customColors.map { $0?.hex ?? "" }, forKey: Key.custom)
-    }
-
-    // MARK: Recientes
-
-    /// Recuerda un color usado que no esté en la paleta (el más reciente primero).
-    func noteUsed(_ color: PaintColor) {
-        guard !colors.contains(color) else { return }
-        recent.removeAll { $0 == color }
-        recent.insert(color, at: 0)
-        if recent.count > Self.maxRecent { recent.removeLast(recent.count - Self.maxRecent) }
-        defaults.set(recent.map(\.hex), forKey: Key.recent)
     }
 
     private func save() {

@@ -180,6 +180,28 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Validar lo escrito (valores fuera de rango, HEX incompleto) y actualizar el color al momento
 - [x] Copiar y pegar el HEX del color actual
 
+## Mejoras — Interfaz
+- [x] Barra de colores en este orden: primario/secundario, personalizados y paleta, con el menú de paletas al final
+- [x] Colores recientes eliminados
+- [x] Barra superior en tres grupos: Deshacer/Rehacer, Cortar/Copiar/Pegar y Redimensionar lienzo/Ajustar/Compartir
+- [x] Tooltips con nombre y atajo en las herramientas del panel izquierdo
+- [x] Puntos de control en las esquinas y lados del lienzo para cambiar su tamaño con el ratón; se muestran u ocultan con el botón "Redimensionar lienzo" (⌥⌘E)
+- [x] Puntos de control en la selección para estirarla (⇧ en una esquina mantiene la proporción)
+- [x] Cursores: cruceta en las herramientas de selección; icono de la herramienta en lápiz, pincel, aerógrafo, borrador, relleno y cuentagotas
+- [ ] Revisar a mano los cursores nuevos (los tests no los capturan)
+
+## Fase 9 — Capas (futuro)
+- [ ] Modelo de documento con varias capas en `StainKit`: lista ordenada de bitmaps del mismo tamaño, con nombre, visibilidad, opacidad y bloqueo
+- [ ] Composición de las capas para mostrar el lienzo (solo la región sucia) y para exportar
+- [ ] Las herramientas pintan en la capa activa; el cuentagotas y el relleno pueden leer la capa activa o la imagen combinada
+- [ ] Panel de capas: añadir, duplicar, eliminar, renombrar, reordenar arrastrando, mostrar/ocultar, opacidad y miniatura
+- [ ] Fusionar hacia abajo y acoplar la imagen
+- [ ] Deshacer y rehacer por capa (parches con el índice de capa) y para las operaciones del panel
+- [ ] Selección, filtros, rotar/voltear y cambiar tamaño sobre la capa activa o sobre todas
+- [ ] Formato de archivo propio que conserve las capas (p. ej. paquete con un PNG por capa y un JSON), y aviso al guardar en PNG/JPEG de que se acoplan
+- [ ] Abrir y guardar TIFF/PSD con capas (opcional)
+- [ ] Modos de fusión (multiplicar, pantalla, superponer…) (opcional)
+
 ---
 
 ## Preguntas abiertas

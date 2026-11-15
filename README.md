@@ -6,6 +6,8 @@
 Editor de imágenes raster sencillo para macOS, inspirado en Microsoft Paint (antes Paintbrush) y MacPaint.
 Escrito en Swift, open source (MIT). Autor: **App-Zilla**.
 
+![Ventana de StaiN con un dibujo y una selección con sus puntos de control](docs/screenshot.png)
+
 > Consulta la versión actual y los cambios en [CHANGELOG.md](CHANGELOG.md), y el plan en [TODO.md](TODO.md).
 
 ## Requisitos
@@ -19,6 +21,7 @@ Escrito en Swift, open source (MIT). Autor: **App-Zilla**.
 StaiN/                 App macOS (SwiftUI + lienzo AppKit)
 StaiNUITests/          Tests de interfaz (XCUITest)
 Packages/StainKit/     Motor de dibujo, sin UI ni dependencias
+docs/                  Captura del README (la genera PolishUITests.testReadmeScreenshot)
 project.yml            Definición del proyecto para XcodeGen
 ```
 

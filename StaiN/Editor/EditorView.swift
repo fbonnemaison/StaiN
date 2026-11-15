@@ -67,17 +67,32 @@ struct EditorView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-                ControlGroup {
-                    Button(editor.undoTitle, systemImage: "arrow.uturn.backward") { UndoActions.undo() }
-                        .disabled(!editor.canUndo)
-                    Button(editor.redoTitle, systemImage: "arrow.uturn.forward") { UndoActions.redo() }
-                        .disabled(!editor.canRedo)
-                }
-                .help("Deshacer o rehacer (⌘Z / ⇧⌘Z)")
+            }
+            // Tres burbujas separadas: deshacer, portapapeles y vista/compartir.
+            ToolbarItemGroup {
+                Button(editor.undoTitle, systemImage: "arrow.uturn.backward") { UndoActions.undo() }
+                    .disabled(!editor.canUndo)
+                    .help("Deshacer (⌘Z)")
+                Button(editor.redoTitle, systemImage: "arrow.uturn.forward") { UndoActions.redo() }
+                    .disabled(!editor.canRedo)
+                    .help("Rehacer (⇧⌘Z)")
+            }
+            ToolbarSpacer(.fixed)
+            ToolbarItemGroup {
+                Button("Cortar", systemImage: "scissors") { EditActions.cut() }
+                    .help("Cortar la selección (⌘X)")
+                Button("Copiar", systemImage: "doc.on.doc") { EditActions.copy() }
+                    .help("Copiar la selección, o toda la imagen si no hay selección (⌘C)")
+                Button("Pegar", systemImage: "clipboard") { EditActions.paste() }
+                    .help("Pegar desde el portapapeles (⌘V)")
+            }
+            ToolbarSpacer(.fixed)
+            ToolbarItemGroup {
+                Toggle("Redimensionar lienzo", systemImage: "crop", isOn: $editor.showsCanvasHandles)
+                    .help("Mostrar u ocultar los puntos de control para redimensionar el lienzo con el ratón (⌥⌘E)")
+                    .accessibilityIdentifier("canvasHandlesToggle")
                 Button("Ajustar a la ventana", systemImage: "arrow.up.left.and.arrow.down.right") { editor.zoomToFit() }
                     .help("Ajustar a la ventana (⌘9)")
-                Button("Copiar imagen", systemImage: "doc.on.clipboard") { Clipboard.write(document.canvas.bitmap) }
-                    .help("Copiar toda la imagen al portapapeles (⇧⌘C)")
                 Button("Compartir", systemImage: "square.and.arrow.up") {
                     ImageExport.share(document.canvas.bitmap, from: NSApp.keyWindow)
                 }

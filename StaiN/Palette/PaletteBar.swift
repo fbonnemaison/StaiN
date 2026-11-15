@@ -1,7 +1,8 @@
 import StainKit
 import SwiftUI
 
-/// Barra de colores: primario/secundario, paleta elegida, 8 colores personalizados y recientes.
+/// Barra de colores, de izquierda a derecha: primario/secundario, 8 colores personalizados,
+/// y la paleta elegida (con su menú desplegable al final).
 ///
 /// - Clic izquierdo en una muestra: color primario. Clic derecho: secundario.
 /// - Doble clic en la paleta: editar esa muestra.
@@ -26,13 +27,11 @@ struct PaletteBar: View {
         HStack(alignment: .center, spacing: 12) {
             currentColors
             Divider().frame(height: 36)
-            palettePicker
-            paletteGrid
-            Divider().frame(height: 36)
             customColors
-            if !palette.recent.isEmpty {
-                Divider().frame(height: 36)
-                recentColors
+            Divider().frame(height: 36)
+            HStack(spacing: 4) {
+                paletteGrid
+                paletteMenu
             }
             Spacer(minLength: 0)
         }
@@ -77,23 +76,51 @@ struct PaletteBar: View {
 
     // MARK: Paleta
 
-    private var palettePicker: some View {
-        Picker("Paleta", selection: Binding(get: { palette.source }, set: { palette.select($0) })) {
-            ForEach(PalettePreset.allCases, id: \.self) { preset in
-                Text(title(for: .preset(preset), name: preset.title)).tag(PaletteStore.Source.preset(preset))
-            }
-            if !palette.imported.isEmpty {
-                Divider()
-                ForEach(palette.imported) { item in
-                    Text(title(for: .imported(item.id), name: item.name)).tag(PaletteStore.Source.imported(item.id))
+    /// Botón con flecha al final de la paleta: elegir la paleta y cargar/guardar/restaurar.
+    private var paletteMenu: some View {
+        Menu {
+            Picker("Paleta", selection: Binding(get: { palette.source }, set: { palette.select($0) })) {
+                ForEach(PalettePreset.allCases, id: \.self) { preset in
+                    Text(title(for: .preset(preset), name: preset.title)).tag(PaletteStore.Source.preset(preset))
+                }
+                if !palette.imported.isEmpty {
+                    Divider()
+                    ForEach(palette.imported) { item in
+                        Text(title(for: .imported(item.id), name: item.name))
+                            .tag(PaletteStore.Source.imported(item.id))
+                    }
                 }
             }
+            .pickerStyle(.inline)
+            .labelsHidden()
+            Divider()
+            paletteActions
+        } label: {
+            Label("Paleta de colores", systemImage: "chevron.down")
+                .labelStyle(.iconOnly)
+                .font(.system(size: 10, weight: .semibold))
+                .frame(width: 18, height: 2 * swatch + 2)
+                .contentShape(.rect)
         }
-        .labelsHidden()
-        .pickerStyle(.menu)
+        .menuStyle(.button)
+        .menuIndicator(.hidden)
+        .buttonStyle(.borderless)
+        .background(.quaternary, in: .rect(cornerRadius: 4))
         .fixedSize()
-        .help("Paleta de colores")
+        .help("Elegir paleta de colores")
+        .accessibilityLabel("Paleta de colores")
         .accessibilityIdentifier("palettePicker")
+    }
+
+    @ViewBuilder private var paletteActions: some View {
+        Button("Cargar paleta…") { PaletteFiles.load(into: palette) }
+        Button("Guardar paleta…") { PaletteFiles.save(palette.colors) }
+        Divider()
+        Button("Restaurar paleta original") { palette.resetColors() }
+            .disabled(!palette.isModified)
+        if case .imported(let id) = palette.source {
+            Button("Quitar esta paleta del selector") { palette.removeImported(id) }
+        }
     }
 
     /// Nombre de la paleta, con "•" si es la elegida y tiene muestras editadas.
@@ -120,16 +147,7 @@ struct PaletteBar: View {
         }
         .scrollIndicators(.never)
         .frame(maxWidth: CGFloat(palette.columns) * (swatch + 2))
-        .contextMenu {
-            Button("Cargar paleta…") { PaletteFiles.load(into: palette) }
-            Button("Guardar paleta…") { PaletteFiles.save(palette.colors) }
-            Divider()
-            Button("Restaurar paleta original") { palette.resetColors() }
-                .disabled(!palette.isModified)
-            if case .imported(let id) = palette.source {
-                Button("Quitar esta paleta del selector") { palette.removeImported(id) }
-            }
-        }
+        .contextMenu { paletteActions }
     }
 
     private func swatch(at index: Int) -> some View {
@@ -187,23 +205,5 @@ struct PaletteBar: View {
             menuItems: items
         )
         .frame(width: swatch, height: swatch)
-    }
-
-    // MARK: Recientes
-
-    private var recentColors: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("Recientes").font(.caption2).foregroundStyle(.secondary)
-            HStack(spacing: 2) {
-                ForEach(Array(palette.recent.enumerated()), id: \.offset) { _, color in
-                    SwatchView(
-                        color: color, accessibilityLabel: String(localized: "Color reciente"),
-                        onPrimaryClick: { setColors(color, nil) },
-                        onSecondaryClick: { setColors(nil, color) }
-                    )
-                    .frame(width: swatch, height: swatch)
-                }
-            }
-        }
     }
 }
