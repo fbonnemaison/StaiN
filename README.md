@@ -6,7 +6,7 @@
 Editor de imágenes raster sencillo para macOS, inspirado en Microsoft Paint (antes Paintbrush) y MacPaint.
 Escrito en Swift, open source (MIT). Autor: **App-Zilla**.
 
-> Versión 0.7.0. Consulta el plan en [TODO.md](TODO.md) y los cambios en [CHANGELOG.md](CHANGELOG.md).
+> Consulta la versión actual y los cambios en [CHANGELOG.md](CHANGELOG.md), y el plan en [TODO.md](TODO.md).
 
 ## Requisitos
 
