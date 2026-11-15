@@ -150,6 +150,36 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [ ] (Opcional) Cask de Homebrew
 - [ ] Documentación de usuario: atajos y herramientas en el README o en una wiki
 
+## Mejoras — Colores
+
+### Paletas preconfiguradas
+- [ ] Selector de paleta en la barra de colores (menú junto a las muestras), recordando la última elegida
+- [x] **Clásica**: los 28 colores de Paint (ya existe; será una opción más del selector)
+- [ ] **Moderna**: tonos actuales y equilibrados, tipo colores del sistema de macOS
+- [ ] **Neón**: colores saturados y brillantes (magenta, cian, lima, naranja eléctrico…)
+- [ ] **Pasteles**: tonos suaves y claros
+- [ ] Otras a evaluar:
+  - [ ] **Escala de grises**: del negro al blanco en pasos iguales
+  - [ ] **Tierra / naturales**: marrones, ocres, verdes oliva y arena
+  - [ ] **Retro 8 bits**: paletas limitadas para pixel art (estilo consolas antiguas, 16 colores)
+  - [ ] **Monocromo verde (4 tonos)**: estilo pantallas portátiles antiguas, para pixel art
+  - [ ] **Apta para daltonismo**: colores distinguibles con cualquier tipo de daltonismo (p. ej. Okabe–Ito)
+  - [ ] **Material / web**: los colores más usados en diseño de interfaces
+- [ ] Las paletas cargadas desde archivo (`.gpl` / `.hex`) aparecen también en el selector
+
+### Colores personalizados
+- [ ] **8 casillas de colores personalizados** a la derecha de la paleta, vacías al principio
+- [ ] Guardar en una casilla el color primario (p. ej. clic en una casilla vacía o "Añadir color actual"), editarla con doble clic y vaciarla desde el menú contextual
+- [ ] Las casillas personalizadas se recuerdan entre sesiones y no cambian al cambiar de paleta
+
+### Aspecto de las muestras
+- [ ] Bordes ligeramente redondeados en todas las casillas de color (paleta, recientes, personalizados, primario y secundario), manteniendo el fondo a cuadros para la transparencia
+
+### Elegir colores por valor
+- [ ] Campos **RGB** (0–255 por canal, y alfa) y **HEX** (`#RRGGBB` / `#RRGGBBAA`) para el color primario y el secundario, dentro de la propia app (hoy solo se puede desde el selector de color del sistema)
+- [ ] Validar lo escrito (valores fuera de rango, HEX incompleto) y actualizar el color al momento
+- [ ] Copiar y pegar el HEX del color actual
+
 ---
 
 ## Preguntas abiertas
