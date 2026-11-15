@@ -9,6 +9,20 @@ Escrito en Swift, open source (MIT). Autor: **App-Zilla**.
 ![Ventana de StaiN con un dibujo y una selección con sus puntos de control](docs/screenshot.png)
 
 > Consulta la versión actual y los cambios en [CHANGELOG.md](CHANGELOG.md), y el plan en [TODO.md](TODO.md).
+> Guía de uso: [wiki](https://github.com/fbonnemaison/StaiN/wiki).
+
+## Descargar e instalar
+
+1. Descarga `StaiN-X.Y.Z.dmg` de [Releases](https://github.com/fbonnemaison/StaiN/releases), ábrelo y arrastra
+   **StaiN** a **Aplicaciones**.
+2. **La primera vez**, macOS avisa de que no puede verificar la app: StaiN es gratuito y no está notarizado
+   (la notarización exige un programa de pago de Apple). Pulsa **Hecho**, ve a **Ajustes del Sistema ›
+   Privacidad y seguridad**, baja hasta **Seguridad** y pulsa **Abrir igualmente** junto al aviso de StaiN.
+   Confirma con tu contraseña o Touch ID. Solo hace falta una vez.
+
+   Alternativa desde el Terminal: `xattr -dr com.apple.quarantine /Applications/StaiN.app`
+
+Funciona en Mac con Apple Silicon e Intel, con macOS 26 o superior.
 
 ## Requisitos
 
@@ -21,7 +35,7 @@ Escrito en Swift, open source (MIT). Autor: **App-Zilla**.
 StaiN/                 App macOS (SwiftUI + lienzo AppKit)
 StaiNUITests/          Tests de interfaz (XCUITest)
 Packages/StainKit/     Motor de dibujo, sin UI ni dependencias
-docs/                  Captura del README (la genera PolishUITests.testReadmeScreenshot)
+docs/                  Captura del README, instrucciones del primer arranque y páginas de la wiki
 project.yml            Definición del proyecto para XcodeGen
 ```
 
@@ -45,13 +59,22 @@ Si modificas `project.yml`, regenera el proyecto con [XcodeGen](https://github.c
 xcodegen generate
 ```
 
-## Instalar
+## Instalar desde el código
 
 ```bash
 ./scripts/install.sh
 ```
 
 Compila en Release e instala (o sustituye) `/Applications/StaiN.app`.
+
+## Empaquetar para distribuir
+
+```bash
+./scripts/package-dmg.sh
+```
+
+Crea en `dist/` el `StaiN-X.Y.Z.dmg` (app universal, acceso a Aplicaciones e instrucciones del primer arranque),
+un `.zip` con la app y la suma SHA-256 de cada uno. Solo usa herramientas de macOS y no tiene costes.
 
 ## Versiones
 
@@ -69,6 +92,8 @@ fecha la sección del CHANGELOG, hace commit y crea la etiqueta `vX.Y.Z`. No sub
 
 - `scripts/format.sh` — formatea el código (`--lint` solo comprueba).
 - `scripts/install.sh` — compila e instala en `/Applications`.
+- `scripts/package-dmg.sh` — crea el `.dmg` y el `.zip` para distribuir en `dist/`.
+- `scripts/publish-wiki.sh` — publica en la wiki de GitHub las páginas de `docs/wiki/`.
 - `scripts/bump-version.sh` — sube la versión, actualiza el CHANGELOG y crea la etiqueta.
 - `scripts/icon-from-image.swift` — regenera el icono a partir del diseño `Design/AppIcon-source.png`:
   `swift scripts/icon-from-image.swift Design/AppIcon-source.png StaiN/Resources/Assets.xcassets/AppIcon.appiconset`

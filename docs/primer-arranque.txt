@@ -1,0 +1,40 @@
+Cómo abrir StaiN la primera vez
+===============================
+
+StaiN es gratuito y de código abierto. No está notarizado por Apple, porque eso exige
+un programa de pago, así que macOS pide una confirmación la primera vez que se abre.
+
+1. Arrastra StaiN a la carpeta Aplicaciones (en esta misma ventana).
+2. Abre StaiN desde Aplicaciones. macOS avisa de que no puede verificar la app:
+   pulsa «Hecho» (no «Trasladar a la papelera»).
+3. Abre Ajustes del Sistema › Privacidad y seguridad y baja hasta «Seguridad».
+   Junto a «Se ha bloqueado el uso de StaiN…», pulsa «Abrir igualmente».
+4. Confirma con tu contraseña o Touch ID y pulsa «Abrir igualmente» otra vez.
+
+Solo hace falta una vez. Después StaiN se abre con normalidad.
+
+Desde el Terminal (alternativa), después de copiarla a Aplicaciones:
+
+    xattr -dr com.apple.quarantine /Applications/StaiN.app
+
+Más ayuda: https://github.com/fbonnemaison/StaiN/wiki
+
+
+Opening StaiN for the first time
+================================
+
+StaiN is free and open source. It isn't notarized by Apple (that requires a paid
+program), so macOS asks for confirmation the first time you open it.
+
+1. Drag StaiN to the Applications folder (in this same window).
+2. Open StaiN from Applications. macOS says it can't verify the app: click "Done"
+   (not "Move to Trash").
+3. Open System Settings › Privacy & Security and scroll down to "Security".
+   Next to "StaiN was blocked…", click "Open Anyway".
+4. Confirm with your password or Touch ID and click "Open Anyway" again.
+
+You only need to do this once.
+
+From Terminal (alternative), after copying it to Applications:
+
+    xattr -dr com.apple.quarantine /Applications/StaiN.app

@@ -8,6 +8,11 @@ Mientras la app no se publique (versión 1.0.0), cada fase del [plan](TODO.md) e
 Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró cada fase.
 
 ## [Sin publicar]
+### Añadido
+- `scripts/package-dmg.sh`: crea `StaiN-X.Y.Z.dmg` (app universal, acceso a Aplicaciones e instrucciones
+  del primer arranque) y un `.zip`, con sus sumas SHA-256.
+- Instrucciones para abrir la app sin notarizar la primera vez, en el README y dentro del `.dmg`.
+- Guía de usuario para la wiki en `docs/wiki/` y `scripts/publish-wiki.sh` para publicarla.
 
 ## [0.9.0] - 2026-11-15
 ### Añadido

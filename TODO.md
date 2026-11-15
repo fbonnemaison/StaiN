@@ -145,12 +145,13 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Instalación local: `scripts/install.sh` compila en Release e instala en `/Applications`
 - [x] Gestión de versiones: SemVer, `CHANGELOG.md`, `scripts/bump-version.sh` y etiquetas `vX.Y.Z` (una por fase)
 - [x] Cumplimiento MIT: `LICENSE`, `AUTHORS.md`, `THIRD-PARTY-NOTICES.md`, licencia y créditos dentro de la app; autor App-Zilla
-- [ ] Script de empaquetado `.dmg` / `.zip`
+- [x] Script de empaquetado `.dmg` / `.zip` (`scripts/package-dmg.sh`): app universal, acceso a Aplicaciones, instrucciones del primer arranque y SHA-256
 - [x] Código y etiquetas `v0.0.1`–`v0.7.0` publicados en GitHub
 - [ ] GitHub Releases a partir de las etiquetas y del `CHANGELOG.md`
 - [ ] (Opcional) Cask de Homebrew en un tap propio (`fbonnemaison/homebrew-tap`); el repositorio oficial exige apps notarizadas
-- [ ] Instrucciones para abrir la app sin notarizar la primera vez (clic derecho › Abrir, o Ajustes del Sistema › Privacidad y seguridad)
-- [ ] Documentación de usuario: atajos y herramientas en el README o en una wiki
+- [x] Instrucciones para abrir la app sin notarizar la primera vez (Ajustes del Sistema › Privacidad y seguridad › Abrir igualmente, o `xattr`): en el README, en la wiki y dentro del `.dmg`
+- [x] Documentación de usuario en la wiki: páginas en `docs/wiki/` y `scripts/publish-wiki.sh` para publicarlas
+- [x] Wiki publicada en https://github.com/fbonnemaison/StaiN/wiki (se actualiza con `scripts/publish-wiki.sh`)
 
 ## Mejoras — Colores
 
