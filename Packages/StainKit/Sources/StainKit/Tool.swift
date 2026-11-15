@@ -65,6 +65,9 @@ public protocol Tool: Sendable {
     mutating func end(_ event: PointerEvent, on canvas: inout Canvas)
     /// Se interrumpe la acción (Escape, cambio de herramienta…). La edición se descarta después.
     mutating func cancel(on canvas: inout Canvas)
+    /// El puntero se mueve sin botón pulsado mientras la herramienta espera más clics
+    /// (vista previa del siguiente tramo de una línea o un polígono).
+    mutating func hover(_ event: PointerEvent, on canvas: inout Canvas)
 
     /// `true` si, tras soltar el botón, la herramienta sigue esperando más clics
     /// (polígono, curva, forma editable). La edición sigue abierta hasta `commit`.
@@ -83,6 +86,7 @@ extension Tool {
     public mutating func drag(_ event: PointerEvent, on canvas: inout Canvas) {}
     public mutating func end(_ event: PointerEvent, on canvas: inout Canvas) {}
     public mutating func cancel(on canvas: inout Canvas) {}
+    public mutating func hover(_ event: PointerEvent, on canvas: inout Canvas) {}
     public var isAwaitingInput: Bool { false }
     public func accepts(_ event: PointerEvent) -> Bool { false }
     public mutating func commit(on canvas: inout Canvas) {}

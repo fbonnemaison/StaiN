@@ -110,11 +110,18 @@ private struct ToolOptions: View {
                     .font(.caption2.monospacedDigit())
             case .line, .curve:
                 SizeList(sizes: EditorState.lineWidths, selection: $editor.lineWidth, label: "Grosor de línea")
-                Hint(editor.tool == .line ? "⇧ = 45°" : "Arrastra y luego\ndobla con 2 clics")
+                Hint(
+                    editor.tool == .line
+                        ? "Clic en el inicio\ny en el final\n⇧ = 45°" : "Arrastra y luego\ndobla con 2 clics")
             case .rectangle, .roundedRectangle, .ellipse, .polygon:
+                if editor.tool == .polygon {
+                    PolygonShapePicker(selection: $editor.polygonShape)
+                }
                 FillModePicker(selection: $editor.shapeFillMode)
                 SizeList(sizes: EditorState.lineWidths, selection: $editor.shapeLineWidth, label: "Grosor del borde")
-                Hint(editor.tool == .polygon ? "Doble clic\npara cerrar" : "⇧ = proporción 1:1")
+                Hint(
+                    editor.tool == .polygon && editor.polygonShape == nil
+                        ? "Clic en el origen,\ndoble clic o Esc\npara cerrar" : "⇧ = proporción 1:1")
             case .airbrush:
                 SizeList(sizes: EditorState.airbrushRadii, selection: $editor.airbrushRadius, label: "Radio")
             case .text:
@@ -237,6 +244,67 @@ private struct ShapePicker: View {
         case .square: String(localized: "Cuadrado")
         case .forwardSlash: String(localized: "Caligráfico /")
         case .backSlash: String(localized: "Caligráfico \\")
+        }
+    }
+}
+
+/// Galería de la herramienta Polígono: polígono libre o una forma predefinida (triángulos, rombo,
+/// pentágono, hexágono y flechas).
+private struct PolygonShapePicker: View {
+    @Binding var selection: ShapeKind?
+
+    private static let options: [ShapeKind?] = [nil] + ShapeKind.polygonPresets.map(Optional.some)
+    private let columns = Array(repeating: GridItem(.fixed(18), spacing: 2), count: 3)
+
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: 2) {
+            ForEach(Self.options, id: \.self) { kind in
+                Button {
+                    selection = kind
+                } label: {
+                    icon(kind)
+                        .stroke(.primary, lineWidth: 1.2)
+                        .frame(width: 12, height: 12)
+                        .frame(width: 18, height: 18)
+                        .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .background(selection == kind ? Color.accentColor.opacity(0.25) : .clear, in: .rect(cornerRadius: 3))
+                .help(name(kind))
+                .accessibilityLabel(name(kind))
+                .accessibilityAddTraits(selection == kind ? .isSelected : [])
+            }
+        }
+    }
+
+    private func icon(_ kind: ShapeKind?) -> Path {
+        let frame = CGRect(x: 0, y: 0, width: 12, height: 12)
+        guard let kind else {
+            // Polígono irregular, como el del icono clásico.
+            return Path { path in
+                path.addLines([
+                    CGPoint(x: 0, y: 12), CGPoint(x: 3, y: 2), CGPoint(x: 8, y: 0), CGPoint(x: 7, y: 5),
+                    CGPoint(x: 12, y: 6), CGPoint(x: 9, y: 12),
+                ])
+                path.closeSubpath()
+            }
+        }
+        return Path(kind.path(in: frame))
+    }
+
+    private func name(_ kind: ShapeKind?) -> String {
+        switch kind {
+        case nil: String(localized: "Polígono libre")
+        case .rightTriangle: String(localized: "Triángulo rectángulo")
+        case .isoscelesTriangle: String(localized: "Triángulo isósceles")
+        case .diamond: String(localized: "Rombo")
+        case .pentagon: String(localized: "Pentágono")
+        case .hexagon: String(localized: "Hexágono")
+        case .arrowRight: String(localized: "Flecha a la derecha")
+        case .arrowLeft: String(localized: "Flecha a la izquierda")
+        case .arrowUp: String(localized: "Flecha hacia arriba")
+        case .arrowDown: String(localized: "Flecha hacia abajo")
+        default: kind?.rawValue ?? ""
         }
     }
 }

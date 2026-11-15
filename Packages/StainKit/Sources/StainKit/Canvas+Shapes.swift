@@ -37,6 +37,77 @@ public enum ShapeKind: String, CaseIterable, Sendable, Hashable {
     case rectangle
     case roundedRectangle
     case ellipse
+    // Formas de la galería de la herramienta Polígono: se dibujan arrastrando, como un rectángulo.
+    case rightTriangle
+    case isoscelesTriangle
+    case diamond
+    case pentagon
+    case hexagon
+    case arrowRight
+    case arrowLeft
+    case arrowUp
+    case arrowDown
+
+    /// Formas que ofrece la herramienta Polígono, en el orden de su galería.
+    public static let polygonPresets: [ShapeKind] = [
+        .rightTriangle, .isoscelesTriangle, .diamond, .pentagon, .hexagon,
+        .arrowRight, .arrowLeft, .arrowUp, .arrowDown,
+    ]
+
+    /// Vértices en el cuadrado unidad (y hacia abajo), o `nil` para las formas curvas.
+    public var unitVertices: [CGPoint]? {
+        switch self {
+        case .rectangle, .roundedRectangle, .ellipse: return nil
+        case .rightTriangle: return [CGPoint(x: 0, y: 0), CGPoint(x: 0, y: 1), CGPoint(x: 1, y: 1)]
+        case .isoscelesTriangle: return [CGPoint(x: 0.5, y: 0), CGPoint(x: 1, y: 1), CGPoint(x: 0, y: 1)]
+        case .diamond:
+            return [CGPoint(x: 0.5, y: 0), CGPoint(x: 1, y: 0.5), CGPoint(x: 0.5, y: 1), CGPoint(x: 0, y: 0.5)]
+        case .pentagon: return Self.regularPolygon(sides: 5, startAngle: -.pi / 2)
+        case .hexagon: return Self.regularPolygon(sides: 6, startAngle: 0)
+        case .arrowRight: return Self.arrow
+        case .arrowLeft: return Self.arrow.map { CGPoint(x: 1 - $0.x, y: $0.y) }
+        case .arrowUp: return Self.arrow.map { CGPoint(x: $0.y, y: 1 - $0.x) }
+        case .arrowDown: return Self.arrow.map { CGPoint(x: $0.y, y: $0.x) }
+        }
+    }
+
+    /// Flecha hacia la derecha: el cuerpo ocupa la mitad central y la punta el 45 % final.
+    private static let arrow: [CGPoint] = [
+        CGPoint(x: 0, y: 0.25), CGPoint(x: 0.55, y: 0.25), CGPoint(x: 0.55, y: 0), CGPoint(x: 1, y: 0.5),
+        CGPoint(x: 0.55, y: 1), CGPoint(x: 0.55, y: 0.75), CGPoint(x: 0, y: 0.75),
+    ]
+
+    /// Polígono regular estirado para llenar el cuadrado unidad.
+    private static func regularPolygon(sides: Int, startAngle: Double) -> [CGPoint] {
+        let points = (0..<sides).map { index in
+            let angle = startAngle + Double(index) * 2 * .pi / Double(sides)
+            return CGPoint(x: cos(angle), y: sin(angle))
+        }
+        let minX = points.map(\.x).min() ?? 0, maxX = points.map(\.x).max() ?? 1
+        let minY = points.map(\.y).min() ?? 0, maxY = points.map(\.y).max() ?? 1
+        return points.map { CGPoint(x: ($0.x - minX) / (maxX - minX), y: ($0.y - minY) / (maxY - minY)) }
+    }
+
+    /// Trazado de la forma dentro de `frame`.
+    public func path(in frame: CGRect) -> CGPath {
+        switch self {
+        case .rectangle:
+            return CGPath(rect: frame, transform: nil)
+        case .ellipse:
+            return CGPath(ellipseIn: frame, transform: nil)
+        case .roundedRectangle:
+            let radius = min(20, min(frame.width, frame.height) * 0.2)
+            return CGPath(roundedRect: frame, cornerWidth: radius, cornerHeight: radius, transform: nil)
+        default:
+            let path = CGMutablePath()
+            let points = (unitVertices ?? []).map {
+                CGPoint(x: frame.minX + $0.x * frame.width, y: frame.minY + $0.y * frame.height)
+            }
+            path.addLines(between: points)
+            path.closeSubpath()
+            return path
+        }
+    }
 }
 
 extension PixelRect {
@@ -78,7 +149,7 @@ extension Canvas {
         }
     }
 
-    /// Rectángulo, rectángulo redondeado o elipse que ocupa exactamente `rect` (el contorno queda dentro).
+    /// Forma (rectángulo, elipse, triángulo, flecha…) que ocupa exactamente `rect` (el contorno queda dentro).
     public mutating func drawShape(_ kind: ShapeKind, in rect: PixelRect, style: ShapeStyle) {
         guard !rect.isEmpty else { return }
         var frame = rect.cgRect
@@ -87,17 +158,7 @@ extension Canvas {
             let inset = min(CGFloat(style.lineWidth) / 2, min(frame.width, frame.height) / 2 - 0.01)
             frame = frame.insetBy(dx: max(inset, 0), dy: max(inset, 0))
         }
-        let path: CGPath
-        switch kind {
-        case .rectangle:
-            path = CGPath(rect: frame, transform: nil)
-        case .ellipse:
-            path = CGPath(ellipseIn: frame, transform: nil)
-        case .roundedRectangle:
-            let radius = min(20, min(frame.width, frame.height) * 0.2)
-            path = CGPath(roundedRect: frame, cornerWidth: radius, cornerHeight: radius, transform: nil)
-        }
-        drawPath(path, closed: true, style: style)
+        drawPath(kind.path(in: frame), closed: true, style: style)
     }
 
     /// Sustituye (sin mezclar) todos los píxeles de `rect` por un color.

@@ -103,6 +103,16 @@ final class ImageDocument: ReferenceFileDocument {
         toolDidChangeCanvas(colors: colors)
     }
 
+    /// Ratón movido sin pulsar: vista previa de la herramienta pendiente (línea, polígono).
+    func pointerHovered(_ event: PointerEvent) {
+        guard controller.isPending else { return }
+        controller.pointerMoved(event, canvas: &canvas)
+        toolDidChangeCanvas(colors: nil)
+    }
+
+    /// Escape cierra el polígono libre en vez de descartarlo, si ya tiene 3 vértices.
+    var pendingToolClosesOnEscape: Bool { (controller.tool as? PolygonTool)?.canClose == true }
+
     func pointerUp(_ event: PointerEvent, undoManager: UndoManager?) {
         if let patch = controller.pointerUp(event, canvas: &canvas) {
             finishEdit(patch, actionName: pendingActionName, undoManager: undoManager)

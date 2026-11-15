@@ -5,9 +5,9 @@ import StainKit
 /// Paletas y colores personalizados, compartidos por todas las ventanas
 /// y guardados en `UserDefaults`.
 ///
-/// - La paleta visible sale de una paleta incluida o de una importada desde archivo, y se puede editar
-///   (doble clic en una muestra). "Restaurar" vuelve a sus colores originales.
-/// - Los 8 colores personalizados son independientes de la paleta elegida.
+/// - La paleta visible sale de una paleta incluida o de una importada desde archivo, y no se edita.
+/// - Los colores personalizados (hasta 28, en 2 filas de 1 a 14 columnas) son independientes
+///   de la paleta elegida y se pueden guardar como paleta JSON.
 @MainActor @Observable
 final class PaletteStore {
     static let shared = PaletteStore()
@@ -35,7 +35,7 @@ final class PaletteStore {
         }
     }
 
-    /// Paleta cargada desde un archivo `.gpl` o `.hex`.
+    /// Paleta cargada desde un archivo `.json`, `.gpl` o `.hex`.
     struct ImportedPalette: Codable, Identifiable, Hashable {
         var id: UUID
         var name: String
@@ -44,15 +44,18 @@ final class PaletteStore {
         var paintColors: [PaintColor] { colors.compactMap(PaintColor.init(hex:)) }
     }
 
-    static let customSlotCount = 8
+    /// Casillas personalizadas que se guardan (2 filas × 14 columnas como máximo).
+    static let customSlotCount = 28
+    static let customColumnsRange = 1...14
+    static let defaultCustomColumns = 4
+    /// Clave de `UserDefaults` (y `@AppStorage`) con las columnas visibles de colores personalizados.
+    static let customColumnsKey = "customColorColumns"
     static let maxImported = 12
 
     private(set) var colors: [PaintColor]
     private(set) var source: Source
-    /// La paleta visible tiene muestras editadas respecto a su origen.
-    private(set) var isModified: Bool
     private(set) var imported: [ImportedPalette]
-    /// 8 casillas; `nil` = vacía.
+    /// Casillas personalizadas; `nil` = vacía.
     private(set) var customColors: [PaintColor?]
 
     /// Columnas de la cuadrícula de 2 filas.
@@ -60,9 +63,7 @@ final class PaletteStore {
 
     private let defaults: UserDefaults
     private enum Key {
-        static let colors = "paletteColors"
         static let source = "paletteSource"
-        static let modified = "paletteModified"
         static let imported = "importedPalettes"
         static let custom = "customColors"
     }
@@ -77,10 +78,10 @@ final class PaletteStore {
         var source = defaults.string(forKey: Key.source).flatMap(Source.init(key:)) ?? .preset(.classic)
         if case .imported(let id) = source, !loaded.contains(where: { $0.id == id }) { source = .preset(.classic) }
         self.source = source
-        let saved = (defaults.stringArray(forKey: Key.colors) ?? []).compactMap(PaintColor.init(hex:))
-        let original = Self.colors(for: source, imported: loaded)
-        colors = saved.isEmpty ? original : saved
-        isModified = !saved.isEmpty && saved != original
+        colors = Self.colors(for: source, imported: loaded)
+        // Las versiones anteriores permitían editar la paleta; esas ediciones ya no se usan.
+        defaults.removeObject(forKey: "paletteColors")
+        defaults.removeObject(forKey: "paletteModified")
         let custom = (defaults.stringArray(forKey: Key.custom) ?? []).map { PaintColor(hex: $0) }
         customColors = (0..<Self.customSlotCount).map { $0 < custom.count ? custom[$0] : nil }
         // Las versiones anteriores guardaban colores recientes; ya no se usan.
@@ -96,25 +97,11 @@ final class PaletteStore {
 
     // MARK: Paleta visible
 
-    /// Cambia a otra paleta (se pierden las ediciones de la actual).
+    /// Cambia a otra paleta.
     func select(_ newSource: Source) {
         source = newSource
         colors = Self.colors(for: newSource, imported: imported)
-        isModified = false
         save()
-    }
-
-    /// Edita una muestra de la paleta visible.
-    func setColor(_ color: PaintColor, at index: Int) {
-        guard colors.indices.contains(index) else { return }
-        colors[index] = color
-        isModified = colors != Self.colors(for: source, imported: imported)
-        save()
-    }
-
-    /// Vuelve a los colores originales de la paleta elegida.
-    func resetColors() {
-        select(source)
     }
 
     /// Añade una paleta de archivo al selector y la elige. Si ya había una con el mismo nombre, la sustituye.
@@ -146,14 +133,16 @@ final class PaletteStore {
         defaults.set(customColors.map { $0?.hex ?? "" }, forKey: Key.custom)
     }
 
+    func clearCustomColors() {
+        for index in customColors.indices { customColors[index] = nil }
+        defaults.set(customColors.map { _ in "" }, forKey: Key.custom)
+    }
+
+    /// Colores personalizados no vacíos, en orden.
+    var filledCustomColors: [PaintColor] { customColors.compactMap(\.self) }
+
     private func save() {
         defaults.set(source.key, forKey: Key.source)
-        defaults.set(isModified, forKey: Key.modified)
-        if isModified {
-            defaults.set(colors.map(\.hex), forKey: Key.colors)
-        } else {
-            defaults.removeObject(forKey: Key.colors)
-        }
         defaults.set(try? JSONEncoder().encode(imported), forKey: Key.imported)
     }
 }

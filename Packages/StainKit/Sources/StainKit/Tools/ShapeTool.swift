@@ -1,6 +1,7 @@
 import CoreGraphics
 
-/// Rectángulo, rectángulo redondeado o elipse.
+/// Rectángulo, rectángulo redondeado, elipse o una forma de la galería del polígono (triángulos, rombo,
+/// pentágono, hexágono, flechas).
 ///
 /// Al soltar, la forma sigue editable: arrastrando dentro se mueve y con los tiradores se redimensiona.
 /// Un clic fuera (o cambiar de herramienta) la confirma. Con Shift, proporción 1:1 (cuadrado o círculo).

@@ -1,11 +1,16 @@
 import CoreGraphics
 
-/// Polígono: se arrastra el primer lado y luego cada clic añade un vértice.
-/// Doble clic, o un clic sobre el primer vértice, lo cierra.
+/// Polígono libre: cada clic añade un vértice y, entre clics, el lado siguiente sigue al ratón.
+/// (También se puede arrastrar el primer lado.)
+///
+/// Se cierra con un clic sobre el primer vértice, con doble clic o con Escape (si ya tiene 3 vértices).
 public struct PolygonTool: Tool {
     public var fillMode: ShapeFillMode
     public var lineWidth: Int
+    /// Vértices fijados.
     public private(set) var points: [(x: Int, y: Int)] = []
+    /// Posición del ratón: extremo del lado que se está trazando.
+    private var cursor: (x: Int, y: Int)?
     private var style: ShapeStyle?
     private var isClosed = false
 
@@ -16,31 +21,51 @@ public struct PolygonTool: Tool {
 
     public var isAwaitingInput: Bool { !points.isEmpty && !isClosed }
     public func accepts(_ event: PointerEvent) -> Bool { isAwaitingInput }
+    /// Tiene vértices suficientes para cerrarse (Escape lo cierra en vez de descartarlo).
+    public var canClose: Bool { points.count >= 3 && !isClosed }
 
     public mutating func begin(_ event: PointerEvent, on canvas: inout Canvas) {
         let pixel = event.pixel
         if points.isEmpty {
             style = ShapeStyle(fillMode: fillMode, lineWidth: lineWidth, button: event.button, canvas: canvas)
-            points = [pixel, pixel]
+            points = [pixel]
         } else if event.clickCount >= 2 || isNearFirst(event) {
             // El primer clic del doble clic ya añadió un vértice en el mismo sitio: se quita.
-            if event.clickCount >= 2, points.count > 3 { points.removeLast() }
-            isClosed = true
-        } else {
+            if event.clickCount >= 2, points.count > 3, let last = points.last, last == pixel {
+                points.removeLast()
+            }
+            if points.count >= 3 { isClosed = true }
+        } else if points.last.map({ $0 != pixel }) ?? true {
             points.append(pixel)
         }
+        cursor = pixel
         render(on: &canvas)
     }
 
     public mutating func drag(_ event: PointerEvent, on canvas: inout Canvas) {
         guard !isClosed, !points.isEmpty else { return }
-        points[points.count - 1] = event.pixel
+        cursor = event.pixel
         render(on: &canvas)
     }
 
+    public mutating func end(_ event: PointerEvent, on canvas: inout Canvas) {
+        guard !isClosed, let last = points.last else { return }
+        // Al arrastrar, el punto donde se suelta es un vértice más.
+        if event.pixel != last, !isNearFirst(event) { points.append(event.pixel) }
+        cursor = event.pixel
+        render(on: &canvas)
+    }
+
+    public mutating func hover(_ event: PointerEvent, on canvas: inout Canvas) {
+        guard !isClosed, !points.isEmpty else { return }
+        cursor = event.pixel
+        render(on: &canvas)
+    }
+
+    /// Confirma: con 3 vértices o más se cierra; con menos queda la línea abierta, sin el lado provisional.
     public mutating func commit(on canvas: inout Canvas) {
-        guard points.count >= 3 else { return }
-        isClosed = true
+        if points.count >= 3 { isClosed = true }
+        cursor = nil
         render(on: &canvas)
     }
 
@@ -53,11 +78,14 @@ public struct PolygonTool: Tool {
 
     private func render(on canvas: inout Canvas) {
         guard let style, let first = points.first else { return }
+        var vertices = points
+        if !isClosed, let cursor, cursor != vertices.last ?? first { vertices.append(cursor) }
         let path = CGMutablePath()
         path.move(to: CGPoint(x: Double(first.x) + 0.5, y: Double(first.y) + 0.5))
-        for point in points.dropFirst() {
+        for point in vertices.dropFirst() {
             path.addLine(to: CGPoint(x: Double(point.x) + 0.5, y: Double(point.y) + 0.5))
         }
+        if vertices.count == 1 { path.addLine(to: CGPoint(x: Double(first.x) + 0.5, y: Double(first.y) + 0.5)) }
         if isClosed { path.closeSubpath() }
         canvas.revertToEditStart()
         canvas.drawPath(path, closed: isClosed, style: style)

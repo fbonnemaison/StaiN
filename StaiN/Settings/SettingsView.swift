@@ -10,6 +10,7 @@ struct SettingsView: View {
     @AppStorage(AppSettings.Key.appearance) private var appearance = AppSettings.Appearance.system
     @AppStorage(AppSettings.Key.saveFormat) private var saveFormat = UTType.png.identifier
     @AppStorage(AppSettings.Key.pixelModeByDefault) private var pixelModeByDefault = false
+    @AppStorage(PaletteStore.customColumnsKey) private var customColumns = PaletteStore.defaultCustomColumns
 
     var body: some View {
         Form {
@@ -25,6 +26,12 @@ struct SettingsView: View {
                 TextField("Ancho (px)", value: $width, format: .number)
                 TextField("Alto (px)", value: $height, format: .number)
                 Toggle("Empezar en modo pixel (sin suavizado)", isOn: $pixelModeByDefault)
+            }
+            Section("Colores") {
+                Stepper(value: $customColumns, in: PaletteStore.customColumnsRange) {
+                    LabeledContent("Columnas de colores personalizados", value: "\(customColumns)")
+                }
+                .accessibilityIdentifier("customColumnsStepper")
             }
             Section("Cuadrícula") {
                 Stepper(value: $gridSpacing, in: 2...512) {

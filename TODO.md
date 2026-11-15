@@ -16,6 +16,7 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 | Render | Core Graphics sobre un buffer RGBA8 premultiplicado. Se pasa a Metal solo si el rendimiento lo exige. |
 | Documentos | `DocumentGroup` + `ReferenceFileDocument`. Lectura y escritura con ImageIO. |
 | Licencia | **MIT**. No se copia código de Paintbrush (GPL-3.0): solo se toman ideas y UX. |
+| Costes | **Ninguno**, ni para el desarrollador ni para los usuarios: sin Apple Developer Program (Developer ID, notarización, App Store), sin servicios ni dependencias de pago. La app se distribuye con firma ad-hoc. |
 | Tests | Swift Testing (`import Testing`) para `StainKit` y XCUITest para los flujos básicos. |
 
 ### Referencias
@@ -140,14 +141,15 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Resolución del icono: se mantiene el recorte de ~440 px (algo blando en los tamaños grandes); si aparece una versión de 1024 px, basta con volver a ejecutar el script
 
 ## Fase 8 — Publicación
-- [x] Firma ad-hoc para uso propio ("Sign to Run Locally"); notarizar es opcional
+- [x] Firma ad-hoc ("Sign to Run Locally"). Sin Developer ID ni notarización, porque exigen el Apple Developer Program de pago
 - [x] Instalación local: `scripts/install.sh` compila en Release e instala en `/Applications`
 - [x] Gestión de versiones: SemVer, `CHANGELOG.md`, `scripts/bump-version.sh` y etiquetas `vX.Y.Z` (una por fase)
 - [x] Cumplimiento MIT: `LICENSE`, `AUTHORS.md`, `THIRD-PARTY-NOTICES.md`, licencia y créditos dentro de la app; autor App-Zilla
 - [ ] Script de empaquetado `.dmg` / `.zip`
 - [x] Código y etiquetas `v0.0.1`–`v0.7.0` publicados en GitHub
 - [ ] GitHub Releases a partir de las etiquetas y del `CHANGELOG.md`
-- [ ] (Opcional) Cask de Homebrew
+- [ ] (Opcional) Cask de Homebrew en un tap propio (`fbonnemaison/homebrew-tap`); el repositorio oficial exige apps notarizadas
+- [ ] Instrucciones para abrir la app sin notarizar la primera vez (clic derecho › Abrir, o Ajustes del Sistema › Privacidad y seguridad)
 - [ ] Documentación de usuario: atajos y herramientas en el README o en una wiki
 
 ## Mejoras — Colores

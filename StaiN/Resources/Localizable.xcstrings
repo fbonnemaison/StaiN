@@ -451,6 +451,26 @@
         }
       }
     },
+    "Clic en el inicio\ny en el final\n⇧ = 45°": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click the start\nand the end\n⇧ = 45°"
+          }
+        }
+      }
+    },
+    "Clic en el origen,\ndoble clic o Esc\npara cerrar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click the first point,\ndouble-click or Esc\nto close"
+          }
+        }
+      }
+    },
     "Clic fuera del cuadro para fijar el texto": {
       "localizations": {
         "en": {
@@ -541,12 +561,52 @@
         }
       }
     },
+    "Colores": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colors"
+          }
+        }
+      }
+    },
+    "Colores personalizados": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom colors"
+          }
+        }
+      }
+    },
     "Colores personalizados: clic en una casilla vacía para guardar el color primario": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Custom colors: click an empty slot to save the primary color"
+          }
+        }
+      }
+    },
+    "Columnas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Columns"
+          }
+        }
+      }
+    },
+    "Columnas de colores personalizados": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom color columns"
           }
         }
       }
@@ -601,6 +661,16 @@
         }
       }
     },
+    "Copiar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy"
+          }
+        }
+      }
+    },
     "Copiar HEX": {
       "localizations": {
         "en": {
@@ -631,12 +701,12 @@
         }
       }
     },
-    "Copiar": {
+    "Cortar": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Copy"
+            "value": "Cut"
           }
         }
       }
@@ -647,16 +717,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cut the selection (⌘X)"
-          }
-        }
-      }
-    },
-    "Cortar": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cut"
           }
         }
       }
@@ -741,16 +801,6 @@
         }
       }
     },
-    "Deshacer (⌘Z)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Undo (⌘Z)"
-          }
-        }
-      }
-    },
     "Deshacer": {
       "localizations": {
         "en": {
@@ -771,12 +821,12 @@
         }
       }
     },
-    "Doble clic\npara cerrar": {
+    "Deshacer (⌘Z)": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Double-click\nto close"
+            "value": "Undo (⌘Z)"
           }
         }
       }
@@ -811,22 +861,22 @@
         }
       }
     },
-    "Elegir paleta de colores": {
+    "Elegir o cargar una paleta de colores": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose color palette"
+            "value": "Choose or load a color palette"
           }
         }
       }
     },
-    "Elige una paleta .gpl (GIMP) o .hex": {
+    "Elige una paleta .json (StaiN), .gpl (GIMP) o .hex": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a .gpl (GIMP) or .hex palette"
+            "value": "Choose a .json (StaiN), .gpl (GIMP) or .hex palette"
           }
         }
       }
@@ -927,6 +977,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Arrow"
+          }
+        }
+      }
+    },
+    "Flecha a la derecha": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right arrow"
+          }
+        }
+      }
+    },
+    "Flecha a la izquierda": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Left arrow"
+          }
+        }
+      }
+    },
+    "Flecha hacia abajo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Down arrow"
+          }
+        }
+      }
+    },
+    "Flecha hacia arriba": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Up arrow"
           }
         }
       }
@@ -1051,12 +1141,32 @@
         }
       }
     },
+    "Guarda los colores personalizados como paleta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save the custom colors as a palette"
+          }
+        }
+      }
+    },
     "Guardar": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Saving"
+          }
+        }
+      }
+    },
+    "Guardar como paleta…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save as Palette…"
           }
         }
       }
@@ -1071,12 +1181,12 @@
         }
       }
     },
-    "Guardar paleta…": {
+    "Guardar los colores personalizados como paleta o cambiar sus columnas": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Save Palette…"
+            "value": "Save the custom colors as a palette or change their columns"
           }
         }
       }
@@ -1097,6 +1207,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tools"
+          }
+        }
+      }
+    },
+    "Hexágono": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hexagon"
           }
         }
       }
@@ -1281,6 +1401,16 @@
         }
       }
     },
+    "Mis colores": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My colors"
+          }
+        }
+      }
+    },
     "Moderna": {
       "localizations": {
         "en": {
@@ -1401,6 +1531,26 @@
         }
       }
     },
+    "Nombre de la paleta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palette name"
+          }
+        }
+      }
+    },
+    "Nombre de la paleta:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Palette name:"
+          }
+        }
+      }
+    },
     "Nueva captura de pantalla…": {
       "localizations": {
         "en": {
@@ -1431,16 +1581,6 @@
         }
       }
     },
-    "Ocultar puntos de control del lienzo": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hide Canvas Handles"
-          }
-        }
-      }
-    },
     "Ocultar": {
       "localizations": {
         "en": {
@@ -1467,6 +1607,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hide Pixel Grid"
+          }
+        }
+      }
+    },
+    "Ocultar puntos de control del lienzo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide Canvas Handles"
           }
         }
       }
@@ -1531,16 +1681,6 @@
         }
       }
     },
-    "Pegar desde el portapapeles (⌘V)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Paste from the clipboard (⌘V)"
-          }
-        }
-      }
-    },
     "Pegar": {
       "localizations": {
         "en": {
@@ -1567,6 +1707,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Paste as New Document"
+          }
+        }
+      }
+    },
+    "Pegar desde el portapapeles (⌘V)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste from the clipboard (⌘V)"
+          }
+        }
+      }
+    },
+    "Pentágono": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pentagon"
           }
         }
       }
@@ -1607,6 +1767,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Polygon"
+          }
+        }
+      }
+    },
+    "Polígono libre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free polygon"
           }
         }
       }
@@ -1751,16 +1921,6 @@
         }
       }
     },
-    "Rehacer (⇧⌘Z)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Redo (⇧⌘Z)"
-          }
-        }
-      }
-    },
     "Rehacer": {
       "localizations": {
         "en": {
@@ -1777,6 +1937,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Redo %@"
+          }
+        }
+      }
+    },
+    "Rehacer (⇧⌘Z)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Redo (⇧⌘Z)"
           }
         }
       }
@@ -1821,16 +1991,6 @@
         }
       }
     },
-    "Restaurar paleta original": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Restore Original Palette"
-          }
-        }
-      }
-    },
     "Resultado": {
       "localizations": {
         "en": {
@@ -1847,6 +2007,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Retro 8-Bit"
+          }
+        }
+      }
+    },
+    "Rombo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diamond"
           }
         }
       }
@@ -2161,6 +2331,26 @@
         }
       }
     },
+    "Triángulo isósceles": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isosceles triangle"
+          }
+        }
+      }
+    },
+    "Triángulo rectángulo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Right triangle"
+          }
+        }
+      }
+    },
     "Umbral": {
       "localizations": {
         "en": {
@@ -2207,6 +2397,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Clear"
+          }
+        }
+      }
+    },
+    "Vaciar todos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear All"
           }
         }
       }

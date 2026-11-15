@@ -16,14 +16,25 @@ Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró ca
 - Tooltips con el nombre y el atajo de cada herramienta.
 - Captura de la app en el README.
 - Capas, como fase futura del plan.
+- Galería de formas en la herramienta Polígono: polígono libre, triángulo rectángulo, triángulo isósceles,
+  rombo, pentágono, hexágono y flechas en las cuatro direcciones.
+- Columnas de colores personalizados configurables (1 a 14, en 2 filas; hasta 28 colores), en Ajustes
+  y en su menú desplegable.
+- Guardar los colores personalizados como paleta JSON con nombre, y cargar paletas JSON (además de
+  `.gpl` y `.hex`).
 ### Cambiado
 - Barra de colores reordenada: primario/secundario, personalizados y paleta, con el menú de paletas
   al final.
 - Barra superior en tres grupos: deshacer/rehacer, portapapeles y lienzo/vista/compartir.
 - Cursores: cruceta en las herramientas de selección e icono de la herramienta en lápiz, pincel,
   aerógrafo, borrador, relleno y cuentagotas.
+- Línea y polígono libre se dibujan con clics, sin mantener pulsado el ratón; la vista previa sigue
+  al ratón. El polígono se cierra con un clic en el origen, doble clic o Escape.
+- Las paletas predefinidas y cargadas ya no se editan.
+- Proyecto sin costes: sin Developer ID ni notarización.
 ### Eliminado
 - Colores recientes.
+- "Guardar paleta…" y "Restaurar paleta original" del menú de paletas.
 ### Corregido
 - El cursor sobre el lienzo alternaba entre la flecha y el de la herramienta.
 

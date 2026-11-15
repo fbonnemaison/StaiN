@@ -49,6 +49,13 @@ public struct ToolController: Sendable {
         lastEvent = event
     }
 
+    /// Movimiento sin botón pulsado: la herramienta pendiente actualiza su vista previa.
+    public mutating func pointerMoved(_ event: PointerEvent, canvas: inout Canvas) {
+        guard !isPointerDown, var current = tool, current.isAwaitingInput else { return }
+        current.hover(event, on: &canvas)
+        tool = current
+    }
+
     /// Suelta el botón. Devuelve el parche si la edición terminó (la herramienta no espera más clics).
     public mutating func pointerUp(_ event: PointerEvent, canvas: inout Canvas) -> UndoPatch? {
         guard isPointerDown, var current = tool else { return nil }

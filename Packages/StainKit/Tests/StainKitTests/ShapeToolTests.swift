@@ -312,4 +312,58 @@ let red = PaintColor(red: 255, green: 0, blue: 0)
         let style = TextStyle(fontName: "Helvetica", size: 12, bold: true, italic: true)
         #expect(CTFontGetSize(style.ctFont) == 12)
     }
+
+    @Test func polygonPresetsFitTheirFrame() {
+        for kind in ShapeKind.polygonPresets {
+            let vertices = kind.unitVertices ?? []
+            #expect(vertices.count >= 3, "\(kind)")
+            #expect(vertices.map(\.x).min() == 0 && vertices.map(\.x).max() == 1, "\(kind) ocupa todo el ancho")
+            #expect(vertices.map(\.y).min() == 0 && vertices.map(\.y).max() == 1, "\(kind) ocupa todo el alto")
+        }
+        #expect(ShapeKind.arrowUp.unitVertices?.contains(CGPoint(x: 0.5, y: 0)) == true, "Punta arriba")
+        #expect(ShapeKind.arrowLeft.unitVertices?.contains(CGPoint(x: 0, y: 0.5)) == true, "Punta a la izquierda")
+    }
+
+    @Test func drawingTriangleFillsOnlyItsHalf() {
+        var canvas = Canvas(width: 20, height: 20)
+        let style = ShapeStyle(fillMode: .fill, lineWidth: 1, outlineColor: red, fillColor: red)
+        canvas.drawShape(.rightTriangle, in: PixelRect(x: 0, y: 0, width: 20, height: 20), style: style)
+        #expect(canvas.bitmap[2, 17] == red, "Abajo a la izquierda, dentro")
+        #expect(canvas.bitmap[17, 2] == .white, "Arriba a la derecha, fuera")
+    }
+
+    // MARK: Clic a clic (sin mantener pulsado)
+
+    @Test func lineWithTwoClicksAndHoverPreview() throws {
+        var canvas = Canvas(width: 20, height: 20)
+        var controller = ToolController()
+        let make = { LineTool() as any Tool }
+        drag(&controller, &canvas, [at(2, 2)], make: make)
+        #expect(controller.isPending, "Tras el primer clic espera el final")
+        controller.pointerMoved(at(17, 2), canvas: &canvas)
+        #expect(canvas.bitmap[10, 2] == .black, "Vista previa horizontal")
+        controller.pointerMoved(at(2, 17), canvas: &canvas)
+        #expect(canvas.bitmap[10, 2] == .white && canvas.bitmap[2, 10] == .black, "La vista previa sigue al ratón")
+        let patches = drag(&controller, &canvas, [at(2, 17)], make: make)
+        #expect(patches.count == 1, "Un solo paso de deshacer para toda la línea")
+        #expect(!controller.isActive, "El segundo clic termina la línea")
+        #expect(canvas.bitmap[2, 10] == .black)
+    }
+
+    @Test func polygonByClicksWithHoverAndCommitCloses() {
+        var canvas = Canvas(width: 20, height: 20)
+        var controller = ToolController()
+        let make = { PolygonTool() as any Tool }
+        drag(&controller, &canvas, [at(2, 2)], make: make)
+        controller.pointerMoved(at(15, 2), canvas: &canvas)
+        #expect(canvas.bitmap[8, 2] == .black, "El primer lado sigue al ratón")
+        drag(&controller, &canvas, [at(15, 2)], make: make)
+        drag(&controller, &canvas, [at(15, 15)], make: make)
+        controller.pointerMoved(at(10, 10), canvas: &canvas)
+        #expect((controller.tool as? PolygonTool)?.canClose == true)
+        // Escape = confirmar: se cierra sin el lado provisional hacia el ratón.
+        _ = controller.commit(canvas: &canvas)
+        #expect(canvas.bitmap[8, 8] == .black, "Lado de cierre de (15,15) a (2,2)")
+        #expect(canvas.bitmap[12, 12] == .black)
+    }
 }

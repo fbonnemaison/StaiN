@@ -82,6 +82,9 @@ final class EditorState {
     var activeSheet: Sheet?
 
     var shapeFillMode: ShapeFillMode = .outline
+    /// Forma de la herramienta Polígono: `nil` = polígono libre (clic por vértice); si no, una forma
+    /// predefinida que se dibuja arrastrando.
+    var polygonShape: ShapeKind?
     var shapeLineWidth = 1
     var airbrushRadius = 8
 

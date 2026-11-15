@@ -317,6 +317,10 @@ final class CanvasView: NSView, NSMenuItemValidation {
     override func mouseMoved(with event: NSEvent) {
         updateCursorPosition(event)
         applyCursor(for: event)
+        // Línea y polígono abiertos: el tramo siguiente sigue al ratón entre clics.
+        if strokeButton == nil, tool == .line || tool == .polygon, document?.hasActiveTool == true {
+            document?.pointerHovered(pointerEvent(event, button: .primary))
+        }
     }
 
     override func mouseEntered(with event: NSEvent) { applyCursor(for: event) }
@@ -458,7 +462,8 @@ final class CanvasView: NSView, NSMenuItemValidation {
         let step = event.modifierFlags.contains(.shift) ? 10 : 1
         let selecting = document?.hasSelection == true
         switch event.keyCode {
-        case 53 where selecting, 36, 76:  // Escape con selección, Intro: confirmar.
+        case 53 where selecting || document?.pendingToolClosesOnEscape == true, 36, 76:
+            // Escape con selección o con un polígono de 3 vértices o más, Intro: confirmar.
             document?.commitTool(undoManager: undoManagerForStrokes)
         case 53:  // Escape: descarta lo que esté a medias.
             strokeButton = nil

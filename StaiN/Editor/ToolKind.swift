@@ -144,7 +144,12 @@ enum ToolKind: String, CaseIterable, Identifiable {
         case .rectangle: ShapeTool(kind: .rectangle, fillMode: fill, lineWidth: width)
         case .roundedRectangle: ShapeTool(kind: .roundedRectangle, fillMode: fill, lineWidth: width)
         case .ellipse: ShapeTool(kind: .ellipse, fillMode: fill, lineWidth: width)
-        case .polygon: PolygonTool(fillMode: fill, lineWidth: width)
+        case .polygon:
+            if let kind = options.polygonShape {
+                ShapeTool(kind: kind, fillMode: fill, lineWidth: width)
+            } else {
+                PolygonTool(fillMode: fill, lineWidth: width)
+            }
         case .arrow: ArrowTool(lineWidth: options.arrowWidth, antialiased: smooth)
         case .highlighter: HighlighterTool(size: options.highlighterSize, antialiased: smooth)
         case .redact: RedactTool(mode: options.redactMode)

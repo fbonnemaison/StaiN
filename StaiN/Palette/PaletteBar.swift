@@ -1,13 +1,14 @@
 import StainKit
 import SwiftUI
 
-/// Barra de colores, de izquierda a derecha: primario/secundario, 8 colores personalizados,
+/// Barra de colores, de izquierda a derecha: primario/secundario, colores personalizados (con su menú)
 /// y la paleta elegida (con su menú desplegable al final).
 ///
 /// - Clic izquierdo en una muestra: color primario. Clic derecho: secundario.
-/// - Doble clic en la paleta: editar esa muestra.
+/// - Las paletas no se editan; se elige otra o se carga una de archivo.
 /// - Clic en primario/secundario: panel con valores RGB y HEX.
-/// - Casillas personalizadas: clic en una vacía guarda el color primario; clic derecho abre su menú.
+/// - Casillas personalizadas: clic en una vacía guarda el color primario; clic derecho abre su menú;
+///   doble clic edita una llena. Su menú desplegable cambia las columnas (1–14) y las guarda como JSON.
 struct PaletteBar: View {
     let primary: PaintColor
     let secondary: PaintColor
@@ -15,6 +16,7 @@ struct PaletteBar: View {
     let swapColors: () -> Void
     @State private var palette = PaletteStore.shared
     @State private var editing: ColorSlot?
+    @AppStorage(PaletteStore.customColumnsKey) private var customColumns = PaletteStore.defaultCustomColumns
 
     enum ColorSlot: String, Identifiable {
         case primary, secondary
@@ -27,7 +29,10 @@ struct PaletteBar: View {
         HStack(alignment: .center, spacing: 12) {
             currentColors
             Divider().frame(height: 36)
-            customColors
+            HStack(spacing: 4) {
+                customColors
+                customMenu
+            }
             Divider().frame(height: 36)
             HStack(spacing: 4) {
                 paletteGrid
@@ -81,13 +86,12 @@ struct PaletteBar: View {
         Menu {
             Picker("Paleta", selection: Binding(get: { palette.source }, set: { palette.select($0) })) {
                 ForEach(PalettePreset.allCases, id: \.self) { preset in
-                    Text(title(for: .preset(preset), name: preset.title)).tag(PaletteStore.Source.preset(preset))
+                    Text(preset.title).tag(PaletteStore.Source.preset(preset))
                 }
                 if !palette.imported.isEmpty {
                     Divider()
                     ForEach(palette.imported) { item in
-                        Text(title(for: .imported(item.id), name: item.name))
-                            .tag(PaletteStore.Source.imported(item.id))
+                        Text(item.name).tag(PaletteStore.Source.imported(item.id))
                     }
                 }
             }
@@ -96,36 +100,28 @@ struct PaletteBar: View {
             Divider()
             paletteActions
         } label: {
-            Label("Paleta de colores", systemImage: "chevron.down")
-                .labelStyle(.iconOnly)
-                .font(.system(size: 10, weight: .semibold))
-                .frame(width: 18, height: 2 * swatch + 2)
-                .contentShape(.rect)
+            chevron("Paleta de colores")
         }
-        .menuStyle(.button)
-        .menuIndicator(.hidden)
-        .buttonStyle(.borderless)
-        .background(.quaternary, in: .rect(cornerRadius: 4))
-        .fixedSize()
-        .help("Elegir paleta de colores")
+        .modifier(BarMenuStyle())
+        .help("Elegir o cargar una paleta de colores")
         .accessibilityLabel("Paleta de colores")
         .accessibilityIdentifier("palettePicker")
     }
 
     @ViewBuilder private var paletteActions: some View {
         Button("Cargar paleta…") { PaletteFiles.load(into: palette) }
-        Button("Guardar paleta…") { PaletteFiles.save(palette.colors) }
-        Divider()
-        Button("Restaurar paleta original") { palette.resetColors() }
-            .disabled(!palette.isModified)
         if case .imported(let id) = palette.source {
             Button("Quitar esta paleta del selector") { palette.removeImported(id) }
         }
     }
 
-    /// Nombre de la paleta, con "•" si es la elegida y tiene muestras editadas.
-    private func title(for source: PaletteStore.Source, name: String) -> String {
-        source == palette.source && palette.isModified ? "\(name) •" : name
+    /// Flecha de los menús desplegables de la barra, del alto de las dos filas de muestras.
+    private func chevron(_ title: LocalizedStringKey) -> some View {
+        Label(title, systemImage: "chevron.down")
+            .labelStyle(.iconOnly)
+            .font(.system(size: 10, weight: .semibold))
+            .frame(width: 18, height: 2 * swatch + 2)
+            .contentShape(.rect)
     }
 
     private var paletteGrid: some View {
@@ -155,30 +151,50 @@ struct PaletteBar: View {
         return SwatchView(
             color: color, accessibilityLabel: String(localized: "Paleta \(index + 1)"),
             onPrimaryClick: { setColors(color, nil) },
-            onSecondaryClick: { setColors(nil, color) },
-            onDoubleClick: {
-                ColorPanelController.shared.edit(color) { newColor in
-                    palette.setColor(newColor, at: index)
-                    setColors(newColor, nil)
-                }
-            }
+            onSecondaryClick: { setColors(nil, color) }
         )
         .frame(width: swatch, height: swatch)
     }
 
     // MARK: Colores personalizados
 
+    /// Columnas visibles (2 filas), dentro del rango permitido.
+    private var columns: Int {
+        min(max(customColumns, PaletteStore.customColumnsRange.lowerBound), PaletteStore.customColumnsRange.upperBound)
+    }
+
     private var customColors: some View {
         Grid(horizontalSpacing: 2, verticalSpacing: 2) {
             ForEach(0..<2, id: \.self) { row in
                 GridRow {
-                    ForEach(0..<PaletteStore.customSlotCount / 2, id: \.self) { column in
-                        customSlot(row * PaletteStore.customSlotCount / 2 + column)
+                    ForEach(0..<columns, id: \.self) { column in
+                        customSlot(row * columns + column)
                     }
                 }
             }
         }
         .help("Colores personalizados: clic en una casilla vacía para guardar el color primario")
+    }
+
+    private var customMenu: some View {
+        Menu {
+            Button("Guardar como paleta…") { PaletteFiles.saveJSON(palette.filledCustomColors) }
+                .disabled(palette.filledCustomColors.isEmpty)
+            Divider()
+            Picker("Columnas", selection: $customColumns) {
+                ForEach(PaletteStore.customColumnsRange, id: \.self) { count in
+                    Text("\(count)").tag(count)
+                }
+            }
+            Divider()
+            Button("Vaciar todos") { palette.clearCustomColors() }
+                .disabled(palette.filledCustomColors.isEmpty)
+        } label: {
+            chevron("Colores personalizados")
+        }
+        .modifier(BarMenuStyle())
+        .help("Guardar los colores personalizados como paleta o cambiar sus columnas")
+        .accessibilityIdentifier("customColorsMenu")
     }
 
     private func customSlot(_ index: Int) -> some View {
@@ -205,5 +221,17 @@ struct PaletteBar: View {
             menuItems: items
         )
         .frame(width: swatch, height: swatch)
+    }
+}
+
+/// Botón de menú con solo la flecha, sobre un fondo suave.
+private struct BarMenuStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .menuStyle(.button)
+            .menuIndicator(.hidden)
+            .buttonStyle(.borderless)
+            .background(.quaternary, in: .rect(cornerRadius: 4))
+            .fixedSize()
     }
 }
