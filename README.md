@@ -1,9 +1,12 @@
 # StaiN
 
+[![CI](https://github.com/fbonnemaison/StaiN/actions/workflows/ci.yml/badge.svg)](https://github.com/fbonnemaison/StaiN/actions/workflows/ci.yml)
+[![Licencia: MIT](https://img.shields.io/badge/licencia-MIT-blue.svg)](LICENSE)
+
 Editor de imágenes raster sencillo para macOS, inspirado en Microsoft Paint (antes Paintbrush) y MacPaint.
 Escrito en Swift, open source (MIT). Autor: **App-Zilla**.
 
-> Estado: en desarrollo temprano. Consulta el plan en [TODO.md](TODO.md).
+> Versión 0.7.0. Consulta el plan en [TODO.md](TODO.md) y los cambios en [CHANGELOG.md](CHANGELOG.md).
 
 ## Requisitos
 

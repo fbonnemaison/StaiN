@@ -8,6 +8,9 @@ Mientras la app no se publique (versión 1.0.0), cada fase del [plan](TODO.md) e
 Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró cada fase.
 
 ## [Sin publicar]
+### Añadido
+- Código publicado en GitHub con integración continua.
+- `.gitignore` ampliado para secretos, certificados y productos de compilación.
 
 ## [0.7.0] - 2026-11-14
 ### Añadido

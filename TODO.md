@@ -33,8 +33,8 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Paquete local `Packages/StainKit` (biblioteca + target de tests) enlazado a la app
 - [x] Configurar Swift 6 con strict concurrency y warnings tratados como errores en `StainKit`
 - [x] Formateo y lint: `swift-format` con una configuración en el repo
-- [ ] CI en GitHub Actions: build y tests de `StainKit` y de la app en un runner macOS (*workflow creado; falta verificarlo en GitHub*)
-- [ ] Crear el repositorio público en GitHub, con plantillas de issues y PR
+- [x] CI en GitHub Actions: formato, tests de `StainKit` y compilación de la app en un runner macOS (verificado en GitHub)
+- [x] Crear el repositorio público en GitHub, con plantillas de issues y PR (https://github.com/fbonnemaison/StaiN)
 
 ## Fase 1 — Motor de imagen (`StainKit`)
 - [x] `Bitmap`: buffer RGBA8 premultiplicado (ancho, alto, stride) con acceso por píxel, recorte/reemplazo de regiones y conversión a y desde `CGImage`
@@ -145,7 +145,8 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Gestión de versiones: SemVer, `CHANGELOG.md`, `scripts/bump-version.sh` y etiquetas `vX.Y.Z` (una por fase)
 - [x] Cumplimiento MIT: `LICENSE`, `AUTHORS.md`, `THIRD-PARTY-NOTICES.md`, licencia y créditos dentro de la app; autor App-Zilla
 - [ ] Script de empaquetado `.dmg` / `.zip`
-- [ ] GitHub Releases a partir de las etiquetas y del `CHANGELOG.md` (al crear el repositorio)
+- [x] Código y etiquetas `v0.0.1`–`v0.7.0` publicados en GitHub
+- [ ] GitHub Releases a partir de las etiquetas y del `CHANGELOG.md`
 - [ ] (Opcional) Cask de Homebrew
 - [ ] Documentación de usuario: atajos y herramientas en el README o en una wiki
 
@@ -153,5 +154,5 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 
 ## Preguntas abiertas
 - [ ] ¿El nombre definitivo es **StaiN**? (bundle id provisional: `io.github.fbonnemaison.StaiN`)
-- [ ] ¿El repo de GitHub se crea público desde el principio o se publica cuando la Fase 3 esté lista?
+- [x] Repositorio de GitHub: público, publicado tras la Fase 7
 - [ ] ¿Formato de proyecto propio con datos de edición (formas editables, anotaciones no destructivas), o siempre se rasteriza a PNG?
