@@ -42,7 +42,8 @@ xcodegen generate
 ## Scripts
 
 - `scripts/format.sh` — formatea el código (`--lint` solo comprueba).
-- `scripts/make-icon.swift` — regenera el icono: `swift scripts/make-icon.swift StaiN/Resources/Assets.xcassets/AppIcon.appiconset`
+- `scripts/icon-from-image.swift` — regenera el icono a partir del diseño `Design/AppIcon-source.png`:
+  `swift scripts/icon-from-image.swift Design/AppIcon-source.png StaiN/Resources/Assets.xcassets/AppIcon.appiconset`
 - `scripts/update-strings.py` — regenera las traducciones al inglés a partir de los textos que extrae el compilador
   (las traducciones están en `scripts/translations_en.json`).
 - Pruebas de rendimiento con imágenes de 8000 × 8000:

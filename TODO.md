@@ -136,7 +136,8 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] El menú muestra "Deshacer Lápiz" / "Undo Pencil"
 - [x] Las formas, polígonos y selecciones flotantes aún editables cuentan como cambio y se guardan tal como se ven
 - [x] Rendimiento: medido con 8000×8000 (`STAIN_PERF=1`); el dibujo con zoom alejado pasó de 82–145 ms a 13 ms con muestreo. No se usó Instruments
-- [x] Icono de la app (`scripts/make-icon.swift`); macOS genera los iconos de documento a partir de él
+- [x] Icono de la app: pluma sobre mancha de tinta con degradado (`Design/AppIcon-source.png`, `scripts/icon-from-image.swift`); macOS genera los iconos de documento a partir de él
+- [ ] Conseguir el diseño del icono a 1024 px o más: el actual sale de un recorte de unos 440 px y se ve algo blando en los tamaños grandes
 
 ## Fase 8 — Publicación
 - [ ] Firma ad-hoc o con Apple ID personal (para uso propio; notarizar es opcional)
