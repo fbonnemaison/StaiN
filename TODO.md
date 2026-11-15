@@ -120,6 +120,7 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Plantillas de lienzo pequeñas (16×16, 32×32, 64×64), transparentes; las imágenes pequeñas se abren ampliadas y en modo pixel
 - [x] Exportar escalado ×2, ×4 u ×8 con vecino más cercano (Archivo › Exportar a escala)
 - [x] Dibujo con simetría horizontal y vertical para lápiz, pincel, borrador y aerógrafo
+- [ ] Iconos en la barra superior para **simetría horizontal**, **simetría vertical** y **desactivar la simetría**, con el estado activo resaltado, tooltip y etiqueta de VoiceOver
 - [x] Paletas limitadas (cargar y guardar `.gpl` o `.hex`, clic derecho en la paleta; hasta 256 colores)
 - [ ] Probar a mano los paneles de Compartir, Exportar a escala y Cargar/Guardar paleta (los tests de interfaz no los recorren)
 
@@ -183,6 +184,19 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Campos **RGB** (0–255 por canal, y alfa) y **HEX** (`#RRGGBB` / `#RRGGBBAA`) para el color primario y el secundario, dentro de la propia app en un panel que se abre al hacer clic en el color primario o el secundario; el selector del sistema sigue disponible desde ahí
 - [x] Validar lo escrito (valores fuera de rango, HEX incompleto) y actualizar el color al momento
 - [x] Copiar y pegar el HEX del color actual
+
+### Open Color (futuro)
+Basado en [yeun/open-color](https://github.com/yeun/open-color) (MIT): 13 tonos × 10 niveles de claridad (0–9). Son datos, no código; hay que añadir su aviso de copyright en `THIRD-PARTY-NOTICES.md`.
+- [ ] Paleta preconfigurada **Open Color** (28 colores): fila de arriba con los 13 tonos en nivel 7, fila de abajo con nivel 2, más negro y blanco
+- [ ] Paleta **Open Color (completa)** con los 130 colores (cabe en el límite de 256)
+- [ ] Leer el `open-color.json` original en "Cargar paleta": objeto cuyos valores son listas de HEX (`{"gray": ["#f8f9fa", …], …}`) en `PaletteFile.read`, con tests en StainKit
+- [ ] **Variantes de un color**: clic derecho en una muestra para elegir entre sus 10 niveles, del más claro al más oscuro
+
+## Mejoras — Herramientas (futuro)
+- [ ] **Rellenos con patrón** al estilo MacPaint: patrones de 8×8 (tramas, ladrillos, puntos…) para el cubo y el relleno de las formas, dibujados con el color primario y el secundario; selector de patrón en el recuadro de opciones
+- [ ] **Varita mágica**: selección por color con tolerancia, contigua o en toda la imagen, que reutiliza el *flood fill* de `StainKit`; ⇧ añade a la selección y ⌥ resta
+- [ ] **Quitar el fondo**: separar el sujeto con Vision (`VNGenerateForegroundInstanceMaskRequest`, en el propio Mac) y dejar el fondo transparente, o convertir el sujeto en selección; en la imagen o en la selección, con deshacer
+- [ ] **Degradados** lineal y radial del color primario al secundario (con alfa), con vista previa al arrastrar y Shift para fijar el ángulo a 45°; en la selección si la hay
 
 ## Mejoras — Interfaz
 - [x] Barra de colores en este orden: primario/secundario, personalizados y paleta, con el menú de paletas al final
