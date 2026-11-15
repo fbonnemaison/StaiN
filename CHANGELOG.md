@@ -8,6 +8,8 @@ Mientras la app no se publique (versión 1.0.0), cada fase del [plan](TODO.md) e
 Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró cada fase.
 
 ## [Sin publicar]
+
+## [0.9.0] - 2026-11-15
 ### Añadido
 - Puntos de control en las esquinas y lados del lienzo para cambiar su tamaño con el ratón; se muestran
   u ocultan con el botón "Redimensionar lienzo" o en Visualización (⌥⌘E).
@@ -103,7 +105,8 @@ Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró ca
 ### Añadido
 - Estructura inicial del proyecto, licencia MIT y CI.
 
-[Sin publicar]: https://github.com/fbonnemaison/StaiN/compare/v0.8.0...HEAD
+[Sin publicar]: https://github.com/fbonnemaison/StaiN/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/fbonnemaison/StaiN/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/fbonnemaison/StaiN/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/fbonnemaison/StaiN/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/fbonnemaison/StaiN/compare/v0.5.0...v0.6.0
