@@ -8,7 +8,10 @@ final class ShapeAndTextUITests: XCTestCase {
     override func setUp() async throws {
         continueAfterFailure = false
         app = XCUIApplication()
-        app.launchArguments = ["-ApplePersistenceIgnoreState", "YES", "-canvasWidth", "320", "-canvasHeight", "200"]
+        app.launchArguments = [
+            "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(es)", "-canvasWidth", "320", "-canvasHeight",
+            "200",
+        ]
         app.launch()
         app.typeKey("n", modifierFlags: .command)
         XCTAssertTrue(canvas.waitForExistence(timeout: 5))

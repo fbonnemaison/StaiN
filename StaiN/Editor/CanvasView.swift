@@ -113,7 +113,7 @@ final class CanvasView: NSView, NSMenuItemValidation {
         super.init(frame: frame)
         setAccessibilityElement(true)
         setAccessibilityRole(.image)
-        setAccessibilityLabel("Lienzo")
+        setAccessibilityLabel(String(localized: "Lienzo"))
         setAccessibilityIdentifier("canvas")
     }
 
@@ -430,10 +430,10 @@ final class CanvasView: NSView, NSMenuItemValidation {
             return
         }
         let alert = NSAlert()
-        alert.messageText = "La imagen pegada es más grande que el lienzo"
-        alert.informativeText = "¿Quieres agrandar el lienzo para que quepa?"
-        alert.addButton(withTitle: "Agrandar")
-        alert.addButton(withTitle: "No agrandar")
+        alert.messageText = String(localized: "La imagen pegada es más grande que el lienzo")
+        alert.informativeText = String(localized: "¿Quieres agrandar el lienzo para que quepa?")
+        alert.addButton(withTitle: String(localized: "Agrandar"))
+        alert.addButton(withTitle: String(localized: "No agrandar"))
         alert.beginSheetModal(for: window) { [weak self] response in
             MainActor.assumeIsolated {
                 guard let self, let document = self.document else { return }
@@ -441,7 +441,7 @@ final class CanvasView: NSView, NSMenuItemValidation {
                     let bigger = document.canvas.bitmap.resizedCanvas(
                         width: max(bitmap.width, document.width), height: max(bitmap.height, document.height),
                         anchor: .topLeft, fill: document.secondaryColor)
-                    document.replaceImage(with: bigger, actionName: "Agrandar lienzo")
+                    document.replaceImage(with: bigger, actionName: String(localized: "Agrandar lienzo"))
                 }
                 self.pasteFloating(bitmap)
             }
@@ -509,12 +509,12 @@ final class CanvasView: NSView, NSMenuItemValidation {
     private func confirmBomb(_ pointer: PointerEvent) {
         guard let window else { return }
         let alert = NSAlert()
-        alert.messageText = "¿Borrar toda la imagen?"
-        alert.informativeText = "Se rellenará con el color secundario. Puedes deshacerlo con ⌘Z."
+        alert.messageText = String(localized: "¿Borrar toda la imagen?")
+        alert.informativeText = String(localized: "Se rellenará con el color secundario. Puedes deshacerlo con ⌘Z.")
         alert.alertStyle = .warning
-        let erase = alert.addButton(withTitle: "Borrar")
+        let erase = alert.addButton(withTitle: String(localized: "Borrar"))
         erase.hasDestructiveAction = true
-        alert.addButton(withTitle: "Cancelar")
+        alert.addButton(withTitle: String(localized: "Cancelar"))
         alert.beginSheetModal(for: window) { [weak self] response in
             MainActor.assumeIsolated {
                 guard let self else { return }

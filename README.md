@@ -39,6 +39,18 @@ Si modificas `project.yml`, regenera el proyecto con [XcodeGen](https://github.c
 xcodegen generate
 ```
 
+## Scripts
+
+- `scripts/format.sh` — formatea el código (`--lint` solo comprueba).
+- `scripts/make-icon.swift` — regenera el icono: `swift scripts/make-icon.swift StaiN/Resources/Assets.xcassets/AppIcon.appiconset`
+- `scripts/update-strings.py` — regenera las traducciones al inglés a partir de los textos que extrae el compilador
+  (las traducciones están en `scripts/translations_en.json`).
+- Pruebas de rendimiento con imágenes de 8000 × 8000:
+
+```bash
+STAIN_PERF=1 swift test -c release --package-path Packages/StainKit --filter Performance
+```
+
 ## Referencias
 
 - [SSheldon/Paintbrush](https://github.com/SSheldon/Paintbrush): referencia funcional (GPL-3.0, no se reutiliza su código).

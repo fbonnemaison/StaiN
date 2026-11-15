@@ -8,7 +8,10 @@ final class ExtrasUITests: XCTestCase {
     override func setUp() async throws {
         continueAfterFailure = false
         app = XCUIApplication()
-        app.launchArguments = ["-ApplePersistenceIgnoreState", "YES", "-canvasWidth", "320", "-canvasHeight", "200"]
+        app.launchArguments = [
+            "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(es)", "-canvasWidth", "320", "-canvasHeight",
+            "200",
+        ]
         app.launch()
         app.typeKey("n", modifierFlags: .command)
         XCTAssertTrue(canvas.waitForExistence(timeout: 5))
@@ -109,7 +112,7 @@ final class ExtrasUITests: XCTestCase {
 
     @MainActor
     func testPixelArtTemplateWithSymmetry() {
-        app.menuBars.menuBarItems["File"].click()
+        app.menuBars.menuBarItems["Archivo"].click()
         app.menuItems["Nuevo pixel art"].hover()
         app.menuItems["16 × 16"].click()
         let size = app.staticTexts["imageSize"].firstMatch
@@ -119,7 +122,7 @@ final class ExtrasUITests: XCTestCase {
         XCTAssertEqual(
             (zoom.value as? String ?? "").filter(\.isNumber), "2400", "Zoom inicial: \((zoom.value as? String ?? ""))")
 
-        app.menuBars.menuBarItems["View"].click()
+        app.menuBars.menuBarItems["Visualización"].click()
         app.menuItems["Simetría"].hover()
         app.menuItems["Horizontal (izquierda ↔ derecha)"].click()
         XCTAssertTrue(app.staticTexts["Modo pixel · Simetría ↔"].waitForExistence(timeout: 2))

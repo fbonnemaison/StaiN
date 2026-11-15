@@ -14,14 +14,14 @@ extension ImageDocument {
     func selectAll(transparent: Bool) {
         install(
             SelectionTool(selecting: canvas.bitmap.bounds, isTransparent: transparent, background: secondaryColor),
-            actionName: "Seleccionar todo")
+            actionName: String(localized: "Seleccionar todo"))
     }
 
     /// Pega una imagen como selección flotante en `(x, y)`.
     func paste(_ bitmap: Bitmap, atX x: Int, y: Int, transparent: Bool) {
         install(
             SelectionTool(pasting: bitmap, atX: x, y: y, isTransparent: transparent, background: secondaryColor),
-            actionName: "Pegar")
+            actionName: String(localized: "Pegar"))
         controller.modify(SelectionTool.self, canvas: &canvas) { tool, canvas in tool.nudge(dx: 0, dy: 0, on: &canvas) }
         toolDidChangeCanvas(colors: nil)
     }
@@ -29,7 +29,7 @@ extension ImageDocument {
     /// Borra lo seleccionado (queda el color secundario) y quita la selección.
     func deleteSelection() {
         guard hasSelection else { return }
-        pendingActionName = "Eliminar"
+        pendingActionName = String(localized: "Eliminar")
         controller.modify(SelectionTool.self, canvas: &canvas) { tool, canvas in tool.deleteSelection(on: &canvas) }
         commitTool(undoManager: undoManager)
     }
@@ -75,7 +75,7 @@ extension ImageDocument {
     func cropToSelection() {
         guard let pixels = selectedPixels else { return }
         commitTool(undoManager: undoManager)
-        replaceImage(with: pixels, actionName: "Recortar")
+        replaceImage(with: pixels, actionName: String(localized: "Recortar"))
     }
 
     /// Sustituye la imagen entera (puede cambiar de tamaño) como un paso deshacible.

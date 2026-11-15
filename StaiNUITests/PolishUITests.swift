@@ -3,11 +3,11 @@ import XCTest
 /// Accesibilidad y apariencia (Fase 7).
 final class PolishUITests: XCTestCase {
     @MainActor
-    private func launch(appearance: String) -> XCUIApplication {
+    private func launch(appearance: String, language: String = "es") -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = [
-            "-ApplePersistenceIgnoreState", "YES", "-canvasWidth", "320", "-canvasHeight", "200",
-            "-appearance", appearance,
+            "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(\(language))",
+            "-canvasWidth", "320", "-canvasHeight", "200", "-appearance", appearance,
         ]
         app.launch()
         app.typeKey("n", modifierFlags: .command)
@@ -43,6 +43,26 @@ final class PolishUITests: XCTestCase {
         canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.2, dy: 0.2))
             .click(forDuration: 0.1, thenDragTo: canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.7, dy: 0.8)))
         let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("phase7-light.png")
+        try? app.windows.firstMatch.screenshot().pngRepresentation.write(to: url)
+        app.terminate()
+    }
+
+    @MainActor
+    func testEnglishLocalization() {
+        let app = launch(appearance: "system", language: "en")
+        XCTAssertEqual(app.buttons["tool.pencil"].label, "Pencil")
+        XCTAssertEqual(app.buttons["tool.freeFormSelect"].label, "Free-Form Selection")
+        XCTAssertTrue(app.menuBars.menuBarItems["Image"].exists)
+        XCTAssertTrue(app.menuBars.menuBarItems["Filters"].exists)
+        XCTAssertEqual(app.staticTexts["imageSize"].value as? String, "320 × 200 px")
+        app.typeKey("r", modifierFlags: [])
+        app.images["canvas"].coordinate(withNormalizedOffset: CGVector(dx: 0.2, dy: 0.2))
+            .click(
+                forDuration: 0.1,
+                thenDragTo: app.images["canvas"].coordinate(withNormalizedOffset: CGVector(dx: 0.6, dy: 0.7)))
+        let undo = app.menuBars.menuItems.matching(NSPredicate(format: "title BEGINSWITH %@", "Undo")).firstMatch
+        XCTAssertEqual(undo.title, "Undo Rectangle")
+        let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("phase7-english.png")
         try? app.windows.firstMatch.screenshot().pngRepresentation.write(to: url)
         app.terminate()
     }

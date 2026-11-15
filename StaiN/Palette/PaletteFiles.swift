@@ -12,12 +12,12 @@ enum PaletteFiles {
     static func load(into palette: PaletteStore) {
         let panel = NSOpenPanel()
         panel.allowedContentTypes = types
-        panel.message = "Elige una paleta .gpl (GIMP) o .hex"
+        panel.message = String(localized: "Elige una paleta .gpl (GIMP) o .hex")
         guard panel.runModal() == .OK, let url = panel.url else { return }
         let colors = (try? String(contentsOf: url, encoding: .utf8)).map(PaletteFile.parse) ?? []
         guard !colors.isEmpty else {
             let alert = NSAlert()
-            alert.messageText = "No se encontraron colores en el archivo"
+            alert.messageText = String(localized: "No se encontraron colores en el archivo")
             alert.runModal()
             return
         }

@@ -12,9 +12,9 @@ struct EditorView: View {
 
     private var modeSummary: String {
         var parts: [String] = []
-        if editor.pixelMode { parts.append("Modo pixel") }
-        if editor.symmetry.contains(.horizontal) { parts.append("Simetría ↔") }
-        if editor.symmetry.contains(.vertical) { parts.append("Simetría ↕") }
+        if editor.pixelMode { parts.append(String(localized: "Modo pixel")) }
+        if editor.symmetry.contains(.horizontal) { parts.append(String(localized: "Simetría ↔")) }
+        if editor.symmetry.contains(.vertical) { parts.append(String(localized: "Simetría ↕")) }
         return parts.joined(separator: " · ")
     }
 

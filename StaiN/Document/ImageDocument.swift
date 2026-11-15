@@ -143,7 +143,7 @@ final class ImageDocument: ReferenceFileDocument {
         canvas.beginEdit()
         canvas.drawText(text, style: style, in: rect)
         if let patch = canvas.endEdit() {
-            finishEdit(patch, actionName: "Texto", undoManager: undoManager)
+            finishEdit(patch, actionName: String(localized: "Texto"), undoManager: undoManager)
         }
         flushChanges()
     }

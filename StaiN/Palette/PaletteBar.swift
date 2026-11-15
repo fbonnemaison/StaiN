@@ -32,13 +32,13 @@ struct PaletteBar: View {
     private var currentColors: some View {
         HStack(spacing: 6) {
             ZStack(alignment: .topLeading) {
-                SwatchView(color: secondary, accessibilityLabel: "Color secundario") {
+                SwatchView(color: secondary, accessibilityLabel: String(localized: "Color secundario")) {
                     ColorPanelController.shared.edit(secondary) { setColors(nil, $0) }
                 }
                 .frame(width: 22, height: 22)
                 .offset(x: 12, y: 12)
                 .help("Color secundario (clic para editar)")
-                SwatchView(color: primary, accessibilityLabel: "Color primario") {
+                SwatchView(color: primary, accessibilityLabel: String(localized: "Color primario")) {
                     ColorPanelController.shared.edit(primary) { setColors($0, nil) }
                 }
                 .frame(width: 22, height: 22)
@@ -84,7 +84,7 @@ struct PaletteBar: View {
     private func swatch(at index: Int) -> some View {
         let color = palette.colors[index]
         return SwatchView(
-            color: color, accessibilityLabel: "Paleta \(index + 1)",
+            color: color, accessibilityLabel: String(localized: "Paleta \(index + 1)"),
             onPrimaryClick: { setColors(color, nil) },
             onSecondaryClick: { setColors(nil, color) },
             onDoubleClick: {
@@ -103,7 +103,7 @@ struct PaletteBar: View {
             HStack(spacing: 2) {
                 ForEach(Array(palette.recent.enumerated()), id: \.offset) { _, color in
                     SwatchView(
-                        color: color, accessibilityLabel: "Color reciente",
+                        color: color, accessibilityLabel: String(localized: "Color reciente"),
                         onPrimaryClick: { setColors(color, nil) },
                         onSecondaryClick: { setColors(nil, color) }
                     )

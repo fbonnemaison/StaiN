@@ -28,27 +28,27 @@ enum ToolKind: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .freeFormSelect: "Selección libre"
-        case .select: "Selección"
-        case .pencil: "Lápiz"
-        case .brush: "Pincel"
-        case .airbrush: "Aerógrafo"
-        case .eraser: "Borrador"
-        case .fill: "Relleno"
-        case .eyedropper: "Cuentagotas"
-        case .text: "Texto"
-        case .line: "Línea"
-        case .curve: "Curva"
-        case .rectangle: "Rectángulo"
-        case .roundedRectangle: "Rectángulo redondeado"
-        case .ellipse: "Elipse"
-        case .polygon: "Polígono"
-        case .arrow: "Flecha"
-        case .highlighter: "Resaltador"
-        case .redact: "Ocultar"
-        case .marker: "Marcador numerado"
-        case .zoom: "Lupa"
-        case .bomb: "Bomba"
+        case .freeFormSelect: String(localized: "Selección libre")
+        case .select: String(localized: "Selección")
+        case .pencil: String(localized: "Lápiz")
+        case .brush: String(localized: "Pincel")
+        case .airbrush: String(localized: "Aerógrafo")
+        case .eraser: String(localized: "Borrador")
+        case .fill: String(localized: "Relleno")
+        case .eyedropper: String(localized: "Cuentagotas")
+        case .text: String(localized: "Texto")
+        case .line: String(localized: "Línea")
+        case .curve: String(localized: "Curva")
+        case .rectangle: String(localized: "Rectángulo")
+        case .roundedRectangle: String(localized: "Rectángulo redondeado")
+        case .ellipse: String(localized: "Elipse")
+        case .polygon: String(localized: "Polígono")
+        case .arrow: String(localized: "Flecha")
+        case .highlighter: String(localized: "Resaltador")
+        case .redact: String(localized: "Ocultar")
+        case .marker: String(localized: "Marcador numerado")
+        case .zoom: String(localized: "Lupa")
+        case .bomb: String(localized: "Bomba")
         }
     }
 

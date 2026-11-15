@@ -16,7 +16,8 @@ enum ImageExport {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.png]
         panel.nameFieldStringValue = "\(suggestedName) x\(factor).png"
-        panel.message = "Exportar a ×\(factor) (\(bitmap.width * factor) × \(bitmap.height * factor) px)"
+        panel.message = String(
+            localized: "Exportar a ×\(factor) (\(bitmap.width * factor) × \(bitmap.height * factor) px)")
         guard panel.runModal() == .OK, let url = panel.url else { return }
         let scaled = bitmap.resized(width: bitmap.width * factor, height: bitmap.height * factor, smooth: false)
         do {

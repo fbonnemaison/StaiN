@@ -123,20 +123,20 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [ ] Probar a mano los paneles de Compartir, Exportar a escala y Cargar/Guardar paleta (los tests de interfaz no los recorren)
 
 ## Fase 7 — Pulido para macOS 26
-- [ ] Barra de herramientas e inspectores con el estilo Liquid Glass del sistema
-- [ ] Menús completos con atajos al estilo de Paint y de Mac (⌘Z/⇧⌘Z, ⌘A, ⌘E (atributos de imagen), ⌘R (cambiar tamaño), etc.)
-- [ ] Ventana de preferencias (`Settings`): tamaño por defecto, antialiasing, formato de guardado y cuadrícula
-- [ ] Cursores personalizados por herramienta, con vista previa del tamaño del pincel
-- [ ] Soporte de presión de tableta Wacom o Sidecar para el pincel (opcional)
-- [ ] Accesibilidad: VoiceOver en paneles, Aumentar contraste y navegación con teclado
-- [ ] Localización en **español** e **inglés** (String Catalog)
-- [ ] Modo oscuro y claro
-- [ ] Rendimiento: la copia del bitmap al empezar cada trazo copia la imagen entera; cambiar a copia por tiles si va lento
-- [ ] Deshacer: `UndoManager` limita pasos pero no memoria; aplicar el límite de bytes de `UndoHistory` si hace falta
-- [ ] El menú muestra "Deshacer" sin el nombre de la acción ("Deshacer Lápiz"); revisar con los comandos de SwiftUI
-- [ ] Al guardar con una forma, un polígono o una selección flotante aún editables, se guarda la imagen sin ellos: confirmar lo pendiente antes de guardar
-- [ ] Rendimiento: probar con imágenes de 8000×8000, perfilar con Instruments y valorar Metal o tiles si hace falta
-- [ ] Icono de la app y de los tipos de documento
+- [x] Barra de herramientas del sistema (Liquid Glass en macOS 26) con deshacer/rehacer, ajustar a la ventana, copiar y compartir
+- [x] Menús completos con atajos al estilo de Paint y de Mac (⌘Z/⇧⌘Z, ⌘A, ⌘E (atributos de imagen), ⌘R (cambiar tamaño), ⌘G cuadrícula, ⌘9 ajustar, etc.)
+- [x] Ventana de preferencias (`Settings`): apariencia, tamaño por defecto, modo pixel (sin suavizado), formato de guardado, calidad JPEG y cuadrícula
+- [x] Cursores personalizados por herramienta, con vista previa del tamaño del pincel (pendiente de revisar a mano: los cursores no salen en las capturas de los tests)
+- [x] Soporte de presión de tableta Wacom o Sidecar para el pincel (probado en el motor; sin tableta para probarlo en la app)
+- [x] Accesibilidad: auditoría automática de XCUITest sin problemas, etiquetas de VoiceOver en herramientas, paleta y lienzo, atajos de teclado para todo
+- [x] Localización en **español** e **inglés** (String Catalog, 201 textos; `scripts/update-strings.py`)
+- [x] Modo oscuro y claro (y elección en Ajustes)
+- [x] Rendimiento: la copia del bitmap al empezar cada trazo cuesta 40–90 ms en 8000×8000 (aceptable); los tiles quedan como mejora futura si hiciera falta
+- [x] Deshacer: límite de 512 MB y 200 pasos ajustando `levelsOfUndo`
+- [x] El menú muestra "Deshacer Lápiz" / "Undo Pencil"
+- [x] Las formas, polígonos y selecciones flotantes aún editables cuentan como cambio y se guardan tal como se ven
+- [x] Rendimiento: medido con 8000×8000 (`STAIN_PERF=1`); el dibujo con zoom alejado pasó de 82–145 ms a 13 ms con muestreo. No se usó Instruments
+- [x] Icono de la app (`scripts/make-icon.swift`); macOS genera los iconos de documento a partir de él
 
 ## Fase 8 — Publicación
 - [ ] Firma ad-hoc o con Apple ID personal (para uso propio; notarizar es opcional)

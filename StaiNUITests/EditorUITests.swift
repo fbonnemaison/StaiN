@@ -8,7 +8,7 @@ final class EditorUITests: XCTestCase {
         continueAfterFailure = false
         app = XCUIApplication()
         app.launchArguments = [
-            "-ApplePersistenceIgnoreState", "YES",
+            "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(es)",
             "-canvasWidth", "320",
             "-canvasHeight", "200",
             "-paletteColors", "()",

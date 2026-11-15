@@ -16,15 +16,15 @@ enum FilterKind: String, CaseIterable, Identifiable, Hashable {
 
     var title: String {
         switch self {
-        case .grayscale: "Escala de grises"
-        case .sepia: "Sepia"
-        case .invert: "Invertir"
-        case .adjustments: "Brillo, contraste y saturación"
-        case .blur: "Desenfoque"
-        case .sharpen: "Enfocar"
-        case .pixelate: "Pixelar"
-        case .posterize: "Posterizar"
-        case .threshold: "Umbral (blanco y negro)"
+        case .grayscale: String(localized: "Escala de grises")
+        case .sepia: String(localized: "Sepia")
+        case .invert: String(localized: "Invertir")
+        case .adjustments: String(localized: "Brillo, contraste y saturación")
+        case .blur: String(localized: "Desenfoque")
+        case .sharpen: String(localized: "Enfocar")
+        case .pixelate: String(localized: "Pixelar")
+        case .posterize: String(localized: "Posterizar")
+        case .threshold: String(localized: "Umbral (blanco y negro)")
         }
     }
 
@@ -40,19 +40,29 @@ enum FilterKind: String, CaseIterable, Identifiable, Hashable {
     var parameters: [Parameter] {
         switch self {
         case .grayscale, .invert: []
-        case .sepia: [Parameter(id: "intensity", title: "Intensidad", range: 0...1, defaultValue: 1)]
+        case .sepia: [Parameter(id: "intensity", title: String(localized: "Intensidad"), range: 0...1, defaultValue: 1)]
         case .adjustments:
             [
-                Parameter(id: "brightness", title: "Brillo", range: -0.5...0.5, defaultValue: 0),
-                Parameter(id: "contrast", title: "Contraste", range: 0.25...2, defaultValue: 1),
-                Parameter(id: "saturation", title: "Saturación", range: 0...2, defaultValue: 1),
+                Parameter(id: "brightness", title: String(localized: "Brillo"), range: -0.5...0.5, defaultValue: 0),
+                Parameter(id: "contrast", title: String(localized: "Contraste"), range: 0.25...2, defaultValue: 1),
+                Parameter(id: "saturation", title: String(localized: "Saturación"), range: 0...2, defaultValue: 1),
             ]
-        case .blur: [Parameter(id: "radius", title: "Radio (px)", range: 0.5...40, defaultValue: 4, isPixelSize: true)]
-        case .sharpen: [Parameter(id: "amount", title: "Intensidad", range: 0...2, defaultValue: 0.6)]
+        case .blur:
+            [
+                Parameter(
+                    id: "radius", title: String(localized: "Radio (px)"), range: 0.5...40, defaultValue: 4,
+                    isPixelSize: true)
+            ]
+        case .sharpen:
+            [Parameter(id: "amount", title: String(localized: "Intensidad"), range: 0...2, defaultValue: 0.6)]
         case .pixelate:
-            [Parameter(id: "block", title: "Tamaño del bloque (px)", range: 2...64, defaultValue: 8, isPixelSize: true)]
-        case .posterize: [Parameter(id: "levels", title: "Niveles", range: 2...16, defaultValue: 4)]
-        case .threshold: [Parameter(id: "level", title: "Umbral", range: 0...1, defaultValue: 0.5)]
+            [
+                Parameter(
+                    id: "block", title: String(localized: "Tamaño del bloque (px)"), range: 2...64, defaultValue: 8,
+                    isPixelSize: true)
+            ]
+        case .posterize: [Parameter(id: "levels", title: String(localized: "Niveles"), range: 2...16, defaultValue: 4)]
+        case .threshold: [Parameter(id: "level", title: String(localized: "Umbral"), range: 0...1, defaultValue: 0.5)]
         }
     }
 

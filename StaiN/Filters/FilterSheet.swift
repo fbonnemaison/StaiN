@@ -48,9 +48,15 @@ struct FilterSheet: View {
             }
 
             HStack {
-                Text(document.hasSelection ? "Se aplicará a la selección" : "Se aplicará a toda la imagen")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                Group {
+                    if document.hasSelection {
+                        Text("Se aplicará a la selección")
+                    } else {
+                        Text("Se aplicará a toda la imagen")
+                    }
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
                 Spacer()
                 Button("Cancelar", role: .cancel) { dismiss() }
                     .keyboardShortcut(.cancelAction)

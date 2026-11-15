@@ -128,8 +128,8 @@ private struct ToolOptions: View {
 }
 
 private struct Hint: View {
-    let text: String
-    init(_ text: String) { self.text = text }
+    let text: LocalizedStringKey
+    init(_ text: LocalizedStringKey) { self.text = text }
 
     var body: some View {
         Text(text)
@@ -145,7 +145,7 @@ private struct SizeList: View {
     let sizes: [Int]
     @Binding var selection: Int
     var square = false
-    let label: String
+    let label: LocalizedStringResource
 
     var body: some View {
         VStack(spacing: 2) {
@@ -169,7 +169,7 @@ private struct SizeList: View {
                 }
                 .buttonStyle(.plain)
                 .background(selection == size ? Color.accentColor.opacity(0.25) : .clear, in: .rect(cornerRadius: 4))
-                .accessibilityLabel("\(label): \(size) px")
+                .accessibilityLabel("\(String(localized: label)): \(size) px")
                 .accessibilityAddTraits(selection == size ? .isSelected : [])
             }
         }
@@ -209,10 +209,10 @@ private struct ShapePicker: View {
 
     private func name(for shape: BrushShape) -> String {
         switch shape {
-        case .round: "Redondo"
-        case .square: "Cuadrado"
-        case .forwardSlash: "Caligráfico /"
-        case .backSlash: "Caligráfico \\"
+        case .round: String(localized: "Redondo")
+        case .square: String(localized: "Cuadrado")
+        case .forwardSlash: String(localized: "Caligráfico /")
+        case .backSlash: String(localized: "Caligráfico \\")
         }
     }
 }
@@ -252,21 +252,21 @@ private struct FillModePicker: View {
 
     private func name(_ mode: ShapeFillMode) -> String {
         switch mode {
-        case .outline: "Solo contorno"
-        case .outlineAndFill: "Contorno y relleno"
-        case .fill: "Solo relleno"
+        case .outline: String(localized: "Solo contorno")
+        case .outlineAndFill: String(localized: "Contorno y relleno")
+        case .fill: String(localized: "Solo relleno")
         }
     }
 }
 
 /// Casilla con el texto debajo, para que quepa en el panel estrecho.
 private struct CheckboxOption: View {
-    let title: String
+    let title: LocalizedStringKey
     @Binding var isOn: Bool
 
     var body: some View {
         VStack(spacing: 2) {
-            Toggle(title, isOn: $isOn)
+            Toggle(isOn: $isOn) { Text(title) }
                 .labelsHidden()
                 .toggleStyle(.checkbox)
             Text(title)
@@ -304,9 +304,9 @@ private struct RedactModePicker: View {
 
     private func name(_ mode: RedactTool.Mode) -> String {
         switch mode {
-        case .pixelate: "Pixelar"
-        case .blur: "Desenfocar"
-        case .block: "Bloque"
+        case .pixelate: String(localized: "Pixelar")
+        case .blur: String(localized: "Desenfocar")
+        case .block: String(localized: "Bloque")
         }
     }
 }

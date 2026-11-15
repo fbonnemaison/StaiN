@@ -9,7 +9,10 @@ final class SelectionUITests: XCTestCase {
     override func setUp() async throws {
         continueAfterFailure = false
         app = XCUIApplication()
-        app.launchArguments = ["-ApplePersistenceIgnoreState", "YES", "-canvasWidth", "320", "-canvasHeight", "200"]
+        app.launchArguments = [
+            "-ApplePersistenceIgnoreState", "YES", "-AppleLanguages", "(es)", "-canvasWidth", "320", "-canvasHeight",
+            "200",
+        ]
         app.launch()
         app.typeKey("n", modifierFlags: .command)
         XCTAssertTrue(canvas.waitForExistence(timeout: 5))
@@ -113,8 +116,7 @@ final class SelectionUITests: XCTestCase {
     func testPasteAsNewDocument() {
         app.typeKey("c", modifierFlags: .command)  // sin selección copia toda la imagen
         app.typeKey("v", modifierFlags: [.command, .shift])
-        let windows = app.windows.matching(NSPredicate(format: "title BEGINSWITH 'Untitled'"))
-        waitFor(windows.element(boundBy: 1), "exists == %@", true)
+        waitFor(app.windows.element(boundBy: 1), "exists == %@", true)
     }
 
     @MainActor

@@ -6,10 +6,17 @@ struct ResizeSheet: View {
     let document: ImageDocument
     @Environment(\.dismiss) private var dismiss
 
-    enum Unit: String, CaseIterable, Identifiable {
-        case percent = "Porcentaje"
-        case pixels = "Píxeles"
+    enum Unit: CaseIterable, Identifiable {
+        case percent
+        case pixels
         var id: Self { self }
+
+        var title: String {
+            switch self {
+            case .percent: String(localized: "Porcentaje")
+            case .pixels: String(localized: "Píxeles")
+            }
+        }
     }
 
     @State private var unit: Unit = .percent
@@ -43,9 +50,9 @@ struct ResizeSheet: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Form {
-                Section("Cambiar tamaño") {
+                Section(String(localized: "Cambiar tamaño")) {
                     Picker("Unidad", selection: $unit) {
-                        ForEach(Unit.allCases) { Text($0.rawValue).tag($0) }
+                        ForEach(Unit.allCases) { Text($0.title).tag($0) }
                     }
                     .pickerStyle(.segmented)
                     TextField("Horizontal", value: $horizontal, format: .number.precision(.fractionLength(0...1)))
@@ -100,7 +107,7 @@ struct ResizeSheet: View {
         let size = target
         let skewH = skewX, skewV = skewY, isSmooth = smooth
         let background = document.secondaryColor
-        document.transform("Cambiar tamaño") { bitmap in
+        document.transform(String(localized: "Cambiar tamaño")) { bitmap in
             var result = bitmap
             if document.hasSelection {
                 // A la selección se le aplica el porcentaje (en píxeles, respecto a la imagen).
@@ -117,7 +124,7 @@ struct ResizeSheet: View {
     }
 }
 
-/// "Tamaño del lienzo" (⌘E): cambia el lienzo sin escalar, con ancla 3 × 3.
+/// String(localized: "Tamaño del lienzo") (⌘E): cambia el lienzo sin escalar, con ancla 3 × 3.
 struct CanvasSizeSheet: View {
     let document: ImageDocument
     @Environment(\.dismiss) private var dismiss
@@ -128,7 +135,7 @@ struct CanvasSizeSheet: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Form {
-                Section("Tamaño del lienzo") {
+                Section(String(localized: "Tamaño del lienzo")) {
                     TextField("Ancho (px)", value: $width, format: .number)
                         .accessibilityIdentifier("canvasWidth")
                     TextField("Alto (px)", value: $height, format: .number)
@@ -148,7 +155,7 @@ struct CanvasSizeSheet: View {
                 Button("Aceptar") {
                     let resized = document.canvas.bitmap.resizedCanvas(
                         width: width, height: height, anchor: anchor, fill: document.secondaryColor)
-                    document.replaceImage(with: resized, actionName: "Tamaño del lienzo")
+                    document.replaceImage(with: resized, actionName: String(localized: "Tamaño del lienzo"))
                     dismiss()
                 }
                 .keyboardShortcut(.defaultAction)

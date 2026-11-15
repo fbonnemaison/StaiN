@@ -65,7 +65,8 @@ struct EditorCommands: Commands {
                 ForEach([2, 4, 8], id: \.self) { factor in
                     Button("PNG ×\(factor)…") {
                         if let document {
-                            ImageExport.exportScaled(document.canvas.bitmap, factor: factor, suggestedName: "Imagen")
+                            ImageExport.exportScaled(
+                                document.canvas.bitmap, factor: factor, suggestedName: String(localized: "Imagen"))
                         }
                     }
                 }
@@ -102,13 +103,21 @@ struct EditorCommands: Commands {
 
         CommandMenu("Imagen") {
             Group {
-                Button("Voltear horizontalmente") { document?.transform("Voltear") { $0.flippedHorizontally() } }
-                Button("Voltear verticalmente") { document?.transform("Voltear") { $0.flippedVertically() } }
-                Button("Girar 90° a la derecha") { document?.transform("Girar") { $0.rotated(quarterTurns: 1) } }
-                    .keyboardShortcut("r", modifiers: [.command, .option])
-                Button("Girar 90° a la izquierda") { document?.transform("Girar") { $0.rotated(quarterTurns: -1) } }
-                    .keyboardShortcut("l", modifiers: [.command, .option])
-                Button("Girar 180°") { document?.transform("Girar") { $0.rotated(quarterTurns: 2) } }
+                Button("Voltear horizontalmente") {
+                    document?.transform(String(localized: "Voltear")) { $0.flippedHorizontally() }
+                }
+                Button("Voltear verticalmente") {
+                    document?.transform(String(localized: "Voltear")) { $0.flippedVertically() }
+                }
+                Button("Girar 90° a la derecha") {
+                    document?.transform(String(localized: "Girar")) { $0.rotated(quarterTurns: 1) }
+                }
+                .keyboardShortcut("r", modifiers: [.command, .option])
+                Button("Girar 90° a la izquierda") {
+                    document?.transform(String(localized: "Girar")) { $0.rotated(quarterTurns: -1) }
+                }
+                .keyboardShortcut("l", modifiers: [.command, .option])
+                Button("Girar 180°") { document?.transform(String(localized: "Girar")) { $0.rotated(quarterTurns: 2) } }
             }
             .disabled(document == nil)
             Divider()
@@ -122,17 +131,19 @@ struct EditorCommands: Commands {
                 .keyboardShortcut("k")
                 .disabled(editor?.selectionSize == nil)
             Divider()
-            Button("Invertir colores") { document?.transform("Invertir colores") { $0.inverted() } }
-                .keyboardShortcut("i")
-                .disabled(document == nil)
-            Button("Borrar imagen") {
+            Button(String(localized: "Invertir colores")) {
+                document?.transform(String(localized: "Invertir colores")) { $0.inverted() }
+            }
+            .keyboardShortcut("i")
+            .disabled(document == nil)
+            Button(String(localized: "Borrar imagen")) {
                 guard let document else { return }
                 if document.hasSelection {
                     document.deleteSelection()
                 } else {
                     document.replaceImage(
                         with: Bitmap(width: document.width, height: document.height, fill: document.secondaryColor),
-                        actionName: "Borrar imagen")
+                        actionName: String(localized: "Borrar imagen"))
                 }
             }
             .keyboardShortcut(.delete, modifiers: [.command, .shift])
@@ -143,11 +154,18 @@ struct EditorCommands: Commands {
         }
 
         CommandGroup(before: .toolbar) {
-            Button(editor?.showsPixelGrid == true ? "Ocultar cuadrícula de píxeles" : "Mostrar cuadrícula de píxeles") {
+            Button(
+                editor?.showsPixelGrid == true
+                    ? String(localized: "Ocultar cuadrícula de píxeles")
+                    : String(localized: "Mostrar cuadrícula de píxeles")
+            ) {
                 editor?.showsPixelGrid.toggle()
             }
             .disabled(editor == nil)
-            Button(editor?.pixelMode == true ? "Desactivar modo pixel" : "Activar modo pixel") {
+            Button(
+                editor?.pixelMode == true
+                    ? String(localized: "Desactivar modo pixel") : String(localized: "Activar modo pixel")
+            ) {
                 editor?.pixelMode.toggle()
             }
             .disabled(editor == nil)
@@ -157,7 +175,10 @@ struct EditorCommands: Commands {
             }
             .disabled(editor == nil)
             Divider()
-            Button(editor?.showsGrid == true ? "Ocultar cuadrícula" : "Mostrar cuadrícula") {
+            Button(
+                editor?.showsGrid == true
+                    ? String(localized: "Ocultar cuadrícula") : String(localized: "Mostrar cuadrícula")
+            ) {
                 editor?.showsGrid.toggle()
             }
             .keyboardShortcut("g")  // como Ctrl+G en Paint
