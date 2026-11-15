@@ -140,9 +140,12 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Resolución del icono: se mantiene el recorte de ~440 px (algo blando en los tamaños grandes); si aparece una versión de 1024 px, basta con volver a ejecutar el script
 
 ## Fase 8 — Publicación
-- [ ] Firma ad-hoc o con Apple ID personal (para uso propio; notarizar es opcional)
+- [x] Firma ad-hoc para uso propio ("Sign to Run Locally"); notarizar es opcional
+- [x] Instalación local: `scripts/install.sh` compila en Release e instala en `/Applications`
+- [x] Gestión de versiones: SemVer, `CHANGELOG.md`, `scripts/bump-version.sh` y etiquetas `vX.Y.Z` (una por fase)
+- [x] Cumplimiento MIT: `LICENSE`, `AUTHORS.md`, `THIRD-PARTY-NOTICES.md`, licencia y créditos dentro de la app; autor App-Zilla
 - [ ] Script de empaquetado `.dmg` / `.zip`
-- [ ] GitHub Releases con changelog (`CHANGELOG.md`, versionado SemVer)
+- [ ] GitHub Releases a partir de las etiquetas y del `CHANGELOG.md` (al crear el repositorio)
 - [ ] (Opcional) Cask de Homebrew
 - [ ] Documentación de usuario: atajos y herramientas en el README o en una wiki
 

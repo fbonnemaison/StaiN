@@ -1,7 +1,7 @@
 # StaiN
 
 Editor de imágenes raster sencillo para macOS, inspirado en Microsoft Paint (antes Paintbrush) y MacPaint.
-Escrito en Swift, open source (MIT).
+Escrito en Swift, open source (MIT). Autor: **App-Zilla**.
 
 > Estado: en desarrollo temprano. Consulta el plan en [TODO.md](TODO.md).
 
@@ -39,9 +39,31 @@ Si modificas `project.yml`, regenera el proyecto con [XcodeGen](https://github.c
 xcodegen generate
 ```
 
+## Instalar
+
+```bash
+./scripts/install.sh
+```
+
+Compila en Release e instala (o sustituye) `/Applications/StaiN.app`.
+
+## Versiones
+
+StaiN usa [Versionado Semántico](https://semver.org/lang/es/) y anota los cambios en [CHANGELOG.md](CHANGELOG.md).
+Para publicar una versión, apunta los cambios en `## [Sin publicar]` y ejecuta:
+
+```bash
+./scripts/bump-version.sh minor
+```
+
+(`major`, `minor`, `patch` o un número concreto). El script actualiza la versión y el número de compilación,
+fecha la sección del CHANGELOG, hace commit y crea la etiqueta `vX.Y.Z`. No sube nada a GitHub.
+
 ## Scripts
 
 - `scripts/format.sh` — formatea el código (`--lint` solo comprueba).
+- `scripts/install.sh` — compila e instala en `/Applications`.
+- `scripts/bump-version.sh` — sube la versión, actualiza el CHANGELOG y crea la etiqueta.
 - `scripts/icon-from-image.swift` — regenera el icono a partir del diseño `Design/AppIcon-source.png`:
   `swift scripts/icon-from-image.swift Design/AppIcon-source.png StaiN/Resources/Assets.xcassets/AppIcon.appiconset`
 - `scripts/update-strings.py` — regenera las traducciones al inglés a partir de los textos que extrae el compilador
@@ -59,4 +81,4 @@ STAIN_PERF=1 swift test -c release --package-path Packages/StainKit --filter Per
 
 ## Licencia
 
-[MIT](LICENSE)
+[MIT](LICENSE) © 2026 App-Zilla. Consulta [AUTHORS.md](AUTHORS.md) y [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

@@ -11,8 +11,8 @@ settings:
     SWIFT_STRICT_CONCURRENCY: complete
     SWIFT_EMIT_LOC_STRINGS: YES
     LOCALIZATION_PREFERS_STRING_CATALOGS: YES
-    MARKETING_VERSION: "0.1.0"
-    CURRENT_PROJECT_VERSION: "1"
+    MARKETING_VERSION: "0.7.0"
+    CURRENT_PROJECT_VERSION: "15"
     DEVELOPMENT_TEAM: ""
     CODE_SIGN_STYLE: Automatic
     CODE_SIGN_IDENTITY: "-"
@@ -25,6 +25,9 @@ targets:
     platform: macOS
     sources:
       - StaiN
+      # El texto de la licencia viaja dentro de la app, como pide la MIT.
+      - path: LICENSE
+        buildPhase: resources
     dependencies:
       - package: StainKit
     info:
@@ -44,7 +47,7 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: StaiN
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.graphics-design
-        INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 StaiN contributors. MIT License."
+        INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 App-Zilla. Licencia MIT."
         ENABLE_APP_SANDBOX: YES
         ENABLE_USER_SELECTED_FILES: readwrite
         ENABLE_HARDENED_RUNTIME: YES
