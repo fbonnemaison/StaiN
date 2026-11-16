@@ -6,7 +6,7 @@ import UniformTypeIdentifiers
 /// Documento de imagen. Guarda el lienzo y conecta cada trazo con el `UndoManager` de la ventana.
 ///
 /// Registrar el deshacer es también lo que marca el documento como modificado, y con ello
-/// funcionan el aviso de cambios sin guardar, el autoguardado y las versiones de macOS.
+/// funciona el aviso de cambios sin guardar al cerrar (ver `ClassicSaving`).
 @MainActor
 final class ImageDocument: ReferenceFileDocument {
     nonisolated static var readableContentTypes: [UTType] { ImageCodec.supportedTypes }

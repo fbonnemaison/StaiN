@@ -14,6 +14,10 @@ Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró ca
 - Instrucciones para abrir la app sin notarizar la primera vez, en el README y dentro del `.dmg`.
 - Guía de usuario para la wiki en `docs/wiki/` y `scripts/publish-wiki.sh` para publicarla.
 
+### Corregido
+- Al cerrar un archivo existente con cambios, se guardaban sin preguntar. Ahora se pregunta si guardar
+  los cambios (Guardar / No guardar / Cancelar), también al salir de la app.
+
 ## [0.9.0] - 2026-11-15
 ### Añadido
 - Puntos de control en las esquinas y lados del lienzo para cambiar su tamaño con el ratón; se muestran

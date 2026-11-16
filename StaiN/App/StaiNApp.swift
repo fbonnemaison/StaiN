@@ -17,6 +17,10 @@ struct StaiNApp: App {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        ClassicSaving.install()
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         AppSettings.applyAppearance()
     }
