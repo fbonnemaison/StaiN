@@ -8,6 +8,8 @@ Mientras la app no se publique (versión 1.0.0), cada fase del [plan](TODO.md) e
 Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró cada fase.
 
 ## [Sin publicar]
+
+## [0.9.2] - 2026-11-16
 ### Añadido
 - Título del documento en la barra de la ventana: al pulsarlo se abre un popover para darle nombre, elegir
   el formato del archivo (PNG, JPEG, BMP, GIF, TIFF o HEIC) y la carpeta, y guardarlo ahí. Cambiar el
@@ -142,7 +144,8 @@ Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró ca
 ### Añadido
 - Estructura inicial del proyecto, licencia MIT y CI.
 
-[Sin publicar]: https://github.com/fbonnemaison/StaiN/compare/v0.9.1...HEAD
+[Sin publicar]: https://github.com/fbonnemaison/StaiN/compare/v0.9.2...HEAD
+[0.9.2]: https://github.com/fbonnemaison/StaiN/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/fbonnemaison/StaiN/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/fbonnemaison/StaiN/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/fbonnemaison/StaiN/compare/v0.7.0...v0.8.0
