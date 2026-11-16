@@ -1,9 +1,10 @@
 import AppKit
+import StainKit
 import SwiftUI
 import UniformTypeIdentifiers
 
 /// Título del documento en la barra de la ventana. Al pulsarlo se abre un popover para darle nombre,
-/// etiquetas y carpeta, y guardarlo ahí.
+/// formato y carpeta, y guardarlo ahí.
 ///
 /// macOS solo ofrece ese popover a las apps con autoguardado en el sitio, que StaiN desactiva para
 /// preguntar antes de cerrar (ver `ClassicSaving`); por eso se reproduce aquí.
@@ -66,10 +67,16 @@ private struct DocumentSavePopover: View {
                         .accessibilityIdentifier("documentName")
                 }
                 GridRow {
-                    Text("Etiquetas:")
-                    TextField("Separadas por comas", text: $model.draftTags)
-                        .labelsHidden()
-                        .onSubmit(save)
+                    Text("Formato del archivo:")
+                    Picker("Formato del archivo", selection: $model.draftType) {
+                        ForEach(ImageCodec.supportedTypes, id: \.identifier) { type in
+                            Text(DocumentTitleModel.formatName(type)).tag(type)
+                        }
+                    }
+                    .labelsHidden()
+                    .pickerStyle(.menu)
+                    .fixedSize()
+                    .accessibilityIdentifier("documentFormat")
                 }
                 GridRow {
                     Text("Ubicación:")
@@ -135,7 +142,7 @@ final class DocumentTitleModel {
     private(set) var fileURL: URL?
 
     var draftName = ""
-    var draftTags = ""
+    var draftType: UTType = .png
     var draftFolder = DocumentTitleModel.picturesFolder
     var errorMessage: String?
     private(set) var isSaving = false
@@ -178,13 +185,11 @@ final class DocumentTitleModel {
         if let fileURL {
             draftName = fileURL.deletingPathExtension().lastPathComponent
             draftFolder = fileURL.deletingLastPathComponent()
-            let tags = (try? fileURL.resourceValues(forKeys: [.tagNamesKey]))?.tagNames ?? []
-            draftTags = tags.joined(separator: ", ")
         } else {
             draftName = title
             draftFolder = Self.grantedFolders.last ?? Self.picturesFolder
-            draftTags = ""
         }
+        draftType = Self.supportedType(for: contentType) ?? .png
     }
 
     var folderChoices: [URL] {
@@ -248,28 +253,27 @@ final class DocumentTitleModel {
         return true
     }
 
-    /// Tipo y URL de destino. Al guardar por primera vez, una extensión escrita en el nombre elige el formato.
+    /// Tipo y URL de destino. Una extensión de imagen escrita en el nombre elige el formato.
     private func destination(for document: NSDocument) -> (UTType, URL) {
         var name = trimmedName.replacingOccurrences(of: "/", with: ":")
-        var type = contentType
         let typed = (name as NSString).pathExtension
-        if !typed.isEmpty, let typedType = UTType(filenameExtension: typed) {
-            if document.fileURL == nil,
-                let writable = ImageDocument.writableContentTypes.first(where: { typedType.conforms(to: $0) })
-            {
-                type = writable
-                name = (name as NSString).deletingPathExtension
-            } else if typedType == type {
-                name = (name as NSString).deletingPathExtension
-            }
+        if !typed.isEmpty, let typedType = UTType(filenameExtension: typed).flatMap(Self.supportedType(for:)) {
+            draftType = typedType
+            name = (name as NSString).deletingPathExtension
         }
-        let ext = document.fileURL?.pathExtension ?? type.preferredFilenameExtension ?? "png"
+        let type = draftType
+        // Se conserva la extensión del archivo si ya es de ese formato (p. ej. «jpeg» en vez de «jpg»).
+        let currentExt = document.fileURL?.pathExtension
+        let ext =
+            currentExt.flatMap { UTType(filenameExtension: $0)?.conforms(to: type) == true ? $0 : nil }
+            ?? type.preferredFilenameExtension ?? "png"
         let url = draftFolder.appendingPathComponent(name, isDirectory: false).appendingPathExtension(ext)
         return (type, url)
     }
 
     private func perform(on document: NSDocument, to target: URL, type: UTType) async throws {
-        if document.fileURL == nil {
+        // Documento nuevo o cambio de formato: se guarda un archivo nuevo (el original no se toca).
+        if document.fileURL == nil || Self.supportedType(for: contentType) != type {
             try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
                 document.save(to: target, ofType: type.identifier, for: .saveAsOperation) { error in
                     if let error { continuation.resume(throwing: error) } else { continuation.resume() }
@@ -291,15 +295,15 @@ final class DocumentTitleModel {
                 }
             }
         }
-        applyTags(to: document.fileURL ?? target)
         Self.grant(target.deletingLastPathComponent())
     }
 
-    private func applyTags(to url: URL) {
-        let tags = draftTags.split(separator: ",")
-            .map { $0.trimmingCharacters(in: .whitespaces) }
-            .filter { !$0.isEmpty }
-        try? (url as NSURL).setResourceValue(tags, forKey: .tagNamesKey)
+    static func supportedType(for type: UTType) -> UTType? {
+        ImageCodec.supportedTypes.first { type.conforms(to: $0) }
+    }
+
+    static func formatName(_ type: UTType) -> String {
+        type.preferredFilenameExtension?.uppercased() ?? type.identifier
     }
 
     private func askWithSavePanel(suggesting target: URL, type: UTType) async -> URL? {
@@ -318,7 +322,9 @@ final class DocumentTitleModel {
         }
         guard response == .OK, let url = panel.url else { return nil }
         // El panel ya preguntó si reemplazar un archivo existente; mover no sobrescribe, así que va a la papelera.
-        if document?.fileURL != nil, document?.fileURL?.standardizedFileURL != url.standardizedFileURL {
+        if document?.fileURL != nil, Self.supportedType(for: contentType) == type,
+            document?.fileURL?.standardizedFileURL != url.standardizedFileURL
+        {
             try? FileManager.default.trashItem(at: url, resultingItemURL: nil)
         }
         return url

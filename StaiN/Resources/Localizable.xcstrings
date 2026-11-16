@@ -2551,26 +2551,6 @@
         }
       }
     },
-    "Etiquetas:": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tags:"
-          }
-        }
-      }
-    },
-    "Separadas por comas": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comma-separated"
-          }
-        }
-      }
-    },
     "Ubicación:": {
       "localizations": {
         "en": {
@@ -2697,6 +2677,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "⌥-drag: duplicate · Arrows: move"
+          }
+        }
+      }
+    },
+    "Formato del archivo:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File Format:"
+          }
+        }
+      }
+    },
+    "Formato del archivo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File Format"
           }
         }
       }
