@@ -2,35 +2,91 @@ import CoreGraphics
 import Foundation
 
 /// Flecha para anotar capturas: línea con punta rellena. Con Shift, ángulos de 45°.
+///
+/// Igual que la línea: clic en la cola y clic en la punta (entre los dos, la vista previa sigue al ratón),
+/// o arrastrando. Mientras se crea se ven sus puntos de control; al terminar desaparecen.
 public struct ArrowTool: Tool {
     public var lineWidth: Int
     public var antialiased: Bool
     private var start: (x: Int, y: Int)?
+    /// Punta actual (sigue al ratón hasta fijarse).
+    private var current: (x: Int, y: Int)?
     private var color: PaintColor = .black
+    /// Tras el primer clic sin arrastrar: espera el clic de la punta.
+    private var waitingForEnd = false
+    /// Ya se recibió el clic de la punta (un segundo clic en el mismo píxel también termina).
+    private var placingEnd = false
 
     public init(lineWidth: Int = 4, antialiased: Bool = true) {
         self.lineWidth = max(1, lineWidth)
         self.antialiased = antialiased
     }
 
+    public var isAwaitingInput: Bool { waitingForEnd }
+    public func accepts(_ event: PointerEvent) -> Bool { waitingForEnd }
+
     public mutating func begin(_ event: PointerEvent, on canvas: inout Canvas) {
+        if waitingForEnd {
+            // Segundo clic: fija la punta.
+            waitingForEnd = false
+            placingEnd = true
+            drag(event, on: &canvas)
+            return
+        }
         color = canvas.color(for: event.button)
         start = event.pixel
+        current = event.pixel
     }
 
     public mutating func drag(_ event: PointerEvent, on canvas: inout Canvas) {
         guard let start else { return }
         let end = LineTool.endpoint(from: start, to: event.pixel, constrained: event.modifiers.contains(.shift))
+        current = end
         canvas.revertToEditStart()
+        guard end != start else { return }
         canvas.drawArrow(
             from: CGPoint(x: Double(start.x) + 0.5, y: Double(start.y) + 0.5),
             to: CGPoint(x: Double(end.x) + 0.5, y: Double(end.y) + 0.5), lineWidth: lineWidth, color: color,
             antialiased: antialiased)
     }
 
-    public mutating func end(_ event: PointerEvent, on canvas: inout Canvas) {
+    public mutating func hover(_ event: PointerEvent, on canvas: inout Canvas) {
         drag(event, on: &canvas)
+    }
+
+    public mutating func end(_ event: PointerEvent, on canvas: inout Canvas) {
+        guard let start else { return }
+        if !placingEnd, event.pixel == start {
+            // Clic sin arrastrar: la flecha sigue abierta hasta el clic de la punta.
+            waitingForEnd = true
+            return
+        }
+        drag(event, on: &canvas)
+        reset()
+    }
+
+    /// Confirmar sin segundo clic (cambio de herramienta, Intro) no deja nada dibujado.
+    public mutating func commit(on canvas: inout Canvas) {
+        if waitingForEnd { canvas.revertToEditStart() }
+        reset()
+    }
+
+    public mutating func cancel(on canvas: inout Canvas) {
+        reset()
+    }
+
+    /// Puntos de control (cola y punta) mientras se crea la flecha; al terminar no hay ninguno.
+    public var overlay: ToolOverlay? {
+        guard let start else { return nil }
+        let points = [start, current ?? start].map { CGPoint(x: Double($0.x) + 0.5, y: Double($0.y) + 0.5) }
+        return ToolOverlay(outline: points, isClosed: false, handles: points)
+    }
+
+    private mutating func reset() {
+        waitingForEnd = false
+        placingEnd = false
         start = nil
+        current = nil
     }
 }
 

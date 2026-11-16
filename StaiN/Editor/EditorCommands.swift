@@ -7,7 +7,7 @@ extension FocusedValues {
     @Entry var imageDocument: ImageDocument?
 }
 
-/// Menús que actúan sobre la ventana activa: Edición, Imagen, Visualización e imprimir.
+/// Menús que actúan sobre la ventana activa (Edición, Imagen, Visualización e imprimir) y el menú Ayuda.
 struct EditorCommands: Commands {
     @FocusedValue(\.editor) private var editor
     @FocusedValue(\.imageDocument) private var document
@@ -206,7 +206,26 @@ struct EditorCommands: Commands {
                 .disabled(editor == nil)
             Divider()
         }
+
+        // La app no trae un libro de ayuda de Apple: la ayuda es la wiki del repositorio.
+        CommandGroup(replacing: .help) {
+            Button("Ayuda de StaiN") { HelpLinks.open(HelpLinks.wiki) }
+                .keyboardShortcut("?", modifiers: .command)
+            Button("Atajos de teclado") { HelpLinks.open(HelpLinks.shortcuts) }
+            Divider()
+            Button("Informar de un problema…") { HelpLinks.open(HelpLinks.issues) }
+        }
     }
+}
+
+/// Enlaces del menú Ayuda (se abren en el navegador).
+@MainActor
+enum HelpLinks {
+    static let wiki = URL(string: "https://github.com/fbonnemaison/StaiN/wiki")!
+    static let shortcuts = URL(string: "https://github.com/fbonnemaison/StaiN/wiki/Atajos-de-teclado")!
+    static let issues = URL(string: "https://github.com/fbonnemaison/StaiN/issues/new/choose")!
+
+    static func open(_ url: URL) { NSWorkspace.shared.open(url) }
 }
 
 /// Envía deshacer/rehacer al primer respondedor (el lienzo, un cuadro de texto, un campo de Ajustes…).

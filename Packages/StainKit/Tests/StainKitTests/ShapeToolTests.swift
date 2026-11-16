@@ -382,6 +382,22 @@ let red = PaintColor(red: 255, green: 0, blue: 0)
         #expect(canvas.bitmap[2, 10] == .black)
     }
 
+    @Test func arrowWithTwoClicksShowsControlPoints() {
+        var canvas = Canvas(width: 40, height: 30)
+        var controller = ToolController()
+        let make = { ArrowTool(lineWidth: 3, antialiased: false) as any Tool }
+        drag(&controller, &canvas, [at(5, 15)], make: make)
+        #expect(controller.isPending, "Tras el primer clic espera la punta")
+        #expect(controller.overlay?.handles.count == 2)
+        controller.pointerMoved(at(35, 15), canvas: &canvas)
+        #expect(canvas.bitmap[20, 15] == .black, "La vista previa sigue al ratón")
+        let patches = drag(&controller, &canvas, [at(35, 15)], make: make)
+        #expect(patches.count == 1)
+        #expect(!controller.isActive, "El segundo clic termina la flecha")
+        #expect(controller.overlay == nil, "Al terminar no quedan puntos de control")
+        #expect(canvas.bitmap[20, 15] == .black)
+    }
+
     @Test func polygonByClicksWithHoverAndCommitCloses() {
         var canvas = Canvas(width: 20, height: 20)
         var controller = ToolController()

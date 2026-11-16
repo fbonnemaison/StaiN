@@ -96,7 +96,7 @@ struct EditorView: View {
                 // ShareLink abre el menú Compartir anclado al propio botón de la barra.
                 ShareLink(
                     item: ShareableImage(bitmap: document.canvas.bitmap, name: "StaiN"),
-                    preview: SharePreview("StaiN")
+                    preview: SharePreview("StaiN", image: Image(nsImage: ShareIcon.image))
                 ) {
                     Label("Compartir", systemImage: "square.and.arrow.up")
                 }

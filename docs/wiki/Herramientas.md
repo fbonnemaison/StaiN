@@ -75,7 +75,7 @@ Las opciones del polígono tienen una galería de formas:
 
 | Herramienta | Tecla | Uso |
 |---|---|---|
-| Flecha | W | Arrastra desde la cola hasta la punta. ⇧ = 45°. Opción: grosor. |
+| Flecha | W | **Clic en la cola y clic en la punta**, como la línea (también se puede arrastrar). Los extremos se ven como puntos de control mientras se crea. ⇧ = 45°. Opción: grosor. |
 | Resaltador | H | Trazo semitransparente que no se oscurece al repasar en el mismo trazo. |
 | Ocultar | K | Arrastra sobre una zona para **pixelarla**, **desenfocarla** o taparla con un **bloque**. |
 | Marcador numerado | N | Cada clic pone el número siguiente (1, 2, 3…). Botón **Reiniciar** en las opciones. |

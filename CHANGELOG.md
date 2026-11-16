@@ -13,16 +13,21 @@ Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró ca
   del primer arranque) y un `.zip`, con sus sumas SHA-256.
 - Instrucciones para abrir la app sin notarizar la primera vez, en el README y dentro del `.dmg`.
 - Guía de usuario para la wiki en `docs/wiki/` y `scripts/publish-wiki.sh` para publicarla.
+- Menú Ayuda: "Ayuda de StaiN" (⌘?) abre la wiki; también "Atajos de teclado" e "Informar de un problema…".
 
 ### Cambiado
 - La curva se dibuja con tres clics (inicio, final y punto de control) en vez de arrastrando, y muestra sus
   puntos de control mientras se crea; al terminar desaparecen.
 - La línea y el polígono libre también muestran sus puntos de control (extremos y vértices) mientras se crean.
+- La flecha se dibuja como la línea: clic en la cola y clic en la punta, sin mantener pulsado, y muestra
+  sus puntos de control mientras se crea.
 - Los colores personalizados se editan en el panel de valores RGB/HEX (doble clic o "Editar…").
 - Los colores primario y secundario ya no se editan directamente: se eligen desde las paletas y los
   colores personalizados.
 
 ### Corregido
+- "Ayuda de StaiN" decía que la ayuda no estaba disponible; ahora abre la wiki.
+- La vista previa del menú Compartir mostraba un recuadro vacío; ahora muestra el icono de la app.
 - El menú Compartir se abría en la parte inferior de la ventana; ahora sale del botón de la barra superior.
 - Al cerrar un archivo existente con cambios, se guardaban sin preguntar. Ahora se pregunta si guardar
   los cambios (Guardar / No guardar / Cancelar), también al salir de la app.
