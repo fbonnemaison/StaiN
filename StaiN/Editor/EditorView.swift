@@ -160,6 +160,14 @@ private struct StatusBar: View {
             }
             Label("\(width) × \(height) px", systemImage: "photo")
                 .accessibilityIdentifier("imageSize")
+            if let hint = toolHint {
+                Label(hint, systemImage: "info.circle")
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .layoutPriority(-1)
+                    .accessibilityIdentifier("toolHint")
+            }
             Spacer()
             Button("Alejar", systemImage: "minus.magnifyingglass") { editor.zoomOut() }
                 .disabled(!editor.canZoomOut)
@@ -184,6 +192,24 @@ private struct StatusBar: View {
         .font(.callout.monospacedDigit())
         .padding(.horizontal, 10)
         .padding(.vertical, 4)
+    }
+
+    /// Ayuda de uso de la herramienta activa.
+    private var toolHint: LocalizedStringKey? {
+        switch editor.tool {
+        case .line: "Clic en el inicio y en el final · ⇧ = 45°"
+        case .curve: "Arrastra y luego dobla con 2 clics"
+        case .polygon where editor.polygonShape == nil: "Clic en el origen, doble clic o Esc para cerrar"
+        case .rectangle, .roundedRectangle, .ellipse, .polygon: "⇧ = proporción 1:1"
+        case .text: "Arrastra para crear un cuadro"
+        case .bomb: "Clic: borrar toda la imagen"
+        case .arrow: "⇧ = 45°"
+        case .eyedropper: "Clic: primario · Clic der.: secundario"
+        case .zoom: "Clic: acercar · ⌥ o clic der.: alejar"
+        case .pencil: "Clic der.: color secundario"
+        case .select, .freeFormSelect: "⌥ arrastrar: duplicar · Flechas: mover"
+        default: nil
+        }
     }
 
     private var cursorText: String {

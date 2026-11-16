@@ -251,26 +251,6 @@
         }
       }
     },
-    "Arrastra para\ncrear un cuadro": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Drag to\ncreate a box"
-          }
-        }
-      }
-    },
-    "Arrastra y luego\ndobla con 2 clics": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Drag, then\nbend with 2 clicks"
-          }
-        }
-      }
-    },
     "Bloque": {
       "localizations": {
         "en": {
@@ -446,27 +426,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Right-click:\nsecondary color"
-          }
-        }
-      }
-    },
-    "Clic en el inicio\ny en el final\n⇧ = 45°": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Click the start\nand the end\n⇧ = 45°"
-          }
-        }
-      }
-    },
-    "Clic en el origen,\ndoble clic o Esc\npara cerrar": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Click the first point,\ndouble-click or Esc\nto close"
+            "value": "Right-click: secondary color"
           }
         }
       }
@@ -477,36 +437,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Click outside the box to place the text"
-          }
-        }
-      }
-    },
-    "Clic: acercar\n⌥ o clic der.: alejar": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Click: zoom in\n⌥ or right-click:\nzoom out"
-          }
-        }
-      }
-    },
-    "Clic: borrar\ntoda la imagen": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Click: clear\nthe whole image"
-          }
-        }
-      }
-    },
-    "Clic: primario\nClic der.: secundario": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Click: primary\nRight-click:\nsecondary"
           }
         }
       }
@@ -2541,16 +2471,6 @@
         }
       }
     },
-    "⌥ arrastrar:\nduplicar\nFlechas: mover": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "⌥-drag:\nduplicate\nArrows: move"
-          }
-        }
-      }
-    },
     "Ocultar herramientas": {
       "localizations": {
         "en": {
@@ -2697,6 +2617,86 @@
           "stringUnit": {
             "state": "translated",
             "value": "Confirm where to save: StaiN needs your permission to write to this folder."
+          }
+        }
+      }
+    },
+    "Clic en el inicio y en el final · ⇧ = 45°": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click the start and the end · ⇧ = 45°"
+          }
+        }
+      }
+    },
+    "Arrastra y luego dobla con 2 clics": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag, then bend with 2 clicks"
+          }
+        }
+      }
+    },
+    "Clic en el origen, doble clic o Esc para cerrar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click the first point, double-click or Esc to close"
+          }
+        }
+      }
+    },
+    "Arrastra para crear un cuadro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag to create a box"
+          }
+        }
+      }
+    },
+    "Clic: borrar toda la imagen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click: clear the whole image"
+          }
+        }
+      }
+    },
+    "Clic: primario · Clic der.: secundario": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click: primary · Right-click: secondary"
+          }
+        }
+      }
+    },
+    "Clic: acercar · ⌥ o clic der.: alejar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click: zoom in · ⌥ or right-click: zoom out"
+          }
+        }
+      }
+    },
+    "⌥ arrastrar: duplicar · Flechas: mover": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⌥-drag: duplicate · Arrows: move"
           }
         }
       }

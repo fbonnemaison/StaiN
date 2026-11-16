@@ -110,27 +110,16 @@ private struct ToolOptions: View {
                     .font(.caption2.monospacedDigit())
             case .line, .curve:
                 SizeList(sizes: EditorState.lineWidths, selection: $editor.lineWidth, label: "Grosor de línea")
-                Hint(
-                    editor.tool == .line
-                        ? "Clic en el inicio\ny en el final\n⇧ = 45°" : "Arrastra y luego\ndobla con 2 clics")
             case .rectangle, .roundedRectangle, .ellipse, .polygon:
                 if editor.tool == .polygon {
                     PolygonShapePicker(selection: $editor.polygonShape)
                 }
                 FillModePicker(selection: $editor.shapeFillMode)
                 SizeList(sizes: EditorState.lineWidths, selection: $editor.shapeLineWidth, label: "Grosor del borde")
-                Hint(
-                    editor.tool == .polygon && editor.polygonShape == nil
-                        ? "Clic en el origen,\ndoble clic o Esc\npara cerrar" : "⇧ = proporción 1:1")
             case .airbrush:
                 SizeList(sizes: EditorState.airbrushRadii, selection: $editor.airbrushRadius, label: "Radio")
-            case .text:
-                Hint("Arrastra para\ncrear un cuadro")
-            case .bomb:
-                Hint("Clic: borrar\ntoda la imagen")
             case .arrow:
                 SizeList(sizes: EditorState.arrowWidths, selection: $editor.arrowWidth, label: "Grosor de la flecha")
-                Hint("⇧ = 45°")
             case .highlighter:
                 SizeList(sizes: EditorState.highlighterSizes, selection: $editor.highlighterSize, label: "Tamaño")
             case .redact:
@@ -141,33 +130,16 @@ private struct ToolOptions: View {
                     .accessibilityIdentifier("nextMarker")
                 Button("Reiniciar") { editor.nextMarker = 1 }
                     .controlSize(.mini)
-            case .eyedropper:
-                Hint("Clic: primario\nClic der.: secundario")
-            case .zoom:
-                Hint("Clic: acercar\n⌥ o clic der.: alejar")
-            case .pencil:
-                Hint("Clic der.: color secundario")
+            case .text, .bomb, .eyedropper, .zoom, .pencil:
+                // Sin opciones: su ayuda se muestra en la barra de estado.
+                EmptyView()
             case .select, .freeFormSelect:
                 CheckboxOption(title: "Transparente", isOn: $editor.transparentSelection)
                     .help("Al mover o pegar, el color secundario no tapa lo de debajo")
                     .accessibilityIdentifier("transparentSelection")
-                Hint("⌥ arrastrar:\nduplicar\nFlechas: mover")
             }
         }
         .frame(maxWidth: .infinity)
-    }
-}
-
-private struct Hint: View {
-    let text: LocalizedStringKey
-    init(_ text: LocalizedStringKey) { self.text = text }
-
-    var body: some View {
-        Text(text)
-            .font(.caption2)
-            .foregroundStyle(.secondary)
-            .multilineTextAlignment(.center)
-            .fixedSize(horizontal: false, vertical: true)
     }
 }
 
