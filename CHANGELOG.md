@@ -8,6 +8,9 @@ Mientras la app no se publique (versión 1.0.0), cada fase del [plan](TODO.md) e
 Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró cada fase.
 
 ## [Sin publicar]
+### Corregido
+- La app se cerraba al pulsar ⌘Z después de escribir con la herramienta Texto: el cuadro de texto dejaba
+  sus pasos de deshacer en el historial de la ventana al cerrarse.
 
 ## [0.9.2] - 2026-11-16
 ### Añadido

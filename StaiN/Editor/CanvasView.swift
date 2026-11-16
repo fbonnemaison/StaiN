@@ -695,6 +695,14 @@ extension CanvasView {
     }
 
     private func endTextEditing() {
+        // El cuadro registra su escritura en el `UndoManager` de la ventana, que no retiene el objetivo:
+        // si sus acciones quedan en la pila, el siguiente ⌘Z llamaría a un NSTextView ya liberado.
+        if let view = textView {
+            view.breakUndoCoalescing()
+            for manager in [view.undoManager, undoManagerForStrokes, window?.undoManager] {
+                manager?.removeAllActions(withTarget: view)
+            }
+        }
         textView?.removeFromSuperview()
         textView = nil
         textRect = nil
