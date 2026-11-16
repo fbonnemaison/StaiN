@@ -8,6 +8,18 @@ Mientras la app no se publique (versión 1.0.0), cada fase del [plan](TODO.md) e
 Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró cada fase.
 
 ## [Sin publicar]
+### Añadido
+- Título del documento en la barra de la ventana: al pulsarlo se abre un popover para darle nombre, elegir
+  el formato del archivo (PNG, JPEG, BMP, GIF, TIFF o HEIC) y la carpeta, y guardarlo ahí. Cambiar el
+  formato de un archivo existente guarda uno nuevo sin tocar el original.
+- Botón junto al título para ocultar o mostrar el panel de herramientas (también en Visualización, ⌃⌘S).
+- Permiso para guardar en Imágenes y Descargas sin pasar por un panel; en otras carpetas se pide
+  confirmación con el panel de guardar la primera vez en cada sesión.
+
+### Cambiado
+- La ayuda de la herramienta activa se muestra en una línea en la barra de estado, junto al tamaño del
+  lienzo, en vez de debajo de las herramientas.
+- Los botones de la barra superior quedan siempre alineados a la derecha.
 
 ## [0.9.1] - 2026-11-15
 ### Añadido
