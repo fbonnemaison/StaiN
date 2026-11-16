@@ -14,7 +14,7 @@
 | I | Cuentagotas | N | Marcador numerado |
 | T | Texto | Z | Lupa |
 | L | Línea | X | Intercambiar colores |
-| C | Curva | | |
+| C | Curva | D | Nube de revisión |
 
 ## Al dibujar
 
@@ -23,8 +23,8 @@
 | ⇧ | Línea y flecha a 0°/45°/90°; formas con proporción 1:1; selección estirada en proporción |
 | ⌥ | Duplicar la selección al arrastrar; con la lupa, alejar |
 | Flechas | Mover la selección 1 px (⇧: 10 px) |
-| Intro | Confirmar forma, polígono o selección |
-| Escape | Descartar lo que esté a medias; con selección, confirmarla; con un polígono de 3 vértices, cerrarlo |
+| Intro | Confirmar forma, polígono, nube o selección |
+| Escape | Descartar lo que esté a medias; con selección, confirmarla; con un polígono de 3 vértices, cerrarlo; con una nube de 3 vértices, cerrarla (sigue editable) |
 | ⌫ / Supr | Borrar la selección |
 
 ## Archivo y edición

@@ -23,6 +23,7 @@ enum ToolKind: String, CaseIterable, Identifiable {
     case marker
     case zoom
     case bomb
+    case cloud
 
     var id: Self { self }
 
@@ -49,6 +50,7 @@ enum ToolKind: String, CaseIterable, Identifiable {
         case .marker: String(localized: "Marcador numerado")
         case .zoom: String(localized: "Lupa")
         case .bomb: String(localized: "Bomba")
+        case .cloud: String(localized: "Nube de revisión")
         }
     }
 
@@ -75,6 +77,7 @@ enum ToolKind: String, CaseIterable, Identifiable {
         case .marker: "1.circle"
         case .zoom: "magnifyingglass"
         case .bomb: "burst"
+        case .cloud: "cloud"
         }
     }
 
@@ -102,6 +105,7 @@ enum ToolKind: String, CaseIterable, Identifiable {
         case .marker: "n"
         case .zoom: "z"
         case .bomb: nil
+        case .cloud: "d"
         }
     }
 
@@ -155,6 +159,7 @@ enum ToolKind: String, CaseIterable, Identifiable {
         case .redact: RedactTool(mode: options.redactMode)
         case .marker: StepMarkerTool(number: options.nextMarker, radius: options.markerRadius, antialiased: smooth)
         case .bomb: BombTool()
+        case .cloud: CloudTool(lineWidth: width, arcSize: options.cloudArcSize)
         case .zoom, .text: nil
         }
     }

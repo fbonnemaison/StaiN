@@ -198,16 +198,16 @@ Basado en [yeun/open-color](https://github.com/yeun/open-color) (MIT): 13 tonos 
 - [ ] **Quitar el fondo**: separar el sujeto con Vision (`VNGenerateForegroundInstanceMaskRequest`, en el propio Mac) y dejar el fondo transparente, o convertir el sujeto en selección; en la imagen o en la selección, con deshacer
 - [ ] **Degradados** lineal y radial del color primario al secundario (con alfa), con vista previa al arrastrar y Shift para fijar el ángulo a 45°; en la selección si la hay
 
-### Nube de revisión (futuro)
+### Nube de revisión
 Herramienta para rodear una zona con una nube de arcos, como en las revisiones de planos y PDF.
-- [ ] En el panel de herramientas va **al lado de la Bomba** (segunda columna de la última fila)
-- [ ] Se dibuja **con clics por vértice**, como el polígono: un clic por vértice y doble clic, Esc o clic en el primer vértice para cerrar; los lados se convierten en arcos de nube
-- [ ] **Solo contorno** (nunca rellena), con el color primario y el grosor de línea del recuadro de opciones
-- [ ] **Tamaño de los arcos** en el recuadro de opciones (pequeño, mediano, grande), independiente del grosor; los arcos se reparten para que encajen en cada lado
-- [ ] **Estilo boceto**: arcos con pequeñas variaciones de radio para que parezcan hechos a mano (con una semilla fija por nube, para que la vista previa no tiemble)
-- [ ] **Editable con tiradores** hasta confirmarla (Intro, clic fuera o cambio de herramienta), como las formas: mover, redimensionar con 8 tiradores, y Esc la descarta
-- [ ] **Atajo de teclado** propio (libres: D, J, M, V, Y; propuesta: **D**) y ayuda en la barra de estado
-- [ ] Motor en `StainKit` (`CloudTool` + generación del trazado de arcos), con tests de la geometría
+- [x] En el panel de herramientas va **al lado de la Bomba** (segunda columna de la última fila)
+- [x] Se dibuja **con clics por vértice**, como el polígono: un clic por vértice y doble clic, Esc o clic en el primer vértice para cerrar; los lados se convierten en arcos de nube
+- [x] **Solo contorno** (nunca rellena), con el color primario y el grosor de línea del recuadro de opciones
+- [x] **Tamaño de los arcos** en el recuadro de opciones (pequeño, mediano, grande), independiente del grosor; los arcos se reparten para que encajen en cada lado
+- [x] **Estilo boceto**: arcos con pequeñas variaciones de radio para que parezcan hechos a mano (con una semilla fija por nube, para que la vista previa no tiemble)
+- [x] **Editable con tiradores** hasta confirmarla (Intro, clic fuera o cambio de herramienta), como las formas: mover, redimensionar con 8 tiradores, y Esc la descarta
+- [x] **Atajo de teclado** propio **D** y ayuda en la barra de estado
+- [x] Motor en `StainKit` (`CloudTool` + generación del trazado de arcos), con tests de la geometría
 
 ## Mejoras — Interfaz
 - [x] Barra de colores en este orden: primario/secundario, personalizados y paleta, con el menú de paletas al final

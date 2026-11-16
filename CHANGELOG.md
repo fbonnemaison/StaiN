@@ -8,6 +8,11 @@ Mientras la app no se publique (versión 1.0.0), cada fase del [plan](TODO.md) e
 Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró cada fase.
 
 ## [Sin publicar]
+### Añadido
+- Herramienta **Nube de revisión** (D), junto a la Bomba: rodea una zona con una nube de arcos dibujada con un
+  clic por vértice, solo contorno, con tamaño de arcos pequeño, mediano o grande y estilo a mano. Al cerrarla
+  sigue editable: se mueve arrastrando y se redimensiona con los 8 tiradores.
+
 ### Corregido
 - La app se cerraba al pulsar ⌘Z después de escribir con la herramienta Texto: el cuadro de texto dejaba
   sus pasos de deshacer en el historial de la ventana al cerrarse.

@@ -113,6 +113,14 @@ final class ImageDocument: ReferenceFileDocument {
     /// Escape cierra el polígono libre en vez de descartarlo, si ya tiene 3 vértices.
     var pendingToolClosesOnEscape: Bool { (controller.tool as? PolygonTool)?.canClose == true }
 
+    /// Cierra la nube de revisión pendiente (si tiene 3 vértices o más) sin confirmarla: queda editable.
+    func closePendingCloud() -> Bool {
+        guard (controller.tool as? CloudTool)?.canClose == true, controller.isPending else { return false }
+        controller.modify(CloudTool.self, canvas: &canvas) { $0.close(on: &$1) }
+        toolDidChangeCanvas(colors: nil)
+        return true
+    }
+
     func pointerUp(_ event: PointerEvent, undoManager: UndoManager?) {
         if let patch = controller.pointerUp(event, canvas: &canvas) {
             finishEdit(patch, actionName: pendingActionName, undoManager: undoManager)

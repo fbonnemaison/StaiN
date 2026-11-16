@@ -203,6 +203,7 @@ private struct StatusBar: View {
         case .rectangle, .roundedRectangle, .ellipse, .polygon: "⇧ = proporción 1:1"
         case .text: "Arrastra para crear un cuadro"
         case .bomb: "Clic: borrar toda la imagen"
+        case .cloud: "Clic por vértice; doble clic, clic en el origen o Esc para cerrar"
         case .arrow: "⇧ = 45°"
         case .eyedropper: "Clic: primario · Clic der.: secundario"
         case .zoom: "Clic: acercar · ⌥ o clic der.: alejar"

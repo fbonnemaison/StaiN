@@ -2700,6 +2700,56 @@
           }
         }
       }
+    },
+    "Nube de revisión": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revision cloud"
+          }
+        }
+      }
+    },
+    "Clic por vértice; doble clic, clic en el origen o Esc para cerrar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Click each corner; double-click, click the first point or Esc to close"
+          }
+        }
+      }
+    },
+    "Arcos pequeños": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Small arcs"
+          }
+        }
+      }
+    },
+    "Arcos medianos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medium arcs"
+          }
+        }
+      }
+    },
+    "Arcos grandes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Large arcs"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

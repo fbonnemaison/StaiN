@@ -66,6 +66,27 @@ final class ShapeAndTextUITests: XCTestCase {
     }
 
     @MainActor
+    func testRevisionCloudClosesWithEscapeAndStaysEditable() {
+        app.typeKey("d", modifierFlags: [])
+        XCTAssertTrue(app.buttons["tool.cloud"].isSelected)
+        point(0.15, 0.2).click()
+        point(0.8, 0.15).click()
+        point(0.85, 0.8).click()
+        point(0.2, 0.75).click()
+        // Esc cierra la nube sin confirmarla: sigue editable y se puede mover.
+        app.typeKey(.escape, modifierFlags: [])
+        expectUndo(enabled: true)
+        point(0.5, 0.5).click(forDuration: 0.1, thenDragTo: point(0.45, 0.55))
+        app.typeKey(.return, modifierFlags: [])
+        expectUndo(enabled: true)
+        XCTAssertTrue(undo.title.contains("Nube"), "Menú: \(undo.title)")
+        let attachment = XCTAttachment(screenshot: canvas.screenshot())
+        attachment.name = "nube"
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
+    @MainActor
     func testTextIsRasterizedWhenClickingOutside() {
         app.typeKey("t", modifierFlags: [])
         XCTAssertTrue(app.popUpButtons["fontPicker"].waitForExistence(timeout: 2), "Aparece la barra de fuentes")

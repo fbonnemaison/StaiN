@@ -89,6 +89,8 @@ final class EditorState {
     /// predefinida que se dibuja arrastrando.
     var polygonShape: ShapeKind?
     var shapeLineWidth = 1
+    /// Tamaño de los arcos de la nube de revisión (independiente del grosor).
+    var cloudArcSize: CloudArcSize = .medium
     var airbrushRadius = 8
 
     // Texto

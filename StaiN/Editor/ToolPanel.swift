@@ -116,6 +116,9 @@ private struct ToolOptions: View {
                 }
                 FillModePicker(selection: $editor.shapeFillMode)
                 SizeList(sizes: EditorState.lineWidths, selection: $editor.shapeLineWidth, label: "Grosor del borde")
+            case .cloud:
+                CloudArcSizePicker(selection: $editor.cloudArcSize)
+                SizeList(sizes: EditorState.lineWidths, selection: $editor.shapeLineWidth, label: "Grosor del borde")
             case .airbrush:
                 SizeList(sizes: EditorState.airbrushRadii, selection: $editor.airbrushRadius, label: "Radio")
             case .arrow:
@@ -277,6 +280,59 @@ private struct PolygonShapePicker: View {
         case .arrowUp: String(localized: "Flecha hacia arriba")
         case .arrowDown: String(localized: "Flecha hacia abajo")
         default: kind?.rawValue ?? ""
+        }
+    }
+}
+
+/// Tamaño de los arcos de la nube: pequeño, mediano o grande.
+private struct CloudArcSizePicker: View {
+    @Binding var selection: CloudArcSize
+
+    var body: some View {
+        VStack(spacing: 2) {
+            ForEach(CloudArcSize.allCases, id: \.self) { size in
+                Button {
+                    selection = size
+                } label: {
+                    preview(size)
+                        .stroke(.primary, lineWidth: 1.2)
+                        .frame(width: 40, height: 10)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 3)
+                        .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .background(selection == size ? Color.accentColor.opacity(0.25) : .clear, in: .rect(cornerRadius: 4))
+                .help(name(size))
+                .accessibilityLabel(name(size))
+                .accessibilityAddTraits(selection == size ? .isSelected : [])
+            }
+        }
+    }
+
+    /// Fila de arcos del tamaño elegido.
+    private func preview(_ size: CloudArcSize) -> Path {
+        let count = switch size {
+        case .small: 5
+        case .medium: 3
+        case .large: 2
+        }
+        let chord = 40.0 / Double(count)
+        return Path { path in
+            for index in 0..<count {
+                let center = CGPoint(x: chord * (Double(index) + 0.5), y: 10)
+                path.addArc(
+                    center: center, radius: min(chord / 2, 9), startAngle: .degrees(180), endAngle: .degrees(0),
+                    clockwise: false)
+            }
+        }
+    }
+
+    private func name(_ size: CloudArcSize) -> String {
+        switch size {
+        case .small: String(localized: "Arcos pequeños")
+        case .medium: String(localized: "Arcos medianos")
+        case .large: String(localized: "Arcos grandes")
         }
     }
 }

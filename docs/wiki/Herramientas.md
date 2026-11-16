@@ -71,6 +71,18 @@ Las opciones del polígono tienen una galería de formas:
 - **Formas predefinidas:** triángulo rectángulo, triángulo isósceles, rombo, pentágono, hexágono y flechas hacia
   la derecha, la izquierda, arriba y abajo. Se dibujan arrastrando, como un rectángulo (⇧ = proporción 1:1).
 
+### Nube de revisión
+
+Rodea una zona con una nube de arcos, como en las revisiones de planos y PDF (tecla **D**).
+
+- Se dibuja como el polígono libre: **un clic por vértice** y se cierra con **doble clic**, un **clic en el primer
+  vértice** o **Escape** (si ya tiene 3 vértices). Cada lado se convierte en arcos que abomban hacia fuera, con
+  pequeñas variaciones para que parezcan hechos a mano.
+- **Solo contorno**, con el color primario (o el secundario con el clic derecho).
+- Opciones: **tamaño de los arcos** (pequeño, mediano o grande) y **grosor del borde**.
+- Al cerrarla sigue **editable** como las formas: arrastra dentro para moverla y usa los 8 tiradores para cambiar
+  su tamaño. Se confirma con Intro, con un clic fuera o al cambiar de herramienta; Escape la descarta.
+
 ## Anotar capturas
 
 | Herramienta | Tecla | Uso |

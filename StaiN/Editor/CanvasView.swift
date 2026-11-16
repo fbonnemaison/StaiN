@@ -317,8 +317,8 @@ final class CanvasView: NSView, NSMenuItemValidation {
     override func mouseMoved(with event: NSEvent) {
         updateCursorPosition(event)
         applyCursor(for: event)
-        // Línea y polígono abiertos: el tramo siguiente sigue al ratón entre clics.
-        if strokeButton == nil, tool == .line || tool == .polygon, document?.hasActiveTool == true {
+        // Línea, polígono y nube abiertos: el tramo siguiente sigue al ratón entre clics.
+        if strokeButton == nil, tool == .line || tool == .polygon || tool == .cloud, document?.hasActiveTool == true {
             document?.pointerHovered(pointerEvent(event, button: .primary))
         }
     }
@@ -459,6 +459,8 @@ final class CanvasView: NSView, NSMenuItemValidation {
     }
 
     override func keyDown(with event: NSEvent) {
+        // Escape cierra la nube de revisión (que sigue editable con tiradores) si ya tiene 3 vértices.
+        if event.keyCode == 53, document?.closePendingCloud() == true { return }
         let step = event.modifierFlags.contains(.shift) ? 10 : 1
         let selecting = document?.hasSelection == true
         switch event.keyCode {
