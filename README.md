@@ -6,7 +6,9 @@
 Editor de imágenes raster sencillo para macOS, inspirado en Microsoft Paint (antes Paintbrush) y MacPaint.
 Escrito en Swift, open source (MIT). Autor: **App-Zilla**.
 
-![Ventana de StaiN con un dibujo y una selección con sus puntos de control](docs/screenshot.png)
+![Ventana de StaiN con Sophie y Dante, una ilustración pintada trazo a trazo con las herramientas de StaiN](docs/screenshot.png)
+
+*La imagen de la captura la ha pintado un script con el pincel, el lápiz y el cubo de StaiN: mira [Examples/Replica](Examples/Replica).*
 
 > Consulta la versión actual y los cambios en [CHANGELOG.md](CHANGELOG.md), y el plan en [TODO.md](TODO.md).
 > Guía de uso: [wiki](https://github.com/fbonnemaison/StaiN/wiki).
@@ -35,6 +37,7 @@ Funciona en Mac con Apple Silicon e Intel, con macOS 26 o superior.
 StaiN/                 App macOS (SwiftUI + lienzo AppKit)
 StaiNUITests/          Tests de interfaz (XCUITest)
 Packages/StainKit/     Motor de dibujo, sin UI ni dependencias
+Examples/Replica/      Ejemplo: pinta una imagen trazo a trazo con las herramientas de StainKit
 docs/                  Captura del README, instrucciones del primer arranque y páginas de la wiki
 project.yml            Definición del proyecto para XcodeGen
 ```
@@ -103,6 +106,16 @@ fecha la sección del CHANGELOG, hace commit y crea la etiqueta `vX.Y.Z`. No sub
 
 ```bash
 STAIN_PERF=1 swift test -c release --package-path Packages/StainKit --filter Performance
+```
+
+## Ejemplo: pintar desde código
+
+[Examples/Replica](Examples/Replica) usa `StainKit` sin la interfaz: toma una imagen de referencia y la vuelve
+a pintar con el cubo de pintura, el pincel (de 48 a 2 px) y el lápiz, capa a capa, hasta parecerse un 97,7 %.
+Guarda cada paso, una animación del proceso y una comparación con la referencia.
+
+```bash
+cd Examples/Replica && swift run -c release Replica
 ```
 
 ## Referencias
