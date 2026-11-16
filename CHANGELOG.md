@@ -8,6 +8,8 @@ Mientras la app no se publique (versión 1.0.0), cada fase del [plan](TODO.md) e
 Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró cada fase.
 
 ## [Sin publicar]
+
+## [0.9.3] - 2026-11-16
 ### Añadido
 - Herramienta **Nube de revisión** (D), junto a la Bomba: rodea una zona con una nube de arcos dibujada con un
   clic por vértice, solo contorno, con tamaño de arcos pequeño, mediano o grande y estilo a mano. Al cerrarla
@@ -152,7 +154,8 @@ Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró ca
 ### Añadido
 - Estructura inicial del proyecto, licencia MIT y CI.
 
-[Sin publicar]: https://github.com/fbonnemaison/StaiN/compare/v0.9.2...HEAD
+[Sin publicar]: https://github.com/fbonnemaison/StaiN/compare/v0.9.3...HEAD
+[0.9.3]: https://github.com/fbonnemaison/StaiN/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/fbonnemaison/StaiN/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/fbonnemaison/StaiN/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/fbonnemaison/StaiN/compare/v0.8.0...v0.9.0
