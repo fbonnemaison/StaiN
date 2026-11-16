@@ -28,8 +28,11 @@ struct EditorView: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            ToolPanel(editor: editor)
-            Divider()
+            if editor.showsToolPanel {
+                ToolPanel(editor: editor)
+                    .transition(.move(edge: .leading))
+                Divider()
+            }
             VStack(spacing: 0) {
                 if editor.tool == .text {
                     TextOptionsBar(editor: editor)
@@ -60,7 +63,25 @@ struct EditorView: View {
             case .filter(let kind): FilterSheet(kind: kind, document: document)
             }
         }
+        // El título propio (con el popover para nombrar y guardar) sustituye al de la ventana.
+        .toolbar(removing: .title)
         .toolbar {
+            ToolbarItem(placement: .navigation) {
+                Button(
+                    editor.showsToolPanel ? "Ocultar herramientas" : "Mostrar herramientas",
+                    systemImage: "sidebar.left"
+                ) {
+                    withAnimation(.snappy(duration: 0.2)) { editor.showsToolPanel.toggle() }
+                }
+                .help(editor.showsToolPanel ? "Ocultar el panel de herramientas (⌃⌘S)" : "Mostrar el panel de herramientas (⌃⌘S)")
+                .accessibilityIdentifier("toolPanelToggle")
+            }
+            ToolbarItem(placement: .navigation) {
+                DocumentTitleButton()
+            }
+            .sharedBackgroundVisibility(.hidden)
+            // Empuja el resto de botones al borde derecho, lejos del título.
+            ToolbarSpacer(.flexible)
             ToolbarItemGroup {
                 if editor.pixelMode || !editor.symmetry.isEmpty {
                     Text(modeSummary)

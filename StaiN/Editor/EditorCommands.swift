@@ -155,6 +155,15 @@ struct EditorCommands: Commands {
 
         CommandGroup(before: .toolbar) {
             Button(
+                editor?.showsToolPanel == false
+                    ? String(localized: "Mostrar herramientas") : String(localized: "Ocultar herramientas")
+            ) {
+                withAnimation(.snappy(duration: 0.2)) { editor?.showsToolPanel.toggle() }
+            }
+            .keyboardShortcut("s", modifiers: [.command, .control])
+            .disabled(editor == nil)
+            Divider()
+            Button(
                 editor?.showsPixelGrid == true
                     ? String(localized: "Ocultar cuadrícula de píxeles")
                     : String(localized: "Mostrar cuadrícula de píxeles")

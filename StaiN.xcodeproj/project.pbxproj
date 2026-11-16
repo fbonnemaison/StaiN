@@ -12,6 +12,7 @@
 		0A5AE454482A1752C9A1A670 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8128E319A5D7C80B3083C1A /* Assets.xcassets */; };
 		1017FD0B2B41F9F161294389 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE3323DC9C6CC6571224DEA /* SettingsView.swift */; };
 		10E9F8FF091A86F522700A63 /* StaiNApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87238F001CFBDAF9E619373D /* StaiNApp.swift */; };
+		D0C7A1E2B3F4A5D6E7F80911 /* DocumentTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C7A1E2B3F4A5D6E7F80912 /* DocumentTitle.swift */; };
 		14E43648F0D1EAA669309A38 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C46E74170A5F3E44E7EF7E4 /* EditorView.swift */; };
 		1A117ADA85DC1B7925256B62 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 13495DD0892FDE636EB132A4 /* Credits.html */; };
 		1B6467229F5FC3CE46DDC323 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E77000FAB8EEC1881FBEDC23 /* Localizable.xcstrings */; };
@@ -68,6 +69,7 @@
 		0FE1BD51E1EE23FBB5719DD1 /* CanvasRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasRepresentable.swift; sourceTree = "<group>"; };
 		10C75146D05766C5DE750D8F /* ClassicSaving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicSaving.swift; sourceTree = "<group>"; };
 		13495DD0892FDE636EB132A4 /* Credits.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
+		D0C7A1E2B3F4A5D6E7F80912 /* DocumentTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentTitle.swift; sourceTree = "<group>"; };
 		1C46E74170A5F3E44E7EF7E4 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		2142EAEDE5F7C48FC8459F8A /* ToolKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolKind.swift; sourceTree = "<group>"; };
 		226B57D0B291FD99D59E88E1 /* ToolCursors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCursors.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				334EF62F50C32E47964055AE /* CanvasView.swift */,
 				95E25EC853F211D0B1D123E8 /* CenteringClipView.swift */,
 				D791246C1B7C7FB6AA6AE8BC /* Checkerboard.swift */,
+				D0C7A1E2B3F4A5D6E7F80912 /* DocumentTitle.swift */,
 				B953FD2696037BF6B5D740E0 /* EditorCommands.swift */,
 				B77BE8C7EE709B19FC4F0712 /* EditorState.swift */,
 				1C46E74170A5F3E44E7EF7E4 /* EditorView.swift */,
@@ -384,6 +387,7 @@
 				20E43685AF445A77DBD0B6E8 /* Clipboard.swift in Sources */,
 				F09ABA38D4505EB5D84FAC4C /* ColorPanelController.swift in Sources */,
 				C8F8F54F0AEF072716292A53 /* ColorValueEditor.swift in Sources */,
+				D0C7A1E2B3F4A5D6E7F80911 /* DocumentTitle.swift in Sources */,
 				36051A47CD4F92AFFFE68B33 /* EditorCommands.swift in Sources */,
 				82202AB6F6C88BA69F30326A /* EditorState.swift in Sources */,
 				14E43648F0D1EAA669309A38 /* EditorView.swift in Sources */,
@@ -521,6 +525,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_APP_SANDBOX = YES;
+				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
+				ENABLE_FILE_ACCESS_PICTURE_FOLDER = readwrite;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_RESOURCE_ACCESS_PRINTING = YES;
 				ENABLE_USER_SELECTED_FILES = readwrite;
@@ -545,6 +551,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_APP_SANDBOX = YES;
+				ENABLE_FILE_ACCESS_DOWNLOADS_FOLDER = readwrite;
+				ENABLE_FILE_ACCESS_PICTURE_FOLDER = readwrite;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_RESOURCE_ACCESS_PRINTING = YES;
 				ENABLE_USER_SELECTED_FILES = readwrite;

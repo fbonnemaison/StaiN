@@ -28,6 +28,9 @@ final class EditorState {
 
     func zoomToFit() { fitRequest += 1 }
 
+    /// Panel de herramientas de la izquierda (se oculta con el botón junto al título).
+    var showsToolPanel = true
+
     var tool: ToolKind = .pencil {
         didSet {
             if oldValue != tool && oldValue != .eyedropper { previousTool = oldValue }

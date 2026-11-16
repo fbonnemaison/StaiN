@@ -2550,6 +2550,156 @@
           }
         }
       }
+    },
+    "Ocultar herramientas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide Tools"
+          }
+        }
+      }
+    },
+    "Mostrar herramientas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show Tools"
+          }
+        }
+      }
+    },
+    "Ocultar el panel de herramientas (⌃⌘S)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide the tools panel (⌃⌘S)"
+          }
+        }
+      }
+    },
+    "Mostrar el panel de herramientas (⌃⌘S)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show the tools panel (⌃⌘S)"
+          }
+        }
+      }
+    },
+    "Nombrar y guardar el documento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name and save the document"
+          }
+        }
+      }
+    },
+    "Documento %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Document %@"
+          }
+        }
+      }
+    },
+    "Nombre:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name:"
+          }
+        }
+      }
+    },
+    "Nombre": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "Etiquetas:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tags:"
+          }
+        }
+      }
+    },
+    "Separadas por comas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comma-separated"
+          }
+        }
+      }
+    },
+    "Ubicación:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where:"
+          }
+        }
+      }
+    },
+    "Otra…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other…"
+          }
+        }
+      }
+    },
+    "Elegir": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose"
+          }
+        }
+      }
+    },
+    "Ya existe «%@» en esa carpeta. Elige otro nombre.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” already exists in that folder. Choose another name."
+          }
+        }
+      }
+    },
+    "Confirma dónde guardar: StaiN necesita tu permiso para escribir en esta carpeta.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm where to save: StaiN needs your permission to write to this folder."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
