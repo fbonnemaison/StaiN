@@ -37,9 +37,10 @@ enum ShareIcon {
 
     private static func cropped(_ icon: NSImage, side: Int = 512) -> NSImage {
         guard
+            let space = CGColorSpace(name: CGColorSpace.sRGB),
             let context = CGContext(
                 data: nil, width: side, height: side, bitsPerComponent: 8, bytesPerRow: side * 4,
-                space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+                space: space, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
         else { return icon }
         NSGraphicsContext.saveGraphicsState()
         NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: false)

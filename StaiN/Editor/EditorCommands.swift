@@ -230,11 +230,14 @@ struct EditorCommands: Commands {
 /// Enlaces del menú Ayuda (se abren en el navegador).
 @MainActor
 enum HelpLinks {
-    static let wiki = URL(string: "https://github.com/fbonnemaison/StaiN/wiki")!
-    static let shortcuts = URL(string: "https://github.com/fbonnemaison/StaiN/wiki/Atajos-de-teclado")!
-    static let issues = URL(string: "https://github.com/fbonnemaison/StaiN/issues/new/choose")!
+    static let wiki = "https://github.com/fbonnemaison/StaiN/wiki"
+    static let shortcuts = "https://github.com/fbonnemaison/StaiN/wiki/Atajos-de-teclado"
+    static let issues = "https://github.com/fbonnemaison/StaiN/issues/new/choose"
 
-    static func open(_ url: URL) { NSWorkspace.shared.open(url) }
+    static func open(_ address: String) {
+        guard let url = URL(string: address) else { return }
+        NSWorkspace.shared.open(url)
+    }
 }
 
 /// Envía deshacer/rehacer al primer respondedor (el lienzo, un cuadro de texto, un campo de Ajustes…).

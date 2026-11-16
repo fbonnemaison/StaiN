@@ -210,7 +210,11 @@ final class DocumentTitleModel {
             }
             reopen()
         }
-        if let window { panel.beginSheetModal(for: window, completionHandler: finish) } else { finish(panel.runModal()) }
+        if let window {
+            panel.beginSheetModal(for: window, completionHandler: finish)
+        } else {
+            finish(panel.runModal())
+        }
     }
 
     /// Guarda (o renombra y mueve) el documento según el popover. Devuelve `true` si terminó.
@@ -221,12 +225,13 @@ final class DocumentTitleModel {
         errorMessage = nil
         let (type, target) = destination(for: document)
         if target != document.fileURL, FileManager.default.fileExists(atPath: target.path) {
-            errorMessage = String(localized: "Ya existe «\(target.lastPathComponent)» en esa carpeta. Elige otro nombre.")
+            errorMessage = String(
+                localized: "Ya existe «\(target.lastPathComponent)» en esa carpeta. Elige otro nombre.")
             return false
         }
         do {
             try await perform(on: document, to: target, type: type)
-        } catch where Self.isPermissionError(error) {
+        } catch  where Self.isPermissionError(error) {
             // Sin permiso sobre la carpeta (sandbox): se confirma en un panel, que sí lo concede.
             guard let url = await askWithSavePanel(suggesting: target, type: type) else { return false }
             do {
@@ -249,7 +254,9 @@ final class DocumentTitleModel {
         var type = contentType
         let typed = (name as NSString).pathExtension
         if !typed.isEmpty, let typedType = UTType(filenameExtension: typed) {
-            if document.fileURL == nil, let writable = ImageDocument.writableContentTypes.first(where: { typedType.conforms(to: $0) }) {
+            if document.fileURL == nil,
+                let writable = ImageDocument.writableContentTypes.first(where: { typedType.conforms(to: $0) })
+            {
                 type = writable
                 name = (name as NSString).deletingPathExtension
             } else if typedType == type {
@@ -301,7 +308,8 @@ final class DocumentTitleModel {
         panel.nameFieldStringValue = target.lastPathComponent
         panel.allowedContentTypes = [UTType(filenameExtension: target.pathExtension) ?? type]
         panel.canCreateDirectories = true
-        panel.message = String(localized: "Confirma dónde guardar: StaiN necesita tu permiso para escribir en esta carpeta.")
+        panel.message = String(
+            localized: "Confirma dónde guardar: StaiN necesita tu permiso para escribir en esta carpeta.")
         let response: NSApplication.ModalResponse
         if let window {
             response = await panel.beginSheetModal(for: window)

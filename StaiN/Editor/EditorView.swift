@@ -73,7 +73,10 @@ struct EditorView: View {
                 ) {
                     withAnimation(.snappy(duration: 0.2)) { editor.showsToolPanel.toggle() }
                 }
-                .help(editor.showsToolPanel ? "Ocultar el panel de herramientas (⌃⌘S)" : "Mostrar el panel de herramientas (⌃⌘S)")
+                .help(
+                    editor.showsToolPanel
+                        ? "Ocultar el panel de herramientas (⌃⌘S)" : "Mostrar el panel de herramientas (⌃⌘S)"
+                )
                 .accessibilityIdentifier("toolPanelToggle")
             }
             ToolbarItem(placement: .navigation) {
