@@ -84,7 +84,12 @@ final class ColorUITests: XCTestCase {
 
     @MainActor
     func testHexAndRGBFields() {
+        app.buttons["Personalizado 1"].click()  // guarda el primario (negro)
+        waitForValue("Personalizado 1", "#000000")
         app.buttons["Color primario"].click()
+        XCTAssertFalse(app.popovers.firstMatch.exists, "El primario no se edita directamente")
+
+        app.buttons["Personalizado 1"].doubleClick()
         let hex = app.popovers.textFields["hexField"]
         XCTAssertTrue(hex.waitForExistence(timeout: 3))
         XCTAssertEqual(hex.value as? String, "#000000")
@@ -92,20 +97,20 @@ final class ColorUITests: XCTestCase {
         hex.click()
         hex.typeKey("a", modifierFlags: .command)
         hex.typeText("#00FF00\r")
-        waitForValue("Color primario", "#00FF00")
+        waitForValue("Personalizado 1", "#00FF00")
 
         let red = app.popovers.textFields["redField"]
         red.click()
         red.typeKey("a", modifierFlags: .command)
         red.typeText("255\r")
-        waitForValue("Color primario", "#FFFF00")
+        waitForValue("Personalizado 1", "#FFFF00")
         XCTAssertEqual(hex.value as? String, "#FFFF00", "El HEX se actualiza con el RGB")
 
         hex.click()
         hex.typeKey("a", modifierFlags: .command)
         hex.typeText("#12345")
         XCTAssertTrue(app.popovers.staticTexts["Escribe 6 u 8 dígitos hexadecimales, p. ej. #FF8800"].exists)
-        XCTAssertEqual(value(of: "Color primario"), "#FFFF00", "Un HEX incompleto no cambia el color")
+        XCTAssertEqual(value(of: "Personalizado 1"), "#FFFF00", "Un HEX incompleto no cambia el color")
         screenshot("colors-hex")
     }
 }

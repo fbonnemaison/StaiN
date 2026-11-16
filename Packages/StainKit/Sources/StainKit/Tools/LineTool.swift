@@ -4,9 +4,12 @@ import Foundation
 ///
 /// Se dibuja con un clic en el inicio y otro en el final (entre los dos, la vista previa sigue
 /// al ratón), o arrastrando de un extremo al otro. Escape la descarta.
+/// Mientras se crea se ven sus puntos de control (los extremos); al terminar desaparecen.
 public struct LineTool: Tool {
     public var mask: BrushMask
     private var start: (x: Int, y: Int)?
+    /// Extremo final actual (sigue al ratón hasta fijarse).
+    private var current: (x: Int, y: Int)?
     private var color: PaintColor = .black
     /// Tras el primer clic sin arrastrar: espera el clic del final.
     private var waitingForEnd = false
@@ -28,12 +31,14 @@ public struct LineTool: Tool {
         color = canvas.color(for: event.button)
         let pixel = event.pixel
         start = pixel
+        current = pixel
         canvas.stamp(mask, atX: pixel.x, y: pixel.y, color: color)
     }
 
     public mutating func drag(_ event: PointerEvent, on canvas: inout Canvas) {
         guard let start else { return }
         let end = Self.endpoint(from: start, to: event.pixel, constrained: event.modifiers.contains(.shift))
+        current = end
         canvas.revertToEditStart()
         canvas.stampLine(mask, fromX: start.x, y: start.y, toX: end.x, y: end.y, color: color)
     }
@@ -52,6 +57,14 @@ public struct LineTool: Tool {
         }
         drag(event, on: &canvas)
         self.start = nil
+        current = nil
+    }
+
+    /// Puntos de control mientras se crea la línea; al terminar no hay ninguno.
+    public var overlay: ToolOverlay? {
+        guard let start else { return nil }
+        let points = [start, current ?? start].map { CGPoint(x: Double($0.x) + 0.5, y: Double($0.y) + 0.5) }
+        return ToolOverlay(outline: points, isClosed: false, handles: points)
     }
 
     private var isFirstClick = true
@@ -61,11 +74,13 @@ public struct LineTool: Tool {
         if waitingForEnd { canvas.revertToEditStart() }
         waitingForEnd = false
         start = nil
+        current = nil
     }
 
     public mutating func cancel(on canvas: inout Canvas) {
         waitingForEnd = false
         start = nil
+        current = nil
     }
 
     /// Punto final, ajustado a 0°, 45° o 90° si `constrained`.

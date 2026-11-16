@@ -74,7 +74,7 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 ## Fase 4 — Formas, texto y aerógrafo
 - [x] **Rectángulo**, **rectángulo redondeado** y **elipse**; con Shift salen proporciones 1:1
 - [x] **Polígono** (clic por vértice y doble clic, o clic en el primer vértice, para cerrar)
-- [x] **Curva** al estilo clásico: se traza una línea y luego se doblan 2 puntos de control
+- [x] **Curva** con tres clics (inicio, final y punto de control), con los puntos de control visibles solo mientras se crea
 - [x] Modos de relleno: solo contorno, contorno y relleno, solo relleno (y grosor del borde)
 - [x] Las formas siguen editables (mover y redimensionar con 8 tiradores) hasta que se confirman con Intro, clic fuera o cambio de herramienta; Escape las descarta
 - [x] **Texto**: cuadro editable con fuente, tamaño, negrita, cursiva y subrayado, fondo opaco o transparente; se rasteriza al confirmar
@@ -150,7 +150,7 @@ Escrito en Swift, open source (MIT) y pensado para uso personal.
 - [x] Código y etiquetas `v0.0.1`–`v0.7.0` publicados en GitHub
 - [x] GitHub Releases a partir de las etiquetas y del `CHANGELOG.md` (primera: [v0.9.0](https://github.com/fbonnemaison/StaiN/releases/tag/v0.9.0), con `.dmg`, `.zip` y SHA-256)
 - [ ] Automatizar la creación de la Release (`gh release create` con las notas del CHANGELOG y los archivos de `dist/`)
-- [ ] (Opcional) Cask de Homebrew en un tap propio (`fbonnemaison/homebrew-tap`); el repositorio oficial exige apps notarizadas
+- [x] ~~(Opcional) Cask de Homebrew en un tap propio (`fbonnemaison/homebrew-tap`); el repositorio oficial exige apps notarizadas~~ — descartado
 - [x] Instrucciones para abrir la app sin notarizar la primera vez (Ajustes del Sistema › Privacidad y seguridad › Abrir igualmente, o `xattr`): en el README, en la wiki y dentro del `.dmg`
 - [x] Documentación de usuario en la wiki: páginas en `docs/wiki/` y `scripts/publish-wiki.sh` para publicarlas
 - [x] Wiki publicada en https://github.com/fbonnemaison/StaiN/wiki (se actualiza con `scripts/publish-wiki.sh`)
@@ -206,7 +206,7 @@ Basado en [yeun/open-color](https://github.com/yeun/open-color) (MIT): 13 tonos 
 - [x] Puntos de control en las esquinas y lados del lienzo para cambiar su tamaño con el ratón; se muestran u ocultan con el botón "Redimensionar lienzo" (⌥⌘E)
 - [x] Puntos de control en la selección para estirarla (⇧ en una esquina mantiene la proporción)
 - [x] Cursores: cruceta en las herramientas de selección; icono de la herramienta en lápiz, pincel, aerógrafo, borrador, relleno y cuentagotas
-- [ ] Revisar a mano los cursores nuevos (los tests no los capturan)
+- [x] Revisar a mano los cursores nuevos (los tests no los capturan): funcionan
 
 ## Fase 9 — Capas (futuro)
 - [ ] Modelo de documento con varias capas en `StainKit`: lista ordenada de bitmaps del mismo tamaño, con nombre, visibilidad, opacidad y bloqueo
@@ -223,6 +223,6 @@ Basado en [yeun/open-color](https://github.com/yeun/open-color) (MIT): 13 tonos 
 ---
 
 ## Preguntas abiertas
-- [ ] ¿El nombre definitivo es **StaiN**? (bundle id provisional: `io.github.fbonnemaison.StaiN`)
+- [x] ¿El nombre definitivo es **StaiN**? Sí (bundle id: `io.github.fbonnemaison.StaiN`)
 - [x] Repositorio de GitHub: público, publicado tras la Fase 7
 - [ ] ¿Formato de proyecto propio con datos de edición (formas editables, anotaciones no destructivas), o siempre se rasteriza a PNG?

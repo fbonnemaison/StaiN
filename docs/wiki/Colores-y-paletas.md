@@ -7,8 +7,7 @@ personalizados** y la **paleta**.
 
 - El cuadro de delante es el **primario** (clic izquierdo) y el de detrás el **secundario** (clic derecho,
   fondo del borrador, relleno de formas).
-- **Clic en uno de ellos:** panel con los valores **RGB** (0–255, con alfa) y **HEX** (`#RRGGBB` o `#RRGGBBAA`).
-  Desde ahí se puede copiar y pegar el HEX o abrir el selector de color del sistema.
+- No se editan directamente: se eligen desde la **paleta** o los **colores personalizados**.
 - **⇄** o la tecla **X**: intercambia primario y secundario.
 
 ## Paleta
@@ -28,7 +27,9 @@ Dos filas de casillas, vacías al principio, que se recuerdan entre sesiones y n
 
 - **Clic en una casilla vacía:** guarda en ella el color primario.
 - **Clic en una casilla llena:** usa ese color como primario.
-- **Doble clic en una llena:** editarla.
+- **Doble clic en una llena** (o **Editar…** en su menú): panel con los valores **RGB** (0–255, con alfa) y
+  **HEX** (`#RRGGBB` o `#RRGGBBAA`). Desde ahí se puede copiar y pegar el HEX o abrir el selector de color
+  del sistema.
 - **Clic derecho:** usar como secundario, guardar el primario aquí, editar o vaciar.
 - La flecha **⌄** de los personalizados abre su menú:
   - **Guardar como paleta…**: guarda los colores en un archivo `.json`. El panel pide también el **nombre de la

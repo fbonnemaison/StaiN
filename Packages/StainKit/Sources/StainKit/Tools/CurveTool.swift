@@ -1,32 +1,43 @@
 import CoreGraphics
 
-/// Curva al estilo de Paint: se arrastra una línea recta y después dos clics (o arrastres) la doblan.
+/// Curva de Bézier con tres clics: el primero fija el inicio, el segundo el final y el tercero
+/// el punto de control que la dobla. Entre clics, la vista previa sigue al ratón.
+///
+/// También se puede arrastrar: arrastrar el primer clic traza la línea recta de una vez, y arrastrar
+/// el segundo o el tercero mueve ese punto hasta soltar. Mientras se crea se ven los puntos de control
+/// y sus guías; al terminar desaparecen y queda solo la curva.
 public struct CurveTool: Tool {
     public var lineWidth: Int
 
     private enum Phase: Sendable {
         case idle
-        case line
-        case firstBend
-        case secondBend
+        /// Pulsado el primer clic (o arrastrando la línea recta).
+        case placingStart
+        /// Inicio fijado: el final sigue al ratón.
+        case awaitingEnd
+        /// Pulsado el segundo clic.
+        case placingEnd
+        /// Recta fijada: el punto de control sigue al ratón.
+        case awaitingControl
+        /// Pulsado el tercer clic.
+        case placingControl
         case done
     }
 
     private var phase: Phase = .idle
     private var start = CGPoint.zero
     private var end = CGPoint.zero
-    private var control1 = CGPoint.zero
-    private var control2 = CGPoint.zero
+    private var control = CGPoint.zero
     private var color: PaintColor = .black
 
     public init(lineWidth: Int = 1) {
         self.lineWidth = lineWidth
     }
 
-    /// Espera el primer o el segundo doblez.
+    /// Espera el segundo o el tercer clic.
     public var isAwaitingInput: Bool {
         switch phase {
-        case .firstBend, .secondBend: true
+        case .awaitingEnd, .awaitingControl: true
         default: false
         }
     }
@@ -40,15 +51,16 @@ public struct CurveTool: Tool {
             color = canvas.color(for: event.button)
             start = point
             end = point
-            control1 = point
-            control2 = point
-            phase = .line
-        case .firstBend:
-            control1 = point
-            control2 = point
-        case .secondBend:
-            control2 = point
-        case .line:
+            control = point
+            phase = .placingStart
+        case .awaitingEnd:
+            end = point
+            control = Self.midpoint(start, point)
+            phase = .placingEnd
+        case .awaitingControl:
+            control = point
+            phase = .placingControl
+        case .placingStart, .placingEnd, .placingControl:
             break
         }
         render(on: &canvas)
@@ -57,16 +69,12 @@ public struct CurveTool: Tool {
     public mutating func drag(_ event: PointerEvent, on canvas: inout Canvas) {
         let point = Self.center(event)
         switch phase {
-        case .line:
+        case .placingStart, .placingEnd:
             end = point
-            control1 = start
-            control2 = point
-        case .firstBend:
-            control1 = point
-            control2 = point
-        case .secondBend:
-            control2 = point
-        case .idle, .done:
+            control = Self.midpoint(start, point)
+        case .placingControl:
+            control = point
+        default:
             return
         }
         render(on: &canvas)
@@ -75,15 +83,57 @@ public struct CurveTool: Tool {
     public mutating func end(_ event: PointerEvent, on canvas: inout Canvas) {
         drag(event, on: &canvas)
         switch phase {
-        case .line: phase = start == end ? .done : .firstBend
-        case .firstBend: phase = .secondBend
-        case .secondBend: phase = .done
-        case .idle, .done: break
+        // Un clic sin arrastrar solo fija el inicio; un arrastre ya deja la recta hecha.
+        case .placingStart: phase = start == end ? .awaitingEnd : .awaitingControl
+        // Si el segundo clic cae sobre el inicio, se sigue esperando el final.
+        case .placingEnd: phase = start == end ? .awaitingEnd : .awaitingControl
+        case .placingControl: phase = .done
+        default: break
         }
+        render(on: &canvas)
     }
 
+    public mutating func hover(_ event: PointerEvent, on canvas: inout Canvas) {
+        let point = Self.center(event)
+        switch phase {
+        case .awaitingEnd:
+            end = point
+            control = Self.midpoint(start, point)
+        case .awaitingControl:
+            control = point
+        default:
+            return
+        }
+        render(on: &canvas)
+    }
+
+    /// Confirma: con solo el inicio no queda nada; con la recta fijada queda la recta.
     public mutating func commit(on canvas: inout Canvas) {
+        switch phase {
+        case .awaitingEnd, .placingStart:
+            canvas.revertToEditStart()
+        case .awaitingControl, .placingEnd:
+            control = Self.midpoint(start, end)
+            phase = .done
+            render(on: &canvas)
+        default:
+            break
+        }
         phase = .done
+    }
+
+    /// Puntos de control y guías mientras se crea la curva; al terminar no hay ninguno.
+    public var overlay: ToolOverlay? {
+        switch phase {
+        case .placingStart where start == end, .awaitingEnd where start == end:
+            ToolOverlay(outline: [start], isClosed: false, handles: [start])
+        case .placingStart, .awaitingEnd, .placingEnd:
+            ToolOverlay(outline: [start, end], isClosed: false, handles: [start, end])
+        case .awaitingControl, .placingControl:
+            ToolOverlay(outline: [start, control, end], isClosed: false, handles: [start, control, end])
+        case .idle, .done:
+            nil
+        }
     }
 
     /// Centro del píxel bajo el puntero.
@@ -91,10 +141,14 @@ public struct CurveTool: Tool {
         CGPoint(x: Double(event.pixel.x) + 0.5, y: Double(event.pixel.y) + 0.5)
     }
 
+    private static func midpoint(_ a: CGPoint, _ b: CGPoint) -> CGPoint {
+        CGPoint(x: (a.x + b.x) / 2, y: (a.y + b.y) / 2)
+    }
+
     private func render(on canvas: inout Canvas) {
         let path = CGMutablePath()
         path.move(to: start)
-        path.addCurve(to: end, control1: control1, control2: control2)
+        path.addQuadCurve(to: end, control: control)
         if start == end { path.addLine(to: end) }  // un punto: se pinta igualmente
         canvas.revertToEditStart()
         canvas.drawPath(

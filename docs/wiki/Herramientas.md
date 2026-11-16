@@ -46,8 +46,8 @@ confirmar (clic fuera o cambiar de herramienta).
 
 | Herramienta | Tecla | Uso |
 |---|---|---|
-| Línea | L | **Clic en el inicio y clic en el final**; entre los dos, la línea sigue al ratón. También se puede arrastrar. ⇧ fija el ángulo a 0°, 45° o 90°. |
-| Curva | C | Arrastra una línea recta y luego dóblala con dos clics. |
+| Línea | L | **Clic en el inicio y clic en el final**; entre los dos, la línea sigue al ratón. También se puede arrastrar. ⇧ fija el ángulo a 0°, 45° o 90°. Los extremos se ven como puntos de control mientras se crea. |
+| Curva | C | Tres clics: inicio, final y punto de control que la dobla (también se puede arrastrar la recta). Los puntos de control se ven solo mientras se crea. |
 | Rectángulo | R | Arrastra. ⇧ = cuadrado. |
 | Rectángulo redondeado | U | Arrastra. ⇧ = cuadrado. |
 | Elipse | O | Arrastra. ⇧ = círculo. |
@@ -66,7 +66,7 @@ cambiar su tamaño. Se confirma con Intro, con un clic fuera o al cambiar de her
 
 Las opciones del polígono tienen una galería de formas:
 
-- **Polígono libre:** cada clic añade un vértice y, entre clics, el lado siguiente sigue al ratón. Se cierra con
+- **Polígono libre:** cada clic añade un vértice y, entre clics, el lado siguiente sigue al ratón. Los vértices se ven como puntos de control hasta cerrarlo. Se cierra con
   un **clic en el primer vértice**, con **doble clic** o con **Escape** (si ya tiene 3 vértices).
 - **Formas predefinidas:** triángulo rectángulo, triángulo isósceles, rombo, pentágono, hexágono y flechas hacia
   la derecha, la izquierda, arriba y abajo. Se dibujan arrastrando, como un rectángulo (⇧ = proporción 1:1).

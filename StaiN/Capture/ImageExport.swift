@@ -1,4 +1,5 @@
 import AppKit
+import CoreTransferable
 import StainKit
 import UniformTypeIdentifiers
 
@@ -26,14 +27,21 @@ enum ImageExport {
             NSAlert(error: error).runModal()
         }
     }
+}
 
-    /// Menú Compartir del sistema con un PNG temporal de la imagen.
-    static func share(_ bitmap: Bitmap, from window: NSWindow?) {
-        guard let view = window?.contentView, let data = try? ImageCodec.encode(bitmap, as: .png) else { return }
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("StaiN.png")
-        guard (try? data.write(to: url)) != nil else { return }
-        let picker = NSSharingServicePicker(items: [url])
-        let anchor = NSRect(x: view.bounds.maxX - 60, y: view.bounds.maxY - 4, width: 1, height: 1)
-        picker.show(relativeTo: anchor, of: view, preferredEdge: .minY)
+/// Imagen para el menú Compartir (`ShareLink`): el PNG se genera solo al elegir un servicio.
+struct ShareableImage: Transferable {
+    let bitmap: Bitmap
+    let name: String
+
+    static var transferRepresentation: some TransferRepresentation {
+        FileRepresentation(exportedContentType: .png) { image in
+            let folder = FileManager.default.temporaryDirectory.appendingPathComponent(
+                UUID().uuidString, isDirectory: true)
+            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            let url = folder.appendingPathComponent(image.name).appendingPathExtension("png")
+            try ImageCodec.encode(image.bitmap, as: .png).write(to: url)
+            return SentTransferredFile(url)
+        }
     }
 }

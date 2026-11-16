@@ -190,29 +190,59 @@ let red = PaintColor(red: 255, green: 0, blue: 0)
 @Suite struct CurveToolTests {
     let make = { CurveTool() as any Tool }
 
-    @Test func bendsTwiceThenFinishes() throws {
+    @Test func threeClicksDrawCurve() throws {
         var canvas = Canvas(width: 40, height: 40)
         var controller = ToolController()
-        drag(&controller, &canvas, [at(2, 20), at(37, 20)], make: make)
-        #expect(controller.isPending)
-        #expect(canvas.bitmap[20, 20] == .black, "Primero es una línea recta")
+        drag(&controller, &canvas, [at(2, 20)], make: make)
+        #expect(controller.isPending, "El primer clic solo fija el inicio")
+        #expect(controller.overlay?.handles.count == 1)
 
-        drag(&controller, &canvas, [at(20, 2)], make: make)
-        #expect(controller.isPending)
+        controller.pointerMoved(at(37, 20), canvas: &canvas)
+        #expect(canvas.bitmap[20, 20] == .black, "Entre clics, la vista previa sigue al ratón")
+
+        drag(&controller, &canvas, [at(37, 20)], make: make)
+        #expect(controller.isPending, "El segundo clic fija el final")
+        #expect(canvas.bitmap[20, 20] == .black, "Primero es una línea recta")
+        #expect(controller.overlay?.handles.count == 3, "Inicio, punto de control y final")
+
+        controller.pointerMoved(at(20, 2), canvas: &canvas)
         #expect(canvas.bitmap[20, 20] == .white, "Al doblarla, el centro se mueve")
 
         let patches = drag(&controller, &canvas, [at(20, 2)], make: make)
         #expect(patches.count == 1)
         #expect(!controller.isActive)
+        #expect(controller.overlay == nil, "Al terminar no quedan puntos de control")
+        #expect(canvas.bitmap[20, 11] == .black, "La curva pasa a media altura del punto de control")
     }
 
-    @Test func committingEarlyKeepsCurve() throws {
+    @Test func dragDrawsStraightLineThenOneClickBends() {
+        var canvas = Canvas(width: 40, height: 40)
+        var controller = ToolController()
+        drag(&controller, &canvas, [at(2, 20), at(37, 20)], make: make)
+        #expect(controller.isPending)
+        #expect(canvas.bitmap[20, 20] == .black)
+        let patches = drag(&controller, &canvas, [at(20, 2)], make: make)
+        #expect(patches.count == 1)
+        #expect(canvas.bitmap[20, 20] == .white)
+    }
+
+    @Test func committingEarlyKeepsLine() throws {
         var canvas = Canvas(width: 20, height: 20)
         var controller = ToolController()
-        drag(&controller, &canvas, [at(2, 10), at(17, 10)], make: make)
+        drag(&controller, &canvas, [at(2, 10)], make: make)
+        drag(&controller, &canvas, [at(17, 10)], make: make)
         let committed = controller.commit(canvas: &canvas)
         let patch = try #require(committed)
         #expect(patch.region.width >= 16)
+    }
+
+    @Test func committingWithOnlyStartDrawsNothing() {
+        var canvas = Canvas(width: 20, height: 20)
+        var controller = ToolController()
+        drag(&controller, &canvas, [at(2, 10)], make: make)
+        controller.pointerMoved(at(17, 10), canvas: &canvas)
+        #expect(controller.commit(canvas: &canvas) == nil)
+        #expect(count(.black, in: canvas.bitmap) == 0)
     }
 }
 
@@ -341,12 +371,14 @@ let red = PaintColor(red: 255, green: 0, blue: 0)
         drag(&controller, &canvas, [at(2, 2)], make: make)
         #expect(controller.isPending, "Tras el primer clic espera el final")
         controller.pointerMoved(at(17, 2), canvas: &canvas)
+        #expect(controller.overlay?.handles.count == 2, "Puntos de control en los dos extremos")
         #expect(canvas.bitmap[10, 2] == .black, "Vista previa horizontal")
         controller.pointerMoved(at(2, 17), canvas: &canvas)
         #expect(canvas.bitmap[10, 2] == .white && canvas.bitmap[2, 10] == .black, "La vista previa sigue al ratón")
         let patches = drag(&controller, &canvas, [at(2, 17)], make: make)
         #expect(patches.count == 1, "Un solo paso de deshacer para toda la línea")
         #expect(!controller.isActive, "El segundo clic termina la línea")
+        #expect(controller.overlay == nil, "Al terminar no quedan puntos de control")
         #expect(canvas.bitmap[2, 10] == .black)
     }
 
@@ -361,6 +393,7 @@ let red = PaintColor(red: 255, green: 0, blue: 0)
         drag(&controller, &canvas, [at(15, 15)], make: make)
         controller.pointerMoved(at(10, 10), canvas: &canvas)
         #expect((controller.tool as? PolygonTool)?.canClose == true)
+        #expect(controller.overlay?.handles.count == 4, "Un punto de control por vértice y otro en el ratón")
         // Escape = confirmar: se cierra sin el lado provisional hacia el ratón.
         _ = controller.commit(canvas: &canvas)
         #expect(canvas.bitmap[8, 8] == .black, "Lado de cierre de (15,15) a (2,2)")

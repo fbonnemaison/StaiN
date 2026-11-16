@@ -6,22 +6,19 @@ import SwiftUI
 ///
 /// - Clic izquierdo en una muestra: color primario. Clic derecho: secundario.
 /// - Las paletas no se editan; se elige otra o se carga una de archivo.
-/// - Clic en primario/secundario: panel con valores RGB y HEX.
+/// - Primario y secundario no se editan aquí: salen de las paletas y de los colores personalizados.
 /// - Casillas personalizadas: clic en una vacía guarda el color primario; clic derecho abre su menú;
-///   doble clic edita una llena. Su menú desplegable cambia las columnas (1–14) y las guarda como JSON.
+///   doble clic (o "Editar…") abre el panel con valores RGB y HEX. Su menú desplegable cambia las
+///   columnas (1–14) y las guarda como JSON.
 struct PaletteBar: View {
     let primary: PaintColor
     let secondary: PaintColor
     let setColors: (_ primary: PaintColor?, _ secondary: PaintColor?) -> Void
     let swapColors: () -> Void
     @State private var palette = PaletteStore.shared
-    @State private var editing: ColorSlot?
+    /// Casilla personalizada cuyo panel RGB/HEX está abierto.
+    @State private var editingCustom: Int?
     @AppStorage(PaletteStore.customColumnsKey) private var customColumns = PaletteStore.defaultCustomColumns
-
-    enum ColorSlot: String, Identifiable {
-        case primary, secondary
-        var id: Self { self }
-    }
 
     private let swatch: CGFloat = 16
 
@@ -51,25 +48,15 @@ struct PaletteBar: View {
             ZStack(alignment: .topLeading) {
                 SwatchView(
                     color: secondary, accessibilityLabel: String(localized: "Color secundario"), cornerRadius: 4
-                ) { editing = .secondary }
+                ) {}
                 .frame(width: 22, height: 22)
                 .offset(x: 12, y: 12)
-                .help("Color secundario (clic para editar)")
-                SwatchView(color: primary, accessibilityLabel: String(localized: "Color primario"), cornerRadius: 4) {
-                    editing = .primary
-                }
-                .frame(width: 22, height: 22)
-                .help("Color primario (clic para editar)")
+                .help("Color secundario (clic derecho en una paleta para elegirlo)")
+                SwatchView(color: primary, accessibilityLabel: String(localized: "Color primario"), cornerRadius: 4) {}
+                    .frame(width: 22, height: 22)
+                    .help("Color primario (clic en una paleta para elegirlo)")
             }
             .frame(width: 34, height: 34, alignment: .topLeading)
-            .popover(item: $editing, arrowEdge: .top) { slot in
-                ColorValueEditor(
-                    title: slot == .primary ? "Color primario" : "Color secundario",
-                    color: slot == .primary ? primary : secondary
-                ) { newColor in
-                    if slot == .primary { setColors(newColor, nil) } else { setColors(nil, newColor) }
-                }
-            }
 
             Button("Intercambiar colores", systemImage: "arrow.left.arrow.right", action: swapColors)
                 .labelStyle(.iconOnly)
@@ -205,22 +192,29 @@ struct PaletteBar: View {
             items.insert(
                 SwatchView.MenuItem(title: String(localized: "Usar como color secundario")) { setColors(nil, color) },
                 at: 0)
-            items.append(
-                SwatchView.MenuItem(title: String(localized: "Editar…")) {
-                    ColorPanelController.shared.edit(color) { palette.setCustomColor($0, at: index) }
-                })
+            items.append(SwatchView.MenuItem(title: String(localized: "Editar…")) { editingCustom = index })
             items.append(
                 SwatchView.MenuItem(title: String(localized: "Vaciar")) { palette.setCustomColor(nil, at: index) })
         }
         return SwatchView(
             color: color, accessibilityLabel: String(localized: "Personalizado \(index + 1)"),
             onPrimaryClick: { if let color { setColors(color, nil) } else { save() } },
-            onDoubleClick: color.map { color in
-                { ColorPanelController.shared.edit(color) { palette.setCustomColor($0, at: index) } }
-            },
+            onDoubleClick: color.map { _ in { editingCustom = index } },
             menuItems: items
         )
         .frame(width: swatch, height: swatch)
+        .popover(
+            isPresented: Binding(
+                get: { editingCustom == index && palette.customColors[index] != nil },
+                set: { if !$0, editingCustom == index { editingCustom = nil } }),
+            arrowEdge: .top
+        ) {
+            if let current = palette.customColors[index] {
+                ColorValueEditor(title: "Personalizado \(index + 1)", color: current) { newColor in
+                    palette.setCustomColor(newColor, at: index)
+                }
+            }
+        }
     }
 }
 

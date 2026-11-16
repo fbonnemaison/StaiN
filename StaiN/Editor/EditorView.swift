@@ -93,8 +93,12 @@ struct EditorView: View {
                     .accessibilityIdentifier("canvasHandlesToggle")
                 Button("Ajustar a la ventana", systemImage: "arrow.up.left.and.arrow.down.right") { editor.zoomToFit() }
                     .help("Ajustar a la ventana (⌘9)")
-                Button("Compartir", systemImage: "square.and.arrow.up") {
-                    ImageExport.share(document.canvas.bitmap, from: NSApp.keyWindow)
+                // ShareLink abre el menú Compartir anclado al propio botón de la barra.
+                ShareLink(
+                    item: ShareableImage(bitmap: document.canvas.bitmap, name: "StaiN"),
+                    preview: SharePreview("StaiN")
+                ) {
+                    Label("Compartir", systemImage: "square.and.arrow.up")
                 }
                 .help("Compartir la imagen")
             }

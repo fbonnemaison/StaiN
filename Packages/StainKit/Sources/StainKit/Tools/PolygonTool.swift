@@ -4,6 +4,7 @@ import CoreGraphics
 /// (También se puede arrastrar el primer lado.)
 ///
 /// Se cierra con un clic sobre el primer vértice, con doble clic o con Escape (si ya tiene 3 vértices).
+/// Mientras se crea se ven sus puntos de control (los vértices); al cerrarlo desaparecen.
 public struct PolygonTool: Tool {
     public var fillMode: ShapeFillMode
     public var lineWidth: Int
@@ -67,6 +68,15 @@ public struct PolygonTool: Tool {
         if points.count >= 3 { isClosed = true }
         cursor = nil
         render(on: &canvas)
+    }
+
+    /// Puntos de control mientras se crea el polígono; al cerrarlo no hay ninguno.
+    public var overlay: ToolOverlay? {
+        guard !isClosed, let first = points.first else { return nil }
+        var vertices = points
+        if let cursor, cursor != vertices.last ?? first { vertices.append(cursor) }
+        let centers = vertices.map { CGPoint(x: Double($0.x) + 0.5, y: Double($0.y) + 0.5) }
+        return ToolOverlay(outline: centers, isClosed: false, handles: centers)
     }
 
     private func isNearFirst(_ event: PointerEvent) -> Bool {
