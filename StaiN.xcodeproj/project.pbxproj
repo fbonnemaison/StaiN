@@ -18,7 +18,6 @@
 		20E43685AF445A77DBD0B6E8 /* Clipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61D498A4DD0D769CD68C40C7 /* Clipboard.swift */; };
 		21B9590104D091955ABFA1AA /* FilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53A432E261F03F2A5AA4941 /* FilterSheet.swift */; };
 		36051A47CD4F92AFFFE68B33 /* EditorCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = B953FD2696037BF6B5D740E0 /* EditorCommands.swift */; };
-		C1A55AC0DE5A11E000000001 /* ClassicSaving.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1A55AC0DE5A11E000000002 /* ClassicSaving.swift */; };
 		401ED39AC55AE9778AFDAFA1 /* ImageDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5572498271A8F555E5A88E62 /* ImageDocument.swift */; };
 		497AB5261739C6F42C929105 /* ImagePrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A91E11D280ADFDC7269EA6E /* ImagePrinter.swift */; };
 		52E4CEFEC062C634A8D11A74 /* ImageSheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F63D0A0DF1B8238273510AC /* ImageSheets.swift */; };
@@ -31,6 +30,7 @@
 		8D1FE59ED0A5FA1C841164FA /* ImageExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A3EA27F782830FC5C868B5 /* ImageExport.swift */; };
 		975E1F4D86401A82BBA02BB1 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334EF62F50C32E47964055AE /* CanvasView.swift */; };
 		9A6EFEC9A6B13C7EADEB0791 /* SwatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4DB9BAC01873A37AE4BBF5 /* SwatchView.swift */; };
+		9C5601D7C27E3A50BEB858D5 /* ClassicSaving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C75146D05766C5DE750D8F /* ClassicSaving.swift */; };
 		A81D54900A96F184E64604F4 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = FF212D3F7FDCA11D632DDA33 /* LICENSE */; };
 		B3366E48B8B0A368914B17DC /* StainKit in Frameworks */ = {isa = PBXBuildFile; productRef = 560D8AD1D3FBA62D5FF5060B /* StainKit */; };
 		B6C9B364B1D579236954C669 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A941C28F03A86EA3A9B30A8B /* AppSettings.swift */; };
@@ -66,6 +66,7 @@
 		01E48641657DD8689412D44F /* ToolPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolPanel.swift; sourceTree = "<group>"; };
 		072946A586AC092C410FB56B /* FilterKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterKind.swift; sourceTree = "<group>"; };
 		0FE1BD51E1EE23FBB5719DD1 /* CanvasRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasRepresentable.swift; sourceTree = "<group>"; };
+		10C75146D05766C5DE750D8F /* ClassicSaving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicSaving.swift; sourceTree = "<group>"; };
 		13495DD0892FDE636EB132A4 /* Credits.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
 		1C46E74170A5F3E44E7EF7E4 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		2142EAEDE5F7C48FC8459F8A /* ToolKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolKind.swift; sourceTree = "<group>"; };
@@ -79,7 +80,6 @@
 		3F7EB2DB373995F8477FCC7F /* ShapeAndTextUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeAndTextUITests.swift; sourceTree = "<group>"; };
 		4EA31C8DAAE90B5B1ECF7B08 /* StaiN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StaiN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F63D0A0DF1B8238273510AC /* ImageSheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSheets.swift; sourceTree = "<group>"; };
-		C1A55AC0DE5A11E000000002 /* ClassicSaving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicSaving.swift; sourceTree = "<group>"; };
 		5572498271A8F555E5A88E62 /* ImageDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDocument.swift; sourceTree = "<group>"; };
 		58A2F36640CA6C1B34333206 /* PolishUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolishUITests.swift; sourceTree = "<group>"; };
 		61D498A4DD0D769CD68C40C7 /* Clipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clipboard.swift; sourceTree = "<group>"; };
@@ -201,8 +201,8 @@
 		49FBCAE9282E5BBC50F923E0 /* Document */ = {
 			isa = PBXGroup;
 			children = (
+				10C75146D05766C5DE750D8F /* ClassicSaving.swift */,
 				61D498A4DD0D769CD68C40C7 /* Clipboard.swift */,
-				C1A55AC0DE5A11E000000002 /* ClassicSaving.swift */,
 				5572498271A8F555E5A88E62 /* ImageDocument.swift */,
 				303E360C4A2FC6205B2FEC49 /* ImageDocument+Image.swift */,
 				6A91E11D280ADFDC7269EA6E /* ImagePrinter.swift */,
@@ -380,6 +380,7 @@
 				975E1F4D86401A82BBA02BB1 /* CanvasView.swift in Sources */,
 				D91CD4F328A6B5761C9B2AF7 /* CenteringClipView.swift in Sources */,
 				E353FC97CE85D9EB0D293527 /* Checkerboard.swift in Sources */,
+				9C5601D7C27E3A50BEB858D5 /* ClassicSaving.swift in Sources */,
 				20E43685AF445A77DBD0B6E8 /* Clipboard.swift in Sources */,
 				F09ABA38D4505EB5D84FAC4C /* ColorPanelController.swift in Sources */,
 				C8F8F54F0AEF072716292A53 /* ColorValueEditor.swift in Sources */,
@@ -389,7 +390,6 @@
 				D922F4C0BCC219D86298C428 /* FilterKind.swift in Sources */,
 				21B9590104D091955ABFA1AA /* FilterSheet.swift in Sources */,
 				74074C1F433640AD33A3E1DA /* ImageDocument+Image.swift in Sources */,
-				C1A55AC0DE5A11E000000001 /* ClassicSaving.swift in Sources */,
 				401ED39AC55AE9778AFDAFA1 /* ImageDocument.swift in Sources */,
 				8D1FE59ED0A5FA1C841164FA /* ImageExport.swift in Sources */,
 				497AB5261739C6F42C929105 /* ImagePrinter.swift in Sources */,
@@ -470,7 +470,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 31;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -485,7 +485,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 0.9.0;
+				MARKETING_VERSION = 0.9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -599,7 +599,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 31;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -620,7 +620,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 0.9.0;
+				MARKETING_VERSION = 0.9.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;

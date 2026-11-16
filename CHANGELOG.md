@@ -8,6 +8,8 @@ Mientras la app no se publique (versión 1.0.0), cada fase del [plan](TODO.md) e
 Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró cada fase.
 
 ## [Sin publicar]
+
+## [0.9.1] - 2026-11-15
 ### Añadido
 - `scripts/package-dmg.sh`: crea `StaiN-X.Y.Z.dmg` (app universal, acceso a Aplicaciones e instrucciones
   del primer arranque) y un `.zip`, con sus sumas SHA-256.
@@ -128,7 +130,8 @@ Las versiones 0.0.1 a 0.6.0 se asignaron después, sobre el commit que cerró ca
 ### Añadido
 - Estructura inicial del proyecto, licencia MIT y CI.
 
-[Sin publicar]: https://github.com/fbonnemaison/StaiN/compare/v0.9.0...HEAD
+[Sin publicar]: https://github.com/fbonnemaison/StaiN/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/fbonnemaison/StaiN/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/fbonnemaison/StaiN/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/fbonnemaison/StaiN/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/fbonnemaison/StaiN/compare/v0.6.0...v0.7.0
