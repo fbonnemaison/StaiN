@@ -312,11 +312,12 @@ private struct CloudArcSizePicker: View {
 
     /// Fila de arcos del tamaño elegido.
     private func preview(_ size: CloudArcSize) -> Path {
-        let count = switch size {
-        case .small: 5
-        case .medium: 3
-        case .large: 2
-        }
+        let count =
+            switch size {
+            case .small: 5
+            case .medium: 3
+            case .large: 2
+            }
         let chord = 40.0 / Double(count)
         return Path { path in
             for index in 0..<count {

@@ -7,7 +7,9 @@ private func at(_ x: Int, _ y: Int, clicks: Int = 1) -> PointerEvent {
     PointerEvent(location: CGPoint(x: Double(x) + 0.5, y: Double(y) + 0.5), clickCount: clicks, hitTolerance: 1)
 }
 
-private func click(_ controller: inout ToolController, _ canvas: inout Canvas, _ event: PointerEvent, make: () -> any Tool)
+private func click(
+    _ controller: inout ToolController, _ canvas: inout Canvas, _ event: PointerEvent, make: () -> any Tool
+)
     -> UndoPatch?
 {
     let first = controller.pointerDown(event, canvas: &canvas, makeTool: make)
